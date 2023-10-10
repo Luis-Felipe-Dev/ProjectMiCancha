@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contáctenos - {{ first_name }} {{ last_name }}</title>
+</head>
+
+<body>
+    <p><strong>Nombre: </strong>{{ first_name }}</p>
+    <p><strong>Apellido: </strong>{{ last_name }}</p>
+    <p><strong>Email: </strong>{{ email }}</p>
+    <p><strong>Celular: </strong>{{ phone }}</p>
+    {% if type_found_us %}
+    <p><strong>¿Cómo te enteraste?: </strong>
+        {% for type_found in type_found_us_options %}
+            {% if type_found.id == type_found_us_id %}
+                {{ type_found.description }}
+            {% endif %}
+        {% endfor %}
+    </p>
+    {% endif %}
+    {% if type_services %}
+    <p><strong>Tipo de Servicio: </strong>
+        {% for type_serv in type_services_options %}
+            {% if type_serv.id == type_services_id %}
+                {{ type_serv.description }}
+            {% endif %}
+        {% endfor %}
+    </p>
+    {% endif %}
+    {% if type_course_interest %}
+    <p><strong>Escuela: </strong>
+        {% for type_course_int in type_course_interest_options %}
+            {% if type_course_int.id == type_course_interest_id %}
+                {{ type_course_int.description }}
+            {% endif %}
+        {% endfor %}
+    </p>
+    {% endif %}
+    <p><strong>Mensaje: </strong>{{ message_details }}</p>
+</body>
+</html>

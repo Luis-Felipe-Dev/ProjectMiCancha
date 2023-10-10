@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Bienvenido a la plataforma CCASS</title>
+    <style type="text/css">
+        body{
+        width: 650px;
+        font-family: work-Sans, sans-serif;
+        background-color: #f6f7fb;
+        display: block;
+        }
+        a{
+        text-decoration: none;
+        }
+        span {
+        font-size: 14px;
+        }
+        p {
+        font-size: 13px;
+        line-height: 1.7;
+        letter-spacing: 0.7px;
+        margin-top: 0;
+        }
+        .text-center{
+        text-align: center
+        }
+        h6 {
+        font-size: 16px;
+        margin: 0 0 18px 0;
+        }
+        @media (max-width: 767px) {
+        body {
+            width: unset !important;
+            padding: 0 12px;
+        }
+        table {
+            width: 100% !important;
+        }
+        }
+    </style>
+</head>
+<body style="margin: 100px auto;">
+    <table style="width: 650px; margin: 0 auto; background-color: #EBF2F6; border-radius: 8px; margin-top: 20px;">
+        <tbody>
+        <tr>
+            <td style="padding-left: 30px; padding-right: 30px; padding-top: 30px; text-align: center;"> 
+                {% comment %} <img class="img-fluid" src="{{ STATIC_ROOT }}/assets/images/ccass_blue.png" alt=""> {% endcomment %}
+                <img class="img-fluid" style="width: 300px;" src="https://www.ccassperu.com/vendors/img/ccass_blue.png" alt="">
+                <h6 style="font-weight: 600">Bienvenido a la plataforma CCASS</h6>
+            </td>
+        </tr>
+        {% if mail_action == 'create' %}
+        <tr>
+            <td style="padding: 30px"> 
+                <p>Hola, {{ first_name }} {{ last_name }}!</p>
+                <p>Tu cuenta fue creada exitosamente, estas son tus credenciales de acceso:</p>
+                <p><b>Usuario:</b> {{ email }}</p>
+                <p><b>Contraseña:</b> {{ password }}</p>
+                <p style="margin-bottom: 0">
+                    Saludos,<br>Administración CCASS</p>
+            </td>
+        </tr>
+        {% elif mail_action == 'reset' %}
+        <tr>
+            <td style="padding: 30px"> 
+                <p>Hola, {{ first_name }} {{ last_name }}!</p>
+                <p>Tu contraseña fue reseteada exitosamente, estas son tus credenciales de acceso:</p>
+                <p><b>Usuario:</b> {{ email }}</p>
+                <p><b>Contraseña:</b> {{ password }}</p>
+                <p style="margin-bottom: 0">
+                    Saludos,<br>Administración CCASS</p>
+            </td>
+        </tr>
+        {% endif %}
+        <tr>
+            <td style="padding: 30px"> 
+                <p style="text-align: center"><a href="http://localhost:8000/" style="padding: 10px; background-color:#3e5fce; color: #fff; display: inline-block; border-radius:30px; font-weight:700; padding:0.6rem 1.75rem;">Ir a plataforma CCASS</a></p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table style="width: 650px; margin: 0 auto; margin-top: 30px; margin-bottom: 30px;">
+        <tbody>       
+        <tr style="text-align: center">
+            <td> 
+            <p style="color: #999; margin-bottom: 0">Av. Circunvalación del Golf los Incas 206-208, Santiago de Surco, Lima</p>
+            <p style="color: #999; margin-bottom: 0">Horario de atención: 09:00 a 18:00 horas</p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>

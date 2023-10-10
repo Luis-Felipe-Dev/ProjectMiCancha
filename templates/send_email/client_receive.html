@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Correo de confirmación CCASS</title>
+    <style>
+        p {
+            color: black;
+        }
+        span {
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+    <p>Su solicitud ha sido registrada exitosamente, cuyo detalle es el siguiente:</p>
+    <p><strong>Empresa:</strong> {{ type_company.description }}<br>
+        <strong>Servicio:</strong> {{ service.description }}<br>
+        {% comment %} <strong>Cantidad:</strong> 000<br> {% endcomment %}
+        <strong>Fecha:</strong> {{ date_time|date:"Y-m-d H:m:s" }}
+    </p>
+    <span>Recordatorio: Las solicitudes se podrán registrar en nuestro sistema de Lunes a Viernes entre las 9:00 am y
+        6:30 pm; Sábados entre las 9:00 am y 1:00 pm (de solicitarse después de las horas mencionadas se registrará el
+        servicio el día hábil posterior a primera hora).</span>
+</body>
+</html>

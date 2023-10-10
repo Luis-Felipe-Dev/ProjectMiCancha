@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from appUser.models import User, Rol, TypeDocument, TypeCompany
+from appUser.models import User, Rol
 from django.core.exceptions import ValidationError
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -18,33 +18,22 @@ STATIC_ROOT = f"{BASE_DIR}/static"
 @login_required
 def create(request):
     roles = Rol.objects.all()
-    type_docs = TypeDocument.objects.all()
-    type_companies = TypeCompany.objects.all()
     message = ''
 
     if request.method == 'POST':
         try:
             if (len(User.objects.filter(email=request.POST['email'])) == 0):
                 user_create = User()
-                user_create.last_name = (
-                    request.POST['last_name']).upper().strip()
-                user_create.first_name = (
-                    request.POST['first_name']).upper().strip()
-                user_create.email = request.POST['email'].strip()
-                user_create.type_doc = TypeDocument.objects.get(
-                    id=request.POST['type_doc'])
-                user_create.nro_doc = request.POST['nro_doc'].strip()
+                user_create.last_name = (request.POST['last_name']).upper().strip()
+                user_create.first_name = (request.POST['first_name']).upper().strip()
                 user_create.phone = request.POST['phone'].strip()
-                user_create.rol = Rol.objects.get(
-                    id=request.POST['rol'])
-                user_create.type_company = TypeCompany.objects.get(
-                    id=request.POST['type_company'])
+                user_create.email = request.POST['email'].strip()
+                user_create.rol = Rol.objects.get(id=request.POST['rol'])
                 password = generate_password()
                 # print(password)
                 user_create.set_password(password)
                 user_create.status = True
-                user_create.created_user = User.objects.get(
-                    id=request.user.id).id
+                user_create.created_user = User.objects.get(id=request.user.id).id
                 user_create.save()
 
                 #Send Email to New Users
@@ -82,9 +71,7 @@ def create(request):
             return redirect('/user/show/', message=message)
     else:
         context = {
-            'roles': roles,
-            'type_docs': type_docs,
-            'type_companies': type_companies
+            'roles': roles
         }
         return render(request, 'user/create.html', context)
 
@@ -103,13 +90,9 @@ def show(request):
 @login_required
 def edit(request, id):
     roles = Rol.objects.all()
-    type_docs = TypeDocument.objects.all()
-    type_companies = TypeCompany.objects.all()
     user_edit = User.objects.get(id=id)
     context = {
         'roles': roles,
-        'type_docs': type_docs,
-        'type_companies': type_companies,
         'user_edit': user_edit
     }
     return render(request, 'user/edit.html', context)
@@ -124,12 +107,9 @@ def update(request, id):
         try:
             user_edit.last_name = (request.POST['last_name']).upper().strip()
             user_edit.first_name = (request.POST['first_name']).upper().strip()
+            user_edit.phone = request.POST['phone'].strip()
             user_edit.email = request.POST['email'].strip()
             # user_edit.set_password(request.POST['password'])
-            user_edit.type_doc = TypeDocument.objects.get(
-                id=request.POST['type_doc'])
-            user_edit.type_company = TypeCompany.objects.get(
-                id=request.POST['type_company'])
             user_edit.rol = Rol.objects.get(id=request.POST['rol'])
             user_edit.status = request.POST.get('status', False)
             user_edit.status = True if user_edit.status == "on" else False
