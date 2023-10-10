@@ -1,0 +1,96 @@
+{% extends "../base.html" %}
+
+{% load static %}
+
+{% block customCSS %}
+<!-- Datatables css-->
+<link rel="stylesheet" type="text/css" href="{% static '/assets/css/vendors/datatables.css' %}">
+{% endblock customCSS %}
+
+{% block body_header %}
+<div class="container-fluid">
+  <div class="page-title">
+    <div class="row">
+      <div class="col-sm-6">
+        <h3>Bandeja de Empresas</h3>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'home' %}">
+            <i data-feather="home"></i></a></li>
+          <li class="breadcrumb-item">Empresas</li>
+          <li class="breadcrumb-item active">Bandeja de Empresas</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock body_header %}
+
+{% block body %}
+<div class="col-sm-12">
+  <div class="table-responsive">
+    <table id="table-companies" class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th style="width: 50px;">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for type_company in type_companies %}
+            <tr>
+                <td>{{type_company.id}}</td>
+                <td>{{type_company.description}}</td>
+                {% if type_company.status == 1 %}
+                <td><i class="icofont icofont-check-circled" style="color: green; color: green; font-size: 25px;"></i></td>
+                {% else %}
+                <td><i class="icofont icofont-close-circled" style="color: red; font-size: 25px;"></i></td>
+                {% endif %}
+                <td>
+                    <ul class="action"> 
+                        <li class="edit"> <a href="{% url 'companies.edit' id=type_company.id %}"><i class="icon-pencil-alt"></i></a></li>
+                        <li class="delete"><a href="{% url 'companies.delete' id=type_company.id %}"><i class="icon-trash"></i></a></li>
+                    </ul>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+  </div>
+</div>
+{% block customJS %}
+<script src="{% static '/assets/js/datatable/datatables/jquery.dataTables.min.js' %}"></script>
+<script>
+    $(document).ready(function () {
+        $('#table-companies').DataTable({            
+          "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+        }
+        });
+    });
+</script>
+{% if messages %}
+{% for message in messages %}
+<script>
+    $(function () {
+        var Toast = Swal.mixin({
+            toast: true,
+            position: 'top-right',
+            showConfirmButton: false,
+            timer: 5000
+        });
+        if ('{{message}}' == 'Email o username ya existe.') {
+            toastr.error('{{message}}')
+        } else {
+            toastr.success('{{message}}')
+        }
+    });
+</script>
+{% endfor %}
+{% endif %}
+{% endblock customJS %}
+
+{% endblock body %}

@@ -1,0 +1,150 @@
+{% extends "../base.html" %}
+
+{% block body_header %}
+<div class="container-fluid">
+  <div class="page-title">
+    <div class="row">
+      <div class="col-sm-6">
+        <h3>Editar Usuario</h3>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'home' %}">
+            <i data-feather="home"></i></a></li>
+          <li class="breadcrumb-item">Usuarios</li>
+          <li class="breadcrumb-item active">Editar Usuario</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock body_header %}
+
+{% block body %}
+
+<div class="container">
+  <div class="card card-primary">
+    <form method="POST" class="post-form" action="{% url 'user.update' id=user_edit.id %}">
+      {% csrf_token %}
+      <div class="card-body">
+        <div class="form-group">
+          <label for="last_name">Apellidos</label>
+          <input type="text" class="form-control" id="last_name" name="last_name" placeholder=""
+            value="{{ user_edit.last_name }}">
+        </div>
+        <div class="form-group">
+          <label for="first_name">Nombres</label>
+          <input type="text" class="form-control" id="first_name" name="first_name" placeholder=""
+            value="{{ user_edit.first_name }}">
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" class="form-control" id="email" name="email" placeholder="" value="{{ user_edit.email }}">
+        </div>
+        <div class="form-group">
+          <label for="type_doc">Tipo Documento</label>
+          <select class="form-control form-select" id="type_doc" name="type_doc">
+            <option value="{{ user_edit.type_doc.id }}">{{ user_edit.type_doc.description }}</option>
+            {% for type_doc in type_docs %}
+            <option value="{{ type_doc.id }}">{{ type_doc.description }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="nro_doc">N° Documento</label>
+          <input type="text" class="form-control" id="nro_doc" name="nro_doc" placeholder=""
+            value="{{ user_edit.nro_doc }}">
+        </div>
+        <div class="form-group">
+          <label for="phone">N° Celular</label>
+          <input type="text" class="form-control" id="phone" name="phone" placeholder=""
+            value="{{ user_edit.phone }}">
+        </div>
+        <div class="form-group">
+          <label for="type_company">Empresa</label>
+          <select class="form-control form-select" id="type_company" name="type_company">
+            <option value="{{ user_edit.type_company.id }}">{{ user_edit.type_company.description }}</option>
+            {% for type_company in type_companies %}
+              {% if type_company.status == 1 %}
+              <option value="{{ type_company.id }}">{{ type_company.description }}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="rol">Rol</label>
+          <select class="form-control form-select" id="rol" name="rol">
+            <option value="{{ user_edit.rol.id }}">{{ user_edit.rol.description }}</option>
+            {% for rol in roles %}
+            <option value="{{ rol.id }}">{{ rol.description }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="status" name="status" {% if user_edit.status == True %}checked{% endif %}>
+          <label class="form-check-label" for="status">Usuario Activo</label>
+        </div>
+        
+      </div>
+
+      <div class="card-footer text-start">
+        <button class="btn btn-primary" type="submit">Editar</button>
+        <a class="btn btn-warning" type="reset" href="{% url 'user.show' %}">Cancelar</a>
+      </div>
+    </form>
+
+    <div class="card-footer">
+      <a href="{% url 'user.reset_password' user_edit.id %}" class="btn btn-success" id="reset_password_alert">Resetear contraseña</a>
+    </div>
+    {% comment %} <form method="POST" class="post-form" action="{% url 'user.reset_password' id=user_edit.id %}">
+      {% csrf_token %}
+      <div class="card-footer">
+        <button type="submit" class="btn btn-success">Resetear contraseña</button>
+      </div>
+    </form> {% endcomment %}
+  </div>
+</div>
+
+{% block customJS %}
+  
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  document.getElementById('reset_password_alert').addEventListener('click', function(event) {
+      event.preventDefault();  // Evita que el enlace realice la acción inmediatamente
+
+      Swal.fire({
+          title: '¿Estás seguro de resetear la contraseña?',
+          text: 'Esta acción no se puede deshacer',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Sí, resetear',
+          cancelButtonText: 'Cancelar'
+      }).then((result) => {
+          if (result.isConfirmed) {
+              window.location.href = event.target.href;  // Realiza la acción si se confirma
+          }
+      });
+  });
+</script>
+
+  {% comment %} {% if messages %}
+    {% for message in messages %}
+      <script>
+  $(function () {
+      var Toast = Swal.mixin({
+          toast: true,
+          position: 'top-right',
+          showConfirmButton: false,
+          timer: 5000
+      });
+      if ('{{message}}' == 'Email o username ya existe.') {
+          toastr.error('{{message}}')
+      } else {
+          toastr.success('{{message}}')
+      }
+  });
+      </script>
+    {% endfor %}
+  {% endif %} {% endcomment %}
+  {% endblock customJS %}
+{% endblock body %}

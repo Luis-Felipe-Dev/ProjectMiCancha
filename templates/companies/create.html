@@ -1,0 +1,79 @@
+{% extends "../base.html" %}
+
+{% block body_header %}
+<div class="container-fluid">
+  <div class="page-title">
+    <div class="row">
+      <div class="col-sm-6">
+        <h3>Registrar Empresa</h3>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'home' %}">
+            <i data-feather="home"></i></a></li>
+          <li class="breadcrumb-item">Empresas</li>
+          <li class="breadcrumb-item active">Registrar Empresa</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock body_header %}
+
+{% block body %}
+<div class="container">
+  <div class="card card-primary">
+    <form method="POST" class="post-form" action="{% url 'companies.create' %}">  
+      {% csrf_token %}
+      <div class="card-body">
+        <div class="form-group">
+          <label for="company_description">Nombre Empresa</label>
+          <input type="text" class="form-control" id="company_description" name="company_description" placeholder="" required>
+        </div>
+      </div>
+      <div class="card-footer text-start">
+        <button class="btn btn-primary" type="submit">Registrar</button>
+        <a class="btn btn-warning" type="reset" href="{% url 'companies.show' %}">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% block customJS %}
+{% if messages %}
+{% for message in messages %}
+  <script>
+    $(function() {
+      var Toast = Swal.mixin({
+        toast: true,
+        position: 'top-right',
+        showConfirmButton: false,
+        timer: 5000
+      });
+      toastr.error('{{message}}')
+    });
+  </script>
+{% endfor %}
+{% endif %}
+{% endblock customJS %}
+
+{% endblock body %}
+
+
+created_at,
+created_user,
+deleted_at,
+deleted_user,
+email,
+first_name,
+id,
+company_description,
+nro_doc,
+password,
+phone,
+rol_id,
+status,
+type_company_id,
+type_doc_id,
+updated_at,
+updated_user`
