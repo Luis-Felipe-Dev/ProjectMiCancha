@@ -5,112 +5,103 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Enzo admin is super flexible, powerful, clean &amp; modern responsive bootstrap 5 admin template with unlimited possibilities.">
-    <meta name="keywords" content="admin template, Enzo admin template, dashboard template, flat admin template, responsive admin template, web app">
+    <meta name="description" content="viho admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities.">
+    <meta name="keywords" content="admin template, viho admin template, dashboard template, flat admin template, responsive admin template, web app">
     <meta name="author" content="pixelstrap">
-    <link rel="icon"
-          href="{% static '/assets/images/favicon.png' %}"
-          type="image/x-icon">
-    <title>CCASS</title>
+    <link rel="icon" href="{% static 'assets/images/favicon.png' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'assets/images/favicon.png' %}" type="image/x-icon">
+    <title>viho - Premium Admin Template</title>
     <!-- Google font-->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{% static '/assets/css/vendors/font-awesome.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap" rel="stylesheet">
+    <!-- Font Awesome-->
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/fontawesome.css' %}">
     <!-- ico-font-->
-    <link rel="stylesheet" type="text/css" href="{% static '/assets/css/vendors/icofont.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/icofont.css' %}">
     <!-- Themify icon-->
-    <link rel="stylesheet" type="text/css" href="{% static '/assets/css/vendors/themify.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/themify.css' %}">
     <!-- Flag icon-->
-    <link rel="stylesheet" type="text/css" href="{% static '/assets/css/vendors/flag-icon.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/flag-icon.css' %}">
     <!-- Feather icon-->
-    <link rel="stylesheet" type="text/css" href="{% static '/assets/css/vendors/feather-icon.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/feather-icon.css' %}">
     <!-- Plugins css start-->
     <!-- Plugins css Ends-->
     <!-- Bootstrap css-->
-    <link rel="stylesheet" type="text/css" href="{% static '/assets/css/vendors/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/bootstrap.css' %}">
     <!-- App css-->
-    <link rel="stylesheet" type="text/css" href="{% static '/assets/css/style.css' %}">
-    {% comment %} <link id="color" rel="stylesheet" href="{% static '/assets/css/color-1.css" media="screen' %}"> {% endcomment %}
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
+    <link id="color" rel="stylesheet" href="{% static 'assets/css/color-1.css' %}" media="screen">
     <!-- Responsive css-->
-    <link rel="stylesheet" type="text/css" href="{% static '/assets/css/responsive.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/responsive.css' %}">
   </head>
   <body>
     <!-- Loader starts-->
     <div class="loader-wrapper">
-      <div class="loader"></div>
+      <div class="theme-loader">    
+        <div class="loader-p"></div>
+      </div>
     </div>
     <!-- Loader ends-->
-    <!-- login page start-->
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-xl-7"><img class="bg-img-cover bg-center" src="{% static '/assets/images/login/2.jpg' %}" alt="loginpage"></div>
-        <div class="col-xl-5 p-0">
-          <div class="login-card">
-            <div>
-              {% comment %} <div><a class="logo" href="{% url 'home' %}"><img class="img-fluid for-light" src="{% static '/assets/images/logo/login.png' %}" alt="loginpage"></div> {% endcomment %}
-              <div class="login-main"> 
-                <form class="theme-form" method="POST" action="{% url "login_custom" %}">
-                  {% csrf_token %}
-                  <h4 class="text-center">Iniciar sesión</h4>
-                  <p class="text-center">Ingrese su correo electrónico y su contraseña</p>
-                  <div class="form-group">
-                    <label class="col-form-label">Correo electrónico</label>
-                    <input class="form-control" id="email" name="email" type="email" required="" placeholder="correo@gmail.com">
+    <!-- page-wrapper Start-->
+    <section>         
+      <div class="container-fluid p-0">
+        <div class="row">
+          <div class="col-12">
+            <div class="login-card">
+              <form class="theme-form login-form" method="POST">
+                {% csrf_token %}
+                <div class="text-center">
+                  {% comment %} <img src="{% static 'dist/images/arco.png' %}" alt="PNP" style="width: 100px;"> {% endcomment %}
+                  <h1>Mi<b>Cancha</b></h1>
+                </div>
+                <div class="form-group">
+                  <label>Correo</label>
+                  <div class="input-group"><span class="input-group-text"><i class="icon-email"></i></span>
+                    <input class="form-control" type="email" id="email" name="email" required="" placeholder="Correo">
                   </div>
-                  <div class="form-group">
-                    <label class="col-form-label">Contraseña</label>
-                    <div class="form-input position-relative">
-                      <input class="form-control" id="password" name="password" type="password" required="" placeholder="*********">
-                      {% comment %} <div class="show-hide"><span class="show"></span></div> {% endcomment %}
-                    </div>
+                </div>
+                <div class="form-group">
+                  <label>Contraseña</label>
+                  <div class="input-group"><span class="input-group-text"><i class="icon-lock"></i></span>
+                    <input class="form-control" type="password" id="password" name="password" required="" placeholder="*********">
                   </div>
-                  <div class="form-group mb-0">
-                    <div class="checkbox p-0">
-                      <input id="checkbox1" type="checkbox">
-                      {% comment %} <label class="text-muted" for="checkbox1">Recordar contraseña</label> {% endcomment %}
-                    </div>
-                    <a class="link" href="{% url 'change_password' %}">Cambiar o resetear su contraseña</a>
-                    <div class="text-end mt-3">
-                      <button class="btn btn-primary btn-block w-100" type="submit">Ingresar</button>
-                    </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <a class="link" href="/change_password/">¿Olvidó su contraseña?</a>
                   </div>
-                  <div class="login-social-title">
-                    <h6>Visita nuestras redes sociales</h6>
+                  <!-- /.col -->
+                  <div class="col-6">
+                    <button class="btn btn-primary btn-block" type="submit">Iniciar sesión</button>
                   </div>
-                  <div class="form-group">
-                    <ul class="login-social">
-                      <li><a href="https://www.linkedin.com" target="_blank"><i data-feather="linkedin"></i></a></li>
-                      <li><a href="https://www.twitter.com" target="_blank"><i data-feather="twitter"></i></a></li>
-                      <li><a href="https://www.facebook.com" target="_blank"><i data-feather="facebook"></i></a></li>
-                      <li><a href="https://www.instagram.com" target="_blank"><i data-feather="instagram"></i></a></li>
-                    </ul>
-                  </div>
-                </form>
-              </div>
+                  <!-- /.col -->
+                </div>
+                {% comment %} <p>Don't have account?<a class="ms-2" href="log-in.html">Create Account</a></p> {% endcomment %}
+              </form>
             </div>
           </div>
         </div>
       </div>
-      <!-- latest jquery-->
-      <script src="{% static '/assets/js/jquery-3.6.0.min.js' %}"></script>
-      <!-- Bootstrap js-->
-      <script src="{% static '/assets/js/bootstrap/bootstrap.bundle.min.js' %}"></script>
-      <!-- feather icon js-->
-      <script src="{% static '/assets/js/icons/feather-icon/feather.min.js' %}"></script>
-      <script src="{% static '/assets/js/icons/feather-icon/feather-icon.js' %}"></script>
-      <!-- scrollbar js-->
-      <!-- Sidebar jquery-->
-      <script src="{% static '/assets/js/config.js' %}"></script>
-      <!-- Plugins JS start-->
-      <!-- Plugins JS Ends-->
-      <!-- Theme js-->
-      <script src="{% static '/assets/js/script.js' %}"></script>
-      <!-- login js-->
-      <!-- Plugin used-->
-    </div>
+    </section>
+    <!-- page-wrapper end-->
+    <!-- latest jquery-->
+    <script src="{% static 'assets/js/jquery-3.5.1.min.js' %}"></script>
+    <!-- feather icon js-->
+    <script src="{% static 'assets/js/icons/feather-icon/feather.min.js' %}"></script>
+    <script src="{% static 'assets/js/icons/feather-icon/feather-icon.js' %}"></script>
+    {% comment %} <!-- Sidebar jquery-->
+    <script src="{% static 'assets/js/sidebar-menu.js' %}"></script> {% endcomment %}
+    <script src="{% static 'assets/js/config.js' %}"></script>
+    <!-- Bootstrap js-->
+    <script src="{% static 'assets/js/bootstrap/popper.min.js' %}"></script>
+    <script src="{% static 'assets/js/bootstrap/bootstrap.min.js' %}"></script>
+    <!-- Plugins JS start-->
+    <!-- Plugins JS Ends-->
+    <!-- Theme js-->
+    <script src="{% static 'assets/js/script.js' %}"></script>
+    <!-- login js-->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
     {% if result == False %}

@@ -15,11 +15,10 @@ def login_custom(request):
         email = request.POST['email']
         password = request.POST['password']
         user = authenticate(request, email=email, password=password)
-
         if user is not None and user.status == 1:
             try:
                 login(request, user)
-                return redirect("/home")
+                return redirect("/home/")
             except Exception as ex:
                 context = {
                    'result': False
@@ -43,10 +42,13 @@ def login_custom(request):
     
 def change_password(request):
     if request.method == 'POST':
-        user = authenticate(email=request.POST['username'], password=request.POST['password_current'])
+        user = authenticate(request, email=request.POST['email'], password=request.POST['password_current'])
+        print(user)
+        print(request.POST['password_current'])
         if user is not None:
             try:
-                user_change_password = User.objects.get(email=request.POST['username'])
+                print(request.POST['password_new'])
+                user_change_password = User.objects.get(email=request.POST['email'])
                 user_change_password.set_password = request.POST['password_new'].strip()
                 user_change_password.save()
                 context = {
@@ -55,6 +57,7 @@ def change_password(request):
                 return render(request, 'user/change_password.html', context)
 
             except Exception as ex:
+                print(ex)
                 context = {
                    'result': False
                 }

@@ -24,8 +24,8 @@ def create(request):
         try:
             if (len(User.objects.filter(email=request.POST['email'])) == 0):
                 user_create = User()
-                user_create.last_name = (request.POST['last_name']).upper().strip()
                 user_create.first_name = (request.POST['first_name']).upper().strip()
+                user_create.last_name = (request.POST['last_name']).upper().strip()
                 user_create.phone = request.POST['phone'].strip()
                 user_create.email = request.POST['email'].strip()
                 user_create.rol = Rol.objects.get(id=request.POST['rol'])
@@ -61,14 +61,14 @@ def create(request):
                 email.content_subtype = 'html'
                 email.send()
 
-                return redirect("/user/show/")
+                return redirect("/user/")
             else:
                 message = 'Email ya existe.'
                 messages.add_message(request, messages.INFO, message)
-                return redirect('/user/show/')
+                return redirect('/user/')
         except ValidationError as e:
             message = 'Algo salió mal, contacte a TI.'
-            return redirect('/user/show/', message=message)
+            return redirect('/user/', message=message)
     else:
         context = {
             'roles': roles
@@ -105,8 +105,8 @@ def update(request, id):
 
     if request.method == 'POST':
         try:
-            user_edit.last_name = (request.POST['last_name']).upper().strip()
             user_edit.first_name = (request.POST['first_name']).upper().strip()
+            user_edit.last_name = (request.POST['last_name']).upper().strip()
             user_edit.phone = request.POST['phone'].strip()
             user_edit.email = request.POST['email'].strip()
             # user_edit.set_password(request.POST['password'])
@@ -115,11 +115,11 @@ def update(request, id):
             user_edit.status = True if user_edit.status == "on" else False
             user_edit.updated_user = User.objects.get(id=request.user.id).id
             user_edit.save()
-            return redirect('/user/show/')
+            return redirect('/user/')
         except Exception as ex:
             message = 'Email o username ya existe.'
             messages.add_message(request, messages.INFO, message)
-            return redirect('/user/show/')
+            return redirect('/user/')
     else:
         context = {
             'user_edit': user_edit,
@@ -135,7 +135,7 @@ def delete(request, id):
     user.deleted_user = User.objects.get(id=request.user.id).id
     user.status = False
     user.save()
-    return redirect('/user/show/')
+    return redirect('/user/')
 
 
 @login_required
@@ -183,7 +183,7 @@ def reset_password(request, id):
 
     message = 'Contraseña reseteada correctamente.'
     messages.add_message(request, messages.INFO, message)
-    return redirect('/user/show/')
+    return redirect('/user/')
 
 
 @login_required
