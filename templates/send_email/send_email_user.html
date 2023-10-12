@@ -41,13 +41,13 @@
     </style>
 </head>
 <body style="margin: 100px auto;">
-    <table style="width: 650px; margin: 0 auto; background-color: #EBF2F6; border-radius: 8px; margin-top: 20px;">
+    <table style="width: 650px; margin: 0 auto; background-color: #dff2e2; border-radius: 8px; margin-top: 20px;">
         <tbody>
         <tr>
             <td style="padding-left: 30px; padding-right: 30px; padding-top: 30px; text-align: center;"> 
                 {% comment %} <img class="img-fluid" src="{{ STATIC_ROOT }}/assets/images/ccass_blue.png" alt=""> {% endcomment %}
-                <img class="img-fluid" style="width: 300px;" src="https://www.ccassperu.com/vendors/img/ccass_blue.png" alt="">
-                <h6 style="font-weight: 600">Bienvenido a la plataforma CCASS</h6>
+                {% comment %} <img class="img-fluid" style="width: 300px;" src="https://www.ccassperu.com/vendors/img/ccass_blue.png" alt=""> {% endcomment %}
+                <h2 style="font-weight: 600">Bienvenido a la plataforma "Mi<b>Cancha</b>"</h2>
             </td>
         </tr>
         {% if mail_action == 'create' %}
@@ -58,7 +58,7 @@
                 <p><b>Usuario:</b> {{ email }}</p>
                 <p><b>Contraseña:</b> {{ password }}</p>
                 <p style="margin-bottom: 0">
-                    Saludos,<br>Administración CCASS</p>
+                    Saludos,<br>Administración Mi<b>Cancha</b></p>
             </td>
         </tr>
         {% elif mail_action == 'reset' %}
@@ -69,26 +69,26 @@
                 <p><b>Usuario:</b> {{ email }}</p>
                 <p><b>Contraseña:</b> {{ password }}</p>
                 <p style="margin-bottom: 0">
-                    Saludos,<br>Administración CCASS</p>
+                    Saludos,<br>Administración <b>MiCancha</b></p>
             </td>
         </tr>
         {% endif %}
         <tr>
             <td style="padding: 30px"> 
-                <p style="text-align: center"><a href="http://localhost:8000/" style="padding: 10px; background-color:#3e5fce; color: #fff; display: inline-block; border-radius:30px; font-weight:700; padding:0.6rem 1.75rem;">Ir a plataforma CCASS</a></p>
+                <p style="text-align: center"><a href="http://127.0.0.1:8000/" style="padding: 10px; background-color:green; color: #fff; display: inline-block; border-radius:30px; font-weight:700; padding:0.6rem 1.75rem;">Ir a plataforma Mi<b>Cancha</b></a></p>
             </td>
         </tr>
         </tbody>
     </table>
-    <table style="width: 650px; margin: 0 auto; margin-top: 30px; margin-bottom: 30px;">
+    {% comment %} <table style="width: 650px; margin: 0 auto; margin-top: 30px; margin-bottom: 30px;">
         <tbody>       
         <tr style="text-align: center">
             <td> 
-            <p style="color: #999; margin-bottom: 0">Av. Circunvalación del Golf los Incas 206-208, Santiago de Surco, Lima</p>
+            <p style="color: #999; margin-bottom: 0">Av. Guardia Civil 1234, Santiago de Surco, Lima</p>
             <p style="color: #999; margin-bottom: 0">Horario de atención: 09:00 a 18:00 horas</p>
             </td>
         </tr>
         </tbody>
-    </table>
+    </table> {% endcomment %}
 </body>
 </html>

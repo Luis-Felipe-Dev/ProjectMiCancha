@@ -12,7 +12,8 @@ def create(request):
     
     if request.method == 'POST':
         try:
-            if (len(Establishment.objects.filter(name=request.POST['name'].strip())) == 0):
+            if (len(Establishment.objects.filter(name=request.POST['name'].strip(),
+                                                 type_dist=TypeDistrict.objects.get(id=request.POST['type_dist']))) == 0):
                 establishment_create = Establishment()
                 establishment_create.name = (request.POST['name']).upper().strip()
                 establishment_create.location = (request.POST['location']).upper().strip()
@@ -29,9 +30,10 @@ def create(request):
                 message = 'Establecimiento ya existe.'
                 messages.add_message(request, messages.INFO, message)
                 return redirect('/establishment/')
-        except ValidationError as e:
+        except Exception as ex:
             message = 'Algo salió mal, contacte a TI.'
-            return redirect('/establishment/', message=message)
+            messages.add_message(request, messages.INFO, message)
+            return redirect('/establishment/')
     else:
         context = {
             'type_district': type_district
@@ -65,20 +67,26 @@ def update(request, id):
 
     if request.method == 'POST':
         try:
-            establishment_edit.name = (request.POST['name']).upper().strip()
-            establishment_edit.location = (request.POST['location']).upper().strip()
-            establishment_edit.phone = request.POST['phone'].strip()
-            establishment_edit.type_dep = TypeDepartament.objects.get(id=14)
-            establishment_edit.type_prov = TypeProvince.objects.get(id=127)
-            establishment_edit.type_dist = TypeDistrict.objects.get(id=request.POST['type_dist'])
-            establishment_edit.updated_at = datetime.now()
-            establishment_edit.updated_user = request.user.id
-            establishment_edit.status = request.POST.get('status', False)
-            establishment_edit.status = True if establishment_edit.status == "on" else False
-            establishment_edit.save()
-            return redirect('/establishment/')
+            if (len(Establishment.objects.filter(name=request.POST['name'].strip(),
+                                                    type_dist=TypeDistrict.objects.get(id=request.POST['type_dist']))) == 0):
+                establishment_edit.name = (request.POST['name']).upper().strip()
+                establishment_edit.location = (request.POST['location']).upper().strip()
+                establishment_edit.phone = request.POST['phone'].strip()
+                establishment_edit.type_dep = TypeDepartament.objects.get(id=14)
+                establishment_edit.type_prov = TypeProvince.objects.get(id=127)
+                establishment_edit.type_dist = TypeDistrict.objects.get(id=request.POST['type_dist'])
+                establishment_edit.updated_at = datetime.now()
+                establishment_edit.updated_user = request.user.id
+                establishment_edit.status = request.POST.get('status', False)
+                establishment_edit.status = True if establishment_edit.status == "on" else False
+                establishment_edit.save()
+                return redirect("/establishment/")
+            else:
+                message = 'Establecimiento ya existe.'
+                messages.add_message(request, messages.INFO, message)
+                return redirect('/establishment/')
         except Exception as ex:
-            message = 'Establecimiento ya existe.'
+            message = 'Algo salió mal, contacte a TI.'
             messages.add_message(request, messages.INFO, message)
             return redirect('/establishment/')
     else:

@@ -14,7 +14,8 @@ def create(request):
 
     if request.method == 'POST':
         try:
-            if (len(FieldSoccer.objects.filter(name=request.POST['name'].strip())) == 0):
+            if (len(FieldSoccer.objects.filter(name=request.POST['name'].strip(),
+                                               establishment=Establishment.objects.get(id=request.POST['establishment']))) == 0):
                 field_soccer_create = FieldSoccer()
                 field_soccer_create.name = (request.POST['name']).upper().strip()
                 field_soccer_create.number_players = (request.POST['number_players']).strip()
@@ -30,9 +31,10 @@ def create(request):
                 message = 'Campo deportivo ya existe.'
                 messages.add_message(request, messages.INFO, message)
                 return redirect('/field_soccer/')
-        except ValidationError as e:
+        except Exception as ex:
             message = 'Algo salió mal, contacte a TI.'
-            return redirect('/field_soccer/', message=message)
+            messages.add_message(request, messages.INFO, message)
+            return redirect('/field_soccer/')
     else:
         context = {
             "type_field_soccers": type_field_soccers,
@@ -70,19 +72,25 @@ def update(request, id):
 
     if request.method == 'POST':
         try:
-            field_soccer_edit.name = (request.POST['name']).upper().strip()
-            field_soccer_edit.number_players = (request.POST['number_players']).strip()
-            field_soccer_edit.price = (request.POST['price']).strip().replace(",", ".")
-            field_soccer_edit.type_field_soccer = TypeFieldSoccer.objects.get(id=request.POST['type_field_soccer'])
-            field_soccer_edit.establishment = Establishment.objects.get(id=request.POST['establishment'])
-            field_soccer_edit.updated_at = datetime.now()
-            field_soccer_edit.updated_user = request.user.id
-            field_soccer_edit.status = request.POST.get('status', False)
-            field_soccer_edit.status = True if field_soccer_edit.status == "on" else False
-            field_soccer_edit.save()
-            return redirect('/field_soccer/')
+            if (len(FieldSoccer.objects.filter(name=request.POST['name'].strip(),
+                                               establishment=Establishment.objects.get(id=request.POST['establishment']))) == 0):
+                field_soccer_edit.name = (request.POST['name']).upper().strip()
+                field_soccer_edit.number_players = (request.POST['number_players']).strip()
+                field_soccer_edit.price = (request.POST['price']).strip().replace(",", ".")
+                field_soccer_edit.type_field_soccer = TypeFieldSoccer.objects.get(id=request.POST['type_field_soccer'])
+                field_soccer_edit.establishment = Establishment.objects.get(id=request.POST['establishment'])
+                field_soccer_edit.updated_at = datetime.now()
+                field_soccer_edit.updated_user = request.user.id
+                field_soccer_edit.status = request.POST.get('status', False)
+                field_soccer_edit.status = True if field_soccer_edit.status == "on" else False
+                field_soccer_edit.save()
+                return redirect("/field_soccer/")
+            else:
+                message = 'Campo deportivo ya existe.'
+                messages.add_message(request, messages.INFO, message)
+                return redirect('/field_soccer/')
         except Exception as ex:
-            message = 'Campo deportivo ya existe.'
+            message = 'Algo salió mal, contacte a TI.'
             messages.add_message(request, messages.INFO, message)
             return redirect('/field_soccer/')
     else:

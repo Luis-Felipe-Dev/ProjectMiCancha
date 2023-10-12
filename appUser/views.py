@@ -29,9 +29,9 @@ def create(request):
                 user_create.phone = request.POST['phone'].strip()
                 user_create.email = request.POST['email'].strip()
                 user_create.rol = Rol.objects.get(id=request.POST['rol'])
-                password = generate_password()
-                # print(password)
-                user_create.set_password(password)
+                # password = generate_password()
+                # user_create.set_password(password)
+                user_create.set_password(request.POST['password'].strip())
                 user_create.status = True
                 user_create.created_user = User.objects.get(id=request.user.id).id
                 user_create.save()
@@ -44,12 +44,12 @@ def create(request):
                     'email': email,
                     'first_name': user_create.first_name,
                     'last_name': user_create.last_name,
-                    'password': password,
+                    'password': request.POST['password'].strip(),
                     'mail_action': 'create'
                     }
                 
                 # Send Email
-                email_subject = 'Bienvenido a la plataforma CCASS'
+                email_subject = 'Bienvenido a la plataforma MiCancha'
                 email_template = 'send_email/send_email_user.html'
                 email_content = render_to_string(email_template, context)
                 email = EmailMessage(
@@ -161,7 +161,7 @@ def reset_password(request, id):
         'password': password,
         'mail_action': 'reset'
         }
-    email_subject = 'Bienvenido a la plataforma CCASS'
+    email_subject = 'Bienvenido a la plataforma MiCancha'
     email_template = 'send_email/send_email_user.html'
 
     # Render the template with the provided context

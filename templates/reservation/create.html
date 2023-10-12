@@ -1,5 +1,30 @@
 {% extends '../base.html' %}
+{% load static %}
 
+{% block customCSS %}
+<style>
+  .horarios-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr); /* 8 columnas para las horas */
+    gap: 10px; /* Espacio entre las celdas */
+}
+
+.horario-celda {
+  background-color: white; /* Horas disponibles en blanco */
+  border: 1px solid #ccc;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.horario-celda.ocupado {
+  background-color: red; /* Horas ocupadas en rojo */
+}
+
+.horario-celda.seleccionado {
+  background-color: green; /* Horas seleccionadas en verde */
+}
+</style>
+{% endblock customCSS %}
 {% block body %}
   <div class="page-body">
     <div class="container-fluid">
@@ -30,6 +55,46 @@
               {% csrf_token %}
               <div class="card-body">
                 <div class="form-group">
+                  <label for="type_dist">Distrito:</label>
+                  <select class="form-control" id="type_dist" name="type_dist">
+                    <option value="">Selecione...</option>
+                    {% for type_dist in type_district %}
+                      <option value="{{ type_dist.id }}">{{ type_dist.description }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="establishment">Establecimiento:</label>
+                  <select class="form-control" id="establishment" name="establishment">
+                    <option value="">Selecione...</option>
+                    {% for establishment in establishments %}
+                      <option value="{{ establishment.id }}">{{ establishment.name }} - {{ establishment.location }} - {{ establishment.phone }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="field_soccer">Campo deportivo:</label>
+                  <select class="form-control" id="field_soccer" name="field_soccer">
+                    <option value="">Selecione...</option>
+                    {% for field_soccer in field_soccers %}
+                      <option value="{{ field_soccer.id }}">{{ field_soccer.name }} - {{ field_soccer.number_players }} personas - S/. {{ field_soccer.price }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="date">Fecha</label>
+                  <input type="date" class="form-control" id="date" name="date" placeholder="" required />
+                </div>
+
+                <div id="horarios-disponibles" class="horarios-grid">
+                  <!-- Aquí se generarán las celdas de horarios disponibles -->
+                </div>
+
+                <!-- Campo oculto para almacenar las horas seleccionadas -->
+                <input type="hidden" id="horas-seleccionadas" name="horas_seleccionadas" value="">
+
+
+                {% comment %} <div class="form-group">
                   <label for="date">Fecha</label>
                   <input type="date" class="form-control" id="date" name="date" placeholder="" required />
                 </div>
@@ -49,7 +114,7 @@
                       <option value="{{ field_soccer.id }}">{{ field_soccer.name }} - {{ field_soccer.establishment.name }} - {{ field_soccer.establishment.phone }}</option>
                     {% endfor %}
                   </select>
-                </div>
+                </div> {% endcomment %}
               </div>
               <div class="card-footer">
                 <button type="submit" class="btn btn-primary">Registrar</button>
@@ -77,5 +142,103 @@
         </script>
       {% endfor %}
     {% endif %}
+    <!-- latest jquery-->
+    <script src="{% static 'assets/js/jquery-3.5.1.min.js' %}"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const horariosGridDiv = document.getElementById('horarios-disponibles');
+        const horasOcupadas = ['10:00', '14:00', '16:00', '18:00', '21:00'];
+        const seleccionActual = [];
+   
+    
+     function generarHorariosGrid() {
+        for (let hora = 9; hora < 22; hora++) {
+            const horarioInicio = `${hora.toString().padStart(2, '0')}:00`;
+            const horarioFin = `${(hora + 1).toString().padStart(2, '0')}:00`;
+            const horarioMostrar = `${horarioInicio} - ${horarioFin}`;
+
+            const celda = document.createElement('div');
+            celda.className = 'horario-celda';
+            celda.textContent = horarioMostrar;
+            celda.dataset.horarioInicio = horarioInicio;
+            celda.dataset.horarioFin = horarioFin;
+
+            if (horasOcupadas.includes(horarioInicio)) {
+                celda.classList.add('ocupado');
+            } else {
+                celda.classList.add('disponible');
+                celda.addEventListener('click', function() {
+                    manejarSeleccion(celda);
+                });
+            }
+
+            horariosGridDiv.appendChild(celda);
+        }
+                // Agregar manualmente la celda para las 23:00
+                const celda23 = document.createElement('div');
+                celda23.className = 'horario-celda';
+                celda23.textContent = '22:00 - 23:00';
+                celda23.dataset.horarioInicio = '22:00';
+                celda23.dataset.horarioFin = '23:00';
+        
+                if (horasOcupadas.includes('22:00')) {
+                    celda23.classList.add('ocupado');
+                } else {
+                    celda23.classList.add('disponible');
+                    celda23.addEventListener('click', function() {
+                        manejarSeleccion(celda23);
+                    });
+                }
+        
+                horariosGridDiv.appendChild(celda23);
+            }
+    
+        function manejarSeleccion(celda) {
+            if (celda.classList.contains('ocupado')) {
+                // Si la celda está ocupada, no se puede seleccionar
+                return;
+            }
+    
+            const horaInicio = celda.dataset.horarioInicio;
+            const horaFin = celda.dataset.horarioFin;
+    
+            if (seleccionActual.length === 0) {
+                // Si no hay selecciones previas, agregar la selección actual
+                seleccionActual.push({ horaInicio, horaFin });
+                celda.classList.add('seleccionado');
+            } else {
+                // Si hay selecciones previas, verificar si la selección actual es consecutiva
+                const ultimaSeleccion = seleccionActual[seleccionActual.length - 1];
+                if (ultimaSeleccion.horaFin === horaInicio) {
+                    // La selección actual es consecutiva, agregarla a la lista de selecciones
+                    seleccionActual.push({ horaInicio, horaFin });
+                    celda.classList.add('seleccionado');
+                } else {
+                    // La selección actual no es consecutiva, remover las selecciones previas y agregar la selección actual
+                    deseleccionarTodasLasHoras();
+                    seleccionActual.push({ horaInicio, horaFin });
+                    celda.classList.add('seleccionado');
+                }
+            }
+    
+            // Actualizar el campo oculto con las horas seleccionadas
+            document.getElementById('horas-seleccionadas').value = JSON.stringify(seleccionActual);
+        }
+    
+        function deseleccionarTodasLasHoras() {
+            // Remover la clase 'seleccionado' de todas las celdas
+            const celdasSeleccionadas = document.querySelectorAll('.horario-celda.seleccionado');
+            celdasSeleccionadas.forEach(celda => {
+                celda.classList.remove('seleccionado');
+            });
+    
+            // Limpiar la lista de selecciones
+            seleccionActual.length = 0;
+        }
+    
+        generarHorariosGrid();
+    });
+    
+    </script>
   {% endblock %}
 {% endblock %}
