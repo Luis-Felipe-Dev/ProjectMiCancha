@@ -1,5 +1,6 @@
 from django.db import models
 from appUser.models import User
+from typeThings.models import TypeDepartament, TypeProvince, TypeDistrict
 
 # Create your models here.
 class Establishment(models.Model):
@@ -7,6 +8,9 @@ class Establishment(models.Model):
     location = models.CharField(max_length=150, null=False)
     phone = models.CharField(max_length=20, null=False)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='establishment_owner')
+    type_dep = models.ForeignKey(TypeDepartament, on_delete=models.CASCADE, null=True, related_name='establishment_type_dep')
+    type_prov = models.ForeignKey(TypeProvince, on_delete=models.CASCADE, null=True, related_name='establishment_type_prov')
+    type_dist = models.ForeignKey(TypeDistrict, on_delete=models.CASCADE, null=True, related_name='establishment_type_dist')
     status = models.BooleanField(False, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -1,0 +1,88 @@
+{% extends '../base.html' %}
+
+{% block body %}
+<div class="page-body">
+    <div class="container-fluid">
+      <div class="page-header">
+        <div class="row">
+          <div class="col-sm-6">
+            <h3>Establecimientos</h3>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url "home" %}">Inicio</a></li>
+              <li class="breadcrumb-item"><a href="{% url "appEstablishment.show" %}">Establecimientos</a></li>
+              <li class="breadcrumb-item">Editar</li>
+            </ol>
+          </div>
+          <div class="col-sm-6">
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Container-fluid starts-->
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <a class="card-title btn btn-primary" type="button" href="{% url "appEstablishment.create" %}">Registrar establecimiento</a>
+            </div>
+    
+            <div class="card-body">
+                <table id="appEstablishment" class="display responsive nowrap table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            {% comment %} <th style="width: 10px">#</th> {% endcomment %}
+                            <th class="text-center">Nombre establecimiento</th>
+                            <th class="text-center">Distrito</th>
+                            <th class="text-center">Dirección</th>
+                            <th class="text-center">Celular</th>
+                            <th class="text-center">Estado</th>
+                            <th class="text-center" style="width: 100px">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for establishment in establishments %}
+                        <tr>
+                            {% comment %} <td class="text-center">{{establishment.id}}</td> {% endcomment %}
+                            <td class="text-center">{{establishment.name}}</td>
+                            <td class="text-center">{{establishment.type_dist.description}}</td>
+                            <td class="text-center">{{establishment.location}}</td>
+                            <td class="text-center">{{establishment.phone}}</td>
+                            <td class="text-center text-center">
+                                {% if establishment.status %}
+                                <i class="icofont icofont-check-circled" style="color: green; font-size: 20px;"></i>
+                                {% else %}
+                                <i class="icofont icofont-close-circled" style="color: red; font-size: 20px;"></i>
+                                {% endif %}
+                            </td>
+                            <td class="text-center text-center">
+                                <a href="{% url 'appEstablishment.edit' id=establishment.id %}"
+                                    class="mt-2 btn-block btn-sm btn-warning"><i class="icofont icofont-ui-edit"></i></a>
+                                <a href="{% url 'appEstablishment.delete' id=establishment.id %}" class="mt-2 btn-block btn-sm btn-danger"><i class="icofont icofont-ui-close"></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Container-fluid Ends-->
+  </div>
+{% block customJS %}
+{% if messages %}
+{% for message in messages %}
+  <script>
+    $(function() {
+      var Toast = Swal.mixin({
+        toast: true,
+        position: 'top-right',
+        showConfirmButton: false,
+        timer: 5000
+      });
+      toastr.error('{{message}}')
+    });
+  </script>
+{% endfor %}
+{% endif %}
+{% endblock customJS %}
+
+{% endblock body %}

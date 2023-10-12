@@ -1,0 +1,99 @@
+{% extends '../base.html' %}
+
+{% block body %}
+  <div class="page-body">
+    <div class="container-fluid">
+      <div class="page-header">
+        <div class="row">
+          <div class="col-sm-6">
+            <h3>Campos deportivos</h3>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="{% url 'home' %}">Inicio</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="{% url 'appFieldSoccer.show' %}">Campos deportivos</a>
+              </li>
+              <li class="breadcrumb-item">Registrar</li>
+            </ol>
+          </div>
+          <div class="col-sm-6"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Container-fluid starts -->
+    <div class="container">
+      <div class="row starter-main">
+        <div class="col-sm-12">
+          <div class="card">
+            <form method="POST" class="post-form" action="">
+              {% csrf_token %}
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="name">Nombre de campo deportivo</label>
+                  <input type="text" class="form-control" id="name" name="name" placeholder="" required />
+                </div>
+                <div class="form-group">
+                  <label for="type_field_soccer">Tipo de campo deportivo</label>
+                  <select class="form-control" id="type_field_soccer" name="type_field_soccer">
+                    <option value="">Selecione...</option>
+                    {% for type_field_soccer in type_field_soccers %}
+                      <option value="{{ type_field_soccer.id }}">{{ type_field_soccer.description }}</option>
+                    {% endfor %}
+                  </select>
+                </div>                
+                <div class="form-group">
+                  <label for="number_players">Número de jugadores</label>
+                  <select class="form-control" id="number_players" name="number_players">
+                    <option value="">Selecione...</option>
+                    <option value="10">5 vs 5</option>
+                    <option value="12">6 vs 6</option>
+                    <option value="14">7 vs 7</option>
+                    <option value="16">8 vs 8</option>
+                    <option value="18">9 vs 9</option>
+                    <option value="20">10 vs 10</option>
+                    <option value="22">11 vs 11</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="price">Precio</label>
+                  <input type="text" class="form-control" id="price" name="price" placeholder="" required />
+                </div>
+                <div class="form-group">
+                  <label for="establishment">Establecimiento</label>
+                  <select class="form-control" id="establishment" name="establishment">
+                    <option value="">Selecione...</option>
+                    {% for establishment in establishments %}
+                      <option value="{{ establishment.id }}">{{ establishment.name }} - {{ establishment.location }} - {{ establishment.phone }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="card-footer">
+                <button type="submit" class="btn btn-primary">Registrar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Container-fluid Ends -->
+  </div>
+  {% block customJS %}
+    {% if messages %}
+      {% for message in messages %}
+        <script>
+          $(function () {
+            var Toast = Swal.mixin({
+              toast: true,
+              position: 'top-right',
+              showConfirmButton: false,
+              timer: 5000
+            })
+            toastr.error('{{message}}')
+          })
+        </script>
+      {% endfor %}
+    {% endif %}
+  {% endblock %}
+{% endblock %}

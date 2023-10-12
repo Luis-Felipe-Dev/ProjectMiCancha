@@ -1,0 +1,90 @@
+{% extends '../base.html' %}
+
+{% block body %}
+<div class="page-body">
+    <div class="container-fluid">
+      <div class="page-header">
+        <div class="row">
+          <div class="col-sm-6">
+            <h3>Campos deportivos</h3>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url "home" %}">Inicio</a></li>
+              <li class="breadcrumb-item"><a href="{% url "appFieldSoccer.show" %}">Campos deportivos</a></li>
+              <li class="breadcrumb-item">Registrar</li>
+            </ol>
+          </div>
+          <div class="col-sm-6">
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Container-fluid starts-->
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <a class="card-title btn btn-primary" type="button" href="{% url "appFieldSoccer.create" %}">Registrar campo deportivo</a>
+            </div>
+    
+            <div class="card-body">
+                <table id="appFieldSoccer" class="display responsive nowrap table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            {% comment %} <th style="width: 10px">#</th> {% endcomment %}
+                            <th class="text-center">Nombre campo deportivo</th>
+                            <th class="text-center">Tipo de campo deportivo</th>
+                            <th class="text-center">Número de jugadores</th>
+                            <th class="text-center">Precio</th>
+                            <th class="text-center">Establecimiento</th>
+                            <th class="text-center">Estado</th>
+                            <th class="text-center" style="width: 100px">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for field_soccer in field_soccers %}
+                        <tr>
+                            {% comment %} <td class="text-center">{{field_soccer.id}}</td> {% endcomment %}
+                            <td class="text-center">{{field_soccer.name}}</td>
+                            <td class="text-center">{{field_soccer.type_field_soccer.description}}</td>
+                            <td class="text-center">{{field_soccer.number_players}}</td>
+                            <td class="text-center">S/. {{field_soccer.price}}</td>
+                            <td class="text-center">{{field_soccer.establishment.name}}</td>
+                            <td class="text-center text-center">
+                                {% if field_soccer.status %}
+                                <i class="icofont icofont-check-circled" style="color: green; font-size: 20px;"></i>
+                                {% else %}
+                                <i class="icofont icofont-close-circled" style="color: red; font-size: 20px;"></i>
+                                {% endif %}
+                            </td>
+                            <td class="text-center text-center">
+                                <a href="{% url 'appFieldSoccer.edit' id=field_soccer.id %}"
+                                    class="mt-2 btn-block btn-sm btn-warning"><i class="icofont icofont-ui-edit"></i></a>
+                                <a href="{% url 'appFieldSoccer.delete' id=field_soccer.id %}" class="mt-2 btn-block btn-sm btn-danger"><i class="icofont icofont-ui-close"></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Container-fluid Ends-->
+  </div>
+{% block customJS %}
+{% if messages %}
+{% for message in messages %}
+  <script>
+    $(function() {
+      var Toast = Swal.mixin({
+        toast: true,
+        position: 'top-right',
+        showConfirmButton: false,
+        timer: 5000
+      });
+      toastr.error('{{message}}')
+    });
+  </script>
+{% endfor %}
+{% endif %}
+{% endblock customJS %}
+
+{% endblock body %}

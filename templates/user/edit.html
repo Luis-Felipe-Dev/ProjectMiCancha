@@ -23,7 +23,7 @@
       <div class="row starter-main">
         <div class="col-sm-12">
           <div class="card">
-            <form method="POST" class="post-form" action="{% url 'appUser.update' id=user_edit.id %}">
+            <form method="POST" class="post-form" action="{% url "appUser.update" id=user_edit.id %}">
                 {% csrf_token %}
                 <div class="card-body">
                   <div class="form-group">
