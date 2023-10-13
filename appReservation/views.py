@@ -8,12 +8,13 @@ from django.core.exceptions import ValidationError
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
+from django.http import JsonResponse
 
 @login_required
 def create(request):
-    field_soccers = FieldSoccer.objects.all()
-    establishments = Establishment.objects.all()
     type_district = TypeDistrict.objects.filter(relation_id=127)
+    establishments = Establishment.objects.all()
+    field_soccers = FieldSoccer.objects.all()
 
     if request.method == 'POST':
         try:
@@ -53,9 +54,9 @@ def create(request):
             return redirect('/reservation/', message=message)
     else:
         context = {
-            'field_soccers': field_soccers,
             'type_district': type_district,
-            'establishments': establishments
+            'establishments': establishments,
+            'field_soccers': field_soccers
         }
         return render(request, 'reservation/create.html', context)
 
@@ -114,3 +115,13 @@ def delete(request, id):
     reservation_delete.status = False
     reservation_delete.save()
     return redirect('/reservation/')
+
+def get_establishment(request, type_dist_id):
+    establishments = Establishment.objects.filter(type_dist=type_dist_id).values('id', 'name')
+    print(establishments)
+    return JsonResponse({'establishments': list(establishments)})
+
+def get_field_soccer(request, establishment_id):
+    field_soccer = FieldSoccer.objects.filter(establishment=establishment_id).values('id', 'name')
+    print(field_soccer)
+    return JsonResponse({'field_soccer': list(field_soccer)})
