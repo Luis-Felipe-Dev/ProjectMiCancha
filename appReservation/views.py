@@ -7,7 +7,7 @@ from appEstablishment.models import Establishment
 from django.core.exceptions import ValidationError
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from datetime import datetime
+from datetime import datetime, timedelta, time
 from django.http import JsonResponse
 
 @login_required
@@ -18,39 +18,43 @@ def create(request):
 
     if request.method == 'POST':
         try:
-            # Capturar horas seleccionadas del campo oculto
-            horas_seleccionadas = request.POST.get('horas_seleccionadas', '')
-            horas = horas_seleccionadas.split(',')
-            print(horas_seleccionadas)
-            # horas_seleccionadas = request.POST.get('horas_seleccionadas')
+            selected_hours = request.POST.getlist('option_hour')
 
-            # # Dividir las horas seleccionadas en hora de inicio y hora de fin
-            # hora_inicio, hora_fin = horas_seleccionadas.split('-')
+            if selected_hours:
+                selected_hours.sort()
+                consecutive_hours = True
+                for i in range(1, len(selected_hours)):
+                    current_hour = datetime.strptime(selected_hours[i], '%H:%M')
+                    previous_hour = datetime.strptime(selected_hours[i - 1], '%H:%M')
 
-            reservation_create = Reservation()
-            reservation_create.date = request.POST['date']
-            # reservation_create.start_hour = request.POST['start_hour']
-            # reservation_create.end_hour = request.POST['end_hour']
-            reservation_create.start_hour = horas[0].strip()
-            reservation_create.end_hour = horas[1].strip()
-
-            reservation_create.field_soccer = FieldSoccer.objects.get(id=request.POST['field_soccer'])
-            reservation_create.customer = User.objects.get(id=request.user.id)
-            reservation_create.created_at = datetime.now()
-            reservation_create.created_user = request.user.id
-            reservation_create.status = True
-            print(reservation_create.date)
-            # print(request.POST['start_hour'])
-            # print(request.POST['end_hour'])
-            print(reservation_create.start_hour)
-            print(reservation_create.end_hour)
-            print(reservation_create.field_soccer)
-            print(reservation_create.customer)
-            print(reservation_create.created_at)
-            # reservation_create.save()
+                    # Comprueba si la hora actual es consecutiva con la anterior
+                    if current_hour != previous_hour + timedelta(hours=1):
+                        consecutive_hours = False
+                        break
+                if consecutive_hours:
+                    reservation_create = Reservation()
+                    reservation_create.date = request.POST['date_reservation']
+                    reservation_create.start_hour = selected_hours[0].strip()
+                    reservation_create.end_hour = (datetime.strptime(selected_hours[-1].strip(), '%H:%M') + timedelta(hours=1)).strftime('%H:%M')
+                    reservation_create.field_soccer = FieldSoccer.objects.get(id=request.POST['field_soccer'])
+                    reservation_create.customer = User.objects.get(id=request.user.id)
+                    reservation_create.created_at = datetime.now()
+                    reservation_create.created_user = request.user.id
+                    reservation_create.status = True
+                    reservation_create.save()
+                    print("Reserva guardada con éxito.")
+                else:
+                    print("Las horas seleccionadas no son consecutivas. Por favor, seleccione horas consecutivas para la reserva.")
+            else:
+                print("No selecionó una hora de reserva.")
             return redirect("/reservation/")
         except ValidationError as e:
-            message = 'Algo salió mal, contacte a TI.'
+            print(e)
+            message = f'Algo salió mal, contacte a TI. {e}'
+            return redirect('/reservation/', message=message)
+        except Exception as e:
+            print(e)
+            message = f'Algo salió mal, contacte a TI. {e}'
             return redirect('/reservation/', message=message)
     else:
         context = {
@@ -116,12 +120,40 @@ def delete(request, id):
     reservation_delete.save()
     return redirect('/reservation/')
 
+# @method_decorator(csrf_exempt)
 def get_establishment(request, type_dist_id):
-    establishments = Establishment.objects.filter(type_dist=type_dist_id).values('id', 'name')
-    print(establishments)
+    establishments = Establishment.objects.filter(type_dist=type_dist_id).values("id", "name")
     return JsonResponse({'establishments': list(establishments)})
 
+# @method_decorator(csrf_exempt)
 def get_field_soccer(request, establishment_id):
     field_soccer = FieldSoccer.objects.filter(establishment=establishment_id).values('id', 'name')
-    print(field_soccer)
     return JsonResponse({'field_soccer': list(field_soccer)})
+
+# @method_decorator(csrf_exempt)
+def get_reservation(request, field_soccer_id, date_reservation):
+    reservations = Reservation.objects.filter(field_soccer=field_soccer_id, date=date_reservation).values('id', 'start_hour', 'end_hour')
+    return JsonResponse({'reservations': list(reservations)})
+
+def get_available_hours(request, field_soccer_id, date_reservation):
+    # Parsea la fecha de la solicitud
+    requested_date = datetime.strptime(date_reservation, '%Y-%m-%d').date()
+
+    # Obtén todas las reservas para el campo de fútbol y la fecha solicitados
+    reservations = Reservation.objects.filter(field_soccer=field_soccer_id, date=requested_date)
+
+    # Crea una lista de horas disponibles inicialmente con todas las horas del día
+    available_hours = [f'{hour:02}:00' for hour in range(0, 24)]
+
+    # Elimina las horas que están reservadas
+    for reservation in reservations:
+        start_hour = int(reservation.start_hour.strftime('%H'))
+        end_hour = int(reservation.end_hour.strftime('%H'))
+
+        # Elimina las horas reservadas del rango de horas disponibles
+        available_hours = [hour for hour in available_hours if not (start_hour <= int(hour[:2]) < end_hour)]
+
+        print(available_hours)
+
+    # Devuelve las horas disponibles como una lista en la respuesta JSON
+    return JsonResponse({'available_hours': available_hours})

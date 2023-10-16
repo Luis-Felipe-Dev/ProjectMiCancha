@@ -3,21 +3,11 @@
 
 {% block customCSS %}
   <style>
-    #message {
-      padding: 10px;
-      color: white;
-      font-weight: bold;
-  }
-  
-  /* Cuando no se encuentran elementos (fondo rojo) */
-  #message.no-results {
-      color: red;
-  }
-  
-  /* Cuando se encuentran elementos (fondo verde) */
-  #message.with-results {
-      color: green;
-  }
+    #message_establishment,
+    #message_field_soccer,
+    #message_date {
+        font-weight: bold;
+    }
   </style>
 {% endblock %}
 {% block body %}
@@ -59,73 +49,73 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <label for="establishment">Establecimiento: <span id="message"></span></label>
+                  <label for="establishment">Establecimiento: <span id="message_establishment"></span></label>
                   <select class="form-control" id="establishment" name="establishment">
                     <option value="">Selecione...</option>
                   </select>
                 </div>
                 <div class="form-group">
-                  <label for="field_soccer">Campo deportivo: </label>
+                  <label for="field_soccer">Campo deportivo: <span id="message_field_soccer"></span></label>
                   <select class="form-control" id="field_soccer" name="field_soccer">
                     <option value="">Selecione...</option>
                   </select>
                 </div>
                 <div class="form-group">
-                  <label for="date">Fecha</label>
-                  <input type="date" class="form-control" id="date" name="date" placeholder="" required />
+                  <label for="date_reservation">Fecha</label>
+                  <input type="date" class="form-control" id="date_reservation" name="date_reservation" placeholder="" required />
                 </div>
 
                 <div class="row">
                   <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="opcion" value="09:00" />09:00 - 10:00</label>
+                    <label><input type="checkbox" name="option_hour" value="09:00" />09:00 - 10:00</label>
                   </div>
                   <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="opcion" value="10:00" />10:00 - 11:00</label>
+                    <label><input type="checkbox" name="option_hour" value="10:00" />10:00 - 11:00</label>
                   </div>
                   <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="opcion" value="11:00" />11:00 - 12:00</label>
+                    <label><input type="checkbox" name="option_hour" value="11:00" />11:00 - 12:00</label>
                   </div>
                   <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="opcion" value="12:00" />12:00 - 13:00</label>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="opcion" value="13:00" />13:00 - 14:00</label>
-                  </div>
-                  <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="opcion" value="14:00" />14:00 - 15:00</label>
-                  </div>
-                  <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="opcion" value="15:00" />15:00 - 16:00</label>
-                  </div>
-                  <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="opcion" value="16:00" />16:00 - 17:00</label>
+                    <label><input type="checkbox" name="option_hour" value="12:00" />12:00 - 13:00</label>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="opcion" value="17:00" />17:00 - 18:00</label>
+                    <label><input type="checkbox" name="option_hour" value="13:00" />13:00 - 14:00</label>
                   </div>
                   <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="opcion" value="18:00" />18:00 - 19:00</label>
+                    <label><input type="checkbox" name="option_hour" value="14:00" />14:00 - 15:00</label>
                   </div>
                   <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="opcion" value="19:00" />19:00 - 20:00</label>
+                    <label><input type="checkbox" name="option_hour" value="15:00" />15:00 - 16:00</label>
                   </div>
                   <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="opcion" value="20:00" />20:00 - 21:00</label>
+                    <label><input type="checkbox" name="option_hour" value="16:00" />16:00 - 17:00</label>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="opcion" value="21:00" />21:00 - 22:00</label>
+                    <label><input type="checkbox" name="option_hour" value="17:00" />17:00 - 18:00</label>
                   </div>
                   <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="opcion" value="22:00" />22:00 - 23:00</label>
+                    <label><input type="checkbox" name="option_hour" value="18:00" />18:00 - 19:00</label>
                   </div>
                   <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="opcion" value="23:00" />23:00 - 00:00</label>
+                    <label><input type="checkbox" name="option_hour" value="19:00" />19:00 - 20:00</label>
+                  </div>
+                  <div class="col-lg-3 col-sm-12 col-xs-12">
+                    <label><input type="checkbox" name="option_hour" value="20:00" />20:00 - 21:00</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-3 col-sm-12 col-xs-12">
+                    <label><input type="checkbox" name="option_hour" value="21:00" />21:00 - 22:00</label>
+                  </div>
+                  <div class="col-lg-3 col-sm-12 col-xs-12">
+                    <label><input type="checkbox" name="option_hour" value="22:00" />22:00 - 23:00</label>
+                  </div>
+                  <div class="col-lg-3 col-sm-12 col-xs-12">
+                    <label><input type="checkbox" name="option_hour" value="23:00" />23:00 - 00:00</label>
                   </div>
                 </div>
               </div>
@@ -156,132 +146,130 @@
       {% endfor %}
     {% endif %}
     <!-- latest jquery -->
+    <script src="{% static 'assets/js/jquery-3.5.1.min.js' %}"></script>
     <script>
-      const typeDistSelect = document.getElementById('type_dist');
-      const establishmentSelect = document.getElementById('establishment');
-      const messageSpan = document.getElementById('message');
-
-      typeDistSelect.addEventListener('change', () => {
-          const typeDistName = typeDistSelect.options[typeDistSelect.selectedIndex].text;
-          const typeDistId = typeDistSelect.value;
-          establishmentSelect.innerHTML = '';
-
-          if (typeDistId !== '') {
-              fetch(`/reservation/get_establishment/${typeDistId}/`)
-                  .then((response) => response.json())
-                  .then((data) => {
-                      // Añadir opción "Seleccione..." al principio
-                      const defaultOption = document.createElement('option');
-                      defaultOption.value = '';
-                      defaultOption.textContent = 'Seleccione...';
-                      establishmentSelect.appendChild(defaultOption);
-
-                      if (data.establishments.length > 0) {
-                        // Añadir opciones dinámicas
-                        data.establishments.forEach((establishment) => {
-                            const option = document.createElement('option');
-                            option.value = establishment.id;
-                            option.textContent = establishment.name;
-                            establishmentSelect.appendChild(option);
-                        });
-                    
-                        // Mostrar el mensaje con la cantidad de elementos encontrados (fondo verde)
-                        messageSpan.classList.remove('with-results');
-                        messageSpan.textContent = data.establishments.length > 1
-                          ? `Se encontraron ${data.establishments.length} establecimientos en ${typeDistName}.`
-                          : `Se encontró ${data.establishments.length} establecimiento en ${typeDistName}.`;
-                        messageSpan.classList.add('with-results');
-                    } else {
-                        // Mostrar un mensaje si no se encontraron elementos (fondo rojo)
-                        messageSpan.classList.remove('with-results');
-                        messageSpan.textContent = `No se encontraron establecimientos en ${typeDistName}.`;
-                        messageSpan.classList.add('no-results');
-                    }
-                  });
-          } else {
-              // Añadir opción "Seleccione..." cuando no hay selección en el primer select
-              const defaultOption = document.createElement('option');
-              defaultOption.value = '';
-              defaultOption.textContent = 'Seleccione...';
-              establishmentSelect.appendChild(defaultOption);
-
-              // Limpiar el mensaje si no hay selección en el primer select
-              messageSpan.textContent = '';
-          }
-      });
-
-      {% comment %} const fieldSoccerSelect = document.getElementById('type_soccer');
-
-      establishmentSelect.addEventListener('change', () => {
-          const establishmentName = establishmentSelect.options[establishmentSelect.selectedIndex].text;
-          const establishmentId = establishmentSelect.value;
-          fieldSoccerSelect.innerHTML = '';
-
-          if (establishmentId !== '') {
-              fetch(`/reservation/get_field_soccer/${establishmentId}/`)
-                  .then((response) => response.json())
-                  .then((data) => {
-                      // Añadir opción "Seleccione..." al principio
-                      const defaultOption = document.createElement('option');
-                      defaultOption.value = '';
-                      defaultOption.textContent = 'Seleccione...';
-                      fieldSoccerSelect.appendChild(defaultOption);
-
-                      if (data.field_soccer.length > 0) {
-                        // Añadir opciones dinámicas
-                        data.field_soccer.forEach((field_soc) => {
-                            const option = document.createElement('option');
-                            option.value = field_soc.id;
-                            option.textContent = field_soc.name;
-                            fieldSoccerSelect.appendChild(option);
-                        });
-                    
-                        // Mostrar el mensaje con la cantidad de elementos encontrados (fondo verde)
-                        messageSpan.classList.remove('with-results');
-                        messageSpan.textContent = data.field_soccer.length > 1
-                          ? `Se encontraron ${data.field_soccer.length} campos deportivos en ${establishmentName}.`
-                          : `Se encontró ${data.field_soccer.length} campo deportivo en ${establishmentName}.`;
-                        messageSpan.classList.add('with-results');
-                    } else {
-                        // Mostrar un mensaje si no se encontraron elementos (fondo rojo)
-                        messageSpan.classList.remove('with-results');
-                        messageSpan.textContent = `No se encontraron campos deportivos en ${establishmentName}.`;
-                        messageSpan.classList.add('no-results');
-                    }
-                  });
-          } else {
-              // Añadir opción "Seleccione..." cuando no hay selección en el primer select
-              const defaultOption = document.createElement('option');
-              defaultOption.value = '';
-              defaultOption.textContent = 'Seleccione...';
-              fieldSoccerSelect.appendChild(defaultOption);
-
-              // Limpiar el mensaje si no hay selección en el primer select
-              messageSpan.textContent = '';
-          }
-      }); {% endcomment %}
-
-
-      {% comment %} $(document).ready(function() {
-        $('#type_dep_pb').change(function() {
-          var type_dep_pb_id = $(this).val();
-          var select_provinces = $('select[name="type_prov_pb"]');
+      $(document).ready(function() {
+        $('#type_dist').change(function() {
+          var type_dist_id = $(this).val();
+          var select_establishment = $('select[name="establishment"]');
+          var messageEstablishment = $('#message_establishment');
           var options = '<option value="">Seleccione...</option>'
-          $.ajax({
-            url: '/evaluated/ajax_provinces/' + type_dep_pb_id,
-            data: {
-              'id': type_dep_pb_id
-            },
-            dataType: 'json',            
-          }).done(function(data) {
-              $.each(data.provinces, function(key, value){
-                options += `<option value="${value.id}">${value.complete}</option>`;
+
+          if (type_dist_id == "") {
+            messageEstablishment.text('Por favor, seleccione un distrito.');
+            messageEstablishment.css('color', 'red');
+            select_establishment.html(options);
+            $('#field_soccer').val('');
+            $('#message_field_soccer').text('');
+            $('select[name="establishment"]').empty().html(options);
+            $('select[name="field_soccer"]').empty().html(options);
+            $('#date_reservation').text('');
+          } else {          
+            $.ajax({
+              url: `/reservation/get_establishment/${type_dist_id}/`,
+              data: {
+                'type_dist_id': type_dist_id
+              },
+              dataType: 'json',            
+            }).done(function(data) {
+                $.each(data.establishments, function(key, value){
+                  options += `<option value="${value.id}">${value.name}</option>`;
+                });
+              }).always(function(data){
+                select_establishment.html(options)
+  
+                const establishmentsCount = data.establishments.length;
+                if (establishmentsCount === 0) {
+                    $('#message_establishment').text('No se encontraron establecimientos.');
+                    $('#message_establishment').css('color', 'red');
+                } else if (establishmentsCount === 1) {
+                    $('#message_establishment').text(`Se encontró 1 establecimiento.`);
+                    $('#message_establishment').css('color', 'green');
+                } else {
+                    $('#message_establishment').text(`Se encontraron ${establishmentsCount} establecimientos.`);
+                    $('#message_establishment').css('color', 'green');
+                }
               });
-            }).always(function(data){
-              select_provinces.html(options)
-            });
+              $('#field_soccer').val('');
+              $('#message_field_soccer').text('');
+              $('select[name="field_soccer"]').empty().html(options);
+          }
           });
-        }); {% endcomment %}
+        
+        $('#establishment').change(function() {
+          var establishment_id = $(this).val();
+          var select_field_soccer = $('select[name="field_soccer"]');
+          var messageFieldSoccer = $('#message_field_soccer');
+          var options = '<option value="">Seleccione...</option>'
+
+          if (establishment_id == "") {
+            messageFieldSoccer.text('Por favor, seleccione un establecimiento.');
+            messageFieldSoccer.css('color', 'red');
+            select_field_soccer.html(options);
+          } else {
+            $.ajax({
+              url: `/reservation/get_field_soccer/${establishment_id}/`,
+              data: {
+                'establishment_id': establishment_id
+              },
+              dataType: 'json',            
+            }).done(function(data) {
+                $.each(data.field_soccer, function(key, value){
+                  options += `<option value="${value.id}">${value.name}</option>`;
+                });
+              }).always(function(data){
+                select_field_soccer.html(options)
+  
+                const fieldSoccerCount = data.field_soccer.length;
+                if (fieldSoccerCount === 0) {
+                    $('#message_field_soccer').text('No se encontraron campos deportivos.');
+                    $('#message_field_soccer').css('color', 'red');
+                } else if (fieldSoccerCount === 1) {
+                    $('#message_field_soccer').text(`Se encontró 1 campo deportivo.`);
+                    $('#message_field_soccer').css('color', 'green');
+                } else {
+                    $('#message_field_soccer').text(`Se encontraron ${fieldSoccerCount} campos deportivos.`);
+                    $('#message_field_soccer').css('color', 'green');
+                }
+              });
+          }
+          });
+        
+        $('#date_reservation').change(function() {
+          var field_soccer_id = $('#field_soccer').val();
+          var date_reservation = $(this).val();
+              
+          if (field_soccer_id && date_reservation) {
+              $.ajax({
+                  url: `/reservation/get_available_hours/${field_soccer_id}/${date_reservation}/`,
+                  dataType: 'json',
+                  success: function(data) {
+                      // Manejar los datos de las horas disponibles devueltas en 'data.available_hours'
+                      console.log(data.available_hours);
+      
+                      // Limpiar los checkboxes existentes
+                      $('.checkbox-container').empty();
+      
+                      // Crear checkboxes para las horas disponibles
+                      data.available_hours.forEach(function(hour) {
+                          var checkboxHTML = `<div class="col-lg-3 col-sm-12 col-xs-12">
+                                                <label>
+                                                  <input type="checkbox" name="option_hour" value="${hour}" />
+                                                  ${hour} - ${hour + 1}
+                                                </label>
+                                              </div>`;
+                          $('.checkbox-container').append(checkboxHTML);
+                      });
+                  },
+                  error: function(xhr, status, error) {
+                      // Manejar errores en la solicitud AJAX
+                      console.error(error);
+                  }
+              });
+          }
+        });
+        
+        });
     </script>
   {% endblock %}
 {% endblock %}

@@ -33,35 +33,39 @@
                     <thead>
                         <tr>
                             {% comment %} <th style="width: 10px">#</th> {% endcomment %}
-                            <th class="text-center">Nombre campo deportivo</th>
-                            <th class="text-center">Tipo de campo deportivo</th>
-                            <th class="text-center">Número de jugadores</th>
-                            <th class="text-center">Precio</th>
+                            <th class="text-center">Fecha</th>
+                            <th class="text-center">Hora inicio</th>
+                            <th class="text-center">Hora fin</th>
+                            <th class="text-center">Campo deportivo</th>
                             <th class="text-center">Establecimiento</th>
+                            <th class="text-center">Dirección</th>
+                            <th class="text-center">Celular</th>
                             <th class="text-center">Estado</th>
                             <th class="text-center" style="width: 100px">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for field_soccer in field_soccers %}
+                        {% for reservation in reservations %}
                         <tr>
-                            {% comment %} <td class="text-center">{{field_soccer.id}}</td> {% endcomment %}
-                            <td class="text-center">{{field_soccer.name}}</td>
-                            <td class="text-center">{{field_soccer.type_field_soccer.description}}</td>
-                            <td class="text-center">{{field_soccer.number_players}}</td>
-                            <td class="text-center">{{field_soccer.price}}</td>
-                            <td class="text-center">{{field_soccer.establishment.name}}</td>
+                            {% comment %} <td class="text-center">{{reservation.id}}</td> {% endcomment %}
+                            <td class="text-center">{{reservation.date|date:"Y-m-d"}}</td>
+                            <td class="text-center">{{reservation.start_hour}}</td>
+                            <td class="text-center">{{reservation.end_hour}}</td>
+                            <td class="text-center">{{reservation.field_soccer.name}}</td>
+                            <td class="text-center">{{reservation.field_soccer.establishment.name}}</td>
+                            <td class="text-center">{{reservation.field_soccer.establishment.location}}</td>
+                            <td class="text-center">{{reservation.field_soccer.establishment.phone}}</td>
                             <td class="text-center text-center">
-                                {% if field_soccer.status %}
+                                {% if reservation.status %}
                                 <i class="icofont icofont-check-circled" style="color: green; font-size: 20px;"></i>
                                 {% else %}
                                 <i class="icofont icofont-close-circled" style="color: red; font-size: 20px;"></i>
                                 {% endif %}
                             </td>
                             <td class="text-center text-center">
-                                <a href="{% url 'appReservation.edit' id=field_soccer.id %}"
+                                <a href="{% url 'appReservation.edit' id=reservation.id %}"
                                     class="mt-2 btn-block btn-sm btn-warning"><i class="icofont icofont-ui-edit"></i></a>
-                                <a href="{% url 'appReservation.delete' id=field_soccer.id %}" class="mt-2 btn-block btn-sm btn-danger"><i class="icofont icofont-ui-close"></i></a>
+                                <a href="{% url 'appReservation.delete' id=reservation.id %}" class="mt-2 btn-block btn-sm btn-danger"><i class="icofont icofont-ui-close"></i></a>
                             </td>
                         </tr>
                         {% endfor %}

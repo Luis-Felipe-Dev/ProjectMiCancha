@@ -5,8 +5,8 @@ from appFieldSoccer.models import FieldSoccer
 # Create your models here.
 class Reservation(models.Model):
     date = models.DateField(null=False)
-    start_hour = models.DateTimeField(null=False)
-    end_hour = models.DateTimeField(null=False)
+    start_hour = models.TimeField(null=False)
+    end_hour = models.TimeField(null=False)
     customer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='reservation_customer')
     field_soccer = models.ForeignKey(FieldSoccer, on_delete=models.CASCADE, null=True, related_name='reservation_field_soccer')
     status = models.BooleanField(False, null=False)
