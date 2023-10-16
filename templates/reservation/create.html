@@ -65,6 +65,9 @@
                   <input type="date" class="form-control" id="date_reservation" name="date_reservation" placeholder="" required />
                 </div>
 
+                <div class="checkbox-container">
+                </div>
+
                 <div class="row">
                   <div class="col-lg-3 col-sm-12 col-xs-12">
                     <label><input type="checkbox" name="option_hour" value="09:00" />09:00 - 10:00</label>
@@ -163,7 +166,7 @@
             $('#message_field_soccer').text('');
             $('select[name="establishment"]').empty().html(options);
             $('select[name="field_soccer"]').empty().html(options);
-            $('#date_reservation').text('');
+            $('#date_reservation').val('');
           } else {          
             $.ajax({
               url: `/reservation/get_establishment/${type_dist_id}/`,
@@ -193,8 +196,9 @@
               $('#field_soccer').val('');
               $('#message_field_soccer').text('');
               $('select[name="field_soccer"]').empty().html(options);
+              $('#date_reservation').val('');
           }
-          });
+        });
         
         $('#establishment').change(function() {
           var establishment_id = $(this).val();
@@ -206,6 +210,7 @@
             messageFieldSoccer.text('Por favor, seleccione un establecimiento.');
             messageFieldSoccer.css('color', 'red');
             select_field_soccer.html(options);
+            $('#date_reservation').val('');
           } else {
             $.ajax({
               url: `/reservation/get_field_soccer/${establishment_id}/`,
@@ -232,8 +237,13 @@
                     $('#message_field_soccer').css('color', 'green');
                 }
               });
+              $('#date_reservation').val('');
           }
-          });
+        });
+        
+        $('#field_soccer').change(function() {          
+          $('#date_reservation').val('');
+        })
         
         $('#date_reservation').change(function() {
           var field_soccer_id = $('#field_soccer').val();
@@ -246,20 +256,26 @@
                   success: function(data) {
                       // Manejar los datos de las horas disponibles devueltas en 'data.available_hours'
                       console.log(data.available_hours);
+                      console.log(data.unavailable_hours);
       
-                      // Limpiar los checkboxes existentes
-                      $('.checkbox-container').empty();
+                      // Desmarcar todos los checkboxes
+                      $('input[name="option_hour"]').prop('checked', false);
       
-                      // Crear checkboxes para las horas disponibles
-                      data.available_hours.forEach(function(hour) {
-                          var checkboxHTML = `<div class="col-lg-3 col-sm-12 col-xs-12">
-                                                <label>
-                                                  <input type="checkbox" name="option_hour" value="${hour}" />
-                                                  ${hour} - ${hour + 1}
-                                                </label>
-                                              </div>`;
-                          $('.checkbox-container').append(checkboxHTML);
-                      });
+                      // Deshabilitar los checkboxes correspondientes a las horas no disponibles
+                      $('input[name="option_hour"]').prop('disabled', false);
+
+                      if (data && data.unavailable_hours) {
+                          data.unavailable_hours.forEach(function(hour) {
+                              $('input[name="option_hour"][value="' + hour + '"]').prop('disabled', true);
+                          });
+                      }
+      
+                      // Marcar los checkboxes correspondientes a las horas disponibles
+                      if (data && data.available_hours) {
+                          data.available_hours.forEach(function(hour) {
+                              $('input[name="option_hour"][value="' + hour + '"]').prop('checked', false);
+                          });
+                      }
                   },
                   error: function(xhr, status, error) {
                       // Manejar errores en la solicitud AJAX
@@ -269,7 +285,7 @@
           }
         });
         
-        });
+      });
     </script>
   {% endblock %}
 {% endblock %}

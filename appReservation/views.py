@@ -143,9 +143,10 @@ def get_available_hours(request, field_soccer_id, date_reservation):
     reservations = Reservation.objects.filter(field_soccer=field_soccer_id, date=requested_date)
 
     # Crea una lista de horas disponibles inicialmente con todas las horas del día
-    available_hours = [f'{hour:02}:00' for hour in range(0, 24)]
+    available_hours = [f'{hour:02}:00' for hour in range(9, 24)]
 
     # Elimina las horas que están reservadas
+    unavailable_hours = []
     for reservation in reservations:
         start_hour = int(reservation.start_hour.strftime('%H'))
         end_hour = int(reservation.end_hour.strftime('%H'))
@@ -153,7 +154,14 @@ def get_available_hours(request, field_soccer_id, date_reservation):
         # Elimina las horas reservadas del rango de horas disponibles
         available_hours = [hour for hour in available_hours if not (start_hour <= int(hour[:2]) < end_hour)]
 
-        print(available_hours)
+        # Agrega las horas reservadas a la lista de horas no disponibles
+        for hour in range(start_hour, end_hour):
+            unavailable_hours.append(f'{hour:02}:00')
+    
+    context = {
+        'available_hours': available_hours,
+        'unavailable_hours': unavailable_hours
+    }
 
-    # Devuelve las horas disponibles como una lista en la respuesta JSON
-    return JsonResponse({'available_hours': available_hours})
+    # Devuelve las horas disponibles y no disponibles como listas en la respuesta JSON
+    return JsonResponse(context)
