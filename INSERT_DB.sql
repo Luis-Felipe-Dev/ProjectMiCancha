@@ -2120,7 +2120,7 @@ INSERT INTO type_district VALUE(1883, 'SAN MIGUEL', '211105', 'SAN MIGUEL-SAN RO
 
 INSERT INTO users(id, first_name, last_name, phone, email, password, status, created_at,
 updated_at, rol_id)
-VALUES(1, 'ADMINISTRADOR', 'ADMINISTRADOR', '987654321', 'propietario@gmail.com',
+VALUES(1, 'ADMINISTRADOR', 'ADMINISTRADOR', '987654321', 'luis.fhb.2016@gmail.com',
 'pbkdf2_sha256$390000$PChAgyU2xuztZxUb0SPylU$oI7rwsLa2NFBOgjl460DZRhpPVQRJmf9qDC6xkTatjM=', 1, '2023-04-16', '2023-04-16', 1);
 
 INSERT INTO users(id, first_name, last_name, phone, email, password, status, created_at,

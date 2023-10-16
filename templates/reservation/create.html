@@ -8,6 +8,21 @@
     #message_date {
         font-weight: bold;
     }
+
+    .label_checkbox {
+      display: inline-block;
+      width: 125px;
+      vertical-align: middle;
+      {% comment %} background-color: transparent; {% endcomment %}
+    }
+
+    .label_checkbox.disabled {
+        background-color: #F3401A;
+    }
+    
+    .label_checkbox.checked {
+        {% comment %} background-color: green; {% endcomment %}
+    }
   </style>
 {% endblock %}
 {% block body %}
@@ -36,12 +51,12 @@
       <div class="row starter-main">
         <div class="col-sm-12">
           <div class="card">
-            <form method="POST" class="post-form" action="">
+            <form method="POST" class="post-form" action="" id="reservation_register">
               {% csrf_token %}
               <div class="card-body">
                 <div class="form-group">
                   <label for="type_dist">Distrito:</label>
-                  <select class="form-control" id="type_dist" name="type_dist">
+                  <select class="form-control" id="type_dist" name="type_dist" required>
                     <option value="">Selecione...</option>
                     {% for type_dist in type_district %}
                       <option value="{{ type_dist.id }}">{{ type_dist.description }}</option>
@@ -50,13 +65,13 @@
                 </div>
                 <div class="form-group">
                   <label for="establishment">Establecimiento: <span id="message_establishment"></span></label>
-                  <select class="form-control" id="establishment" name="establishment">
+                  <select class="form-control" id="establishment" name="establishment" required>
                     <option value="">Selecione...</option>
                   </select>
                 </div>
                 <div class="form-group">
                   <label for="field_soccer">Campo deportivo: <span id="message_field_soccer"></span></label>
-                  <select class="form-control" id="field_soccer" name="field_soccer">
+                  <select class="form-control" id="field_soccer" name="field_soccer" required>
                     <option value="">Selecione...</option>
                   </select>
                 </div>
@@ -70,55 +85,85 @@
 
                 <div class="row">
                   <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="option_hour" value="09:00" />09:00 - 10:00</label>
+                    <label class="label_checkbox">
+                      <input type="checkbox" name="option_hour" value="09:00" /> 09:00 - 10:00
+                    </label>
                   </div>
                   <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="option_hour" value="10:00" />10:00 - 11:00</label>
+                    <label class="label_checkbox">
+                      <input type="checkbox" name="option_hour" value="10:00" /> 10:00 - 11:00
+                    </label>
                   </div>
                   <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="option_hour" value="11:00" />11:00 - 12:00</label>
+                    <label class="label_checkbox">
+                      <input type="checkbox" name="option_hour" value="11:00" /> 11:00 - 12:00
+                    </label>
                   </div>
                   <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="option_hour" value="12:00" />12:00 - 13:00</label>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="option_hour" value="13:00" />13:00 - 14:00</label>
-                  </div>
-                  <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="option_hour" value="14:00" />14:00 - 15:00</label>
-                  </div>
-                  <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="option_hour" value="15:00" />15:00 - 16:00</label>
-                  </div>
-                  <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="option_hour" value="16:00" />16:00 - 17:00</label>
+                    <label class="label_checkbox">
+                      <input type="checkbox" name="option_hour" value="12:00" /> 12:00 - 13:00
+                    </label>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="option_hour" value="17:00" />17:00 - 18:00</label>
+                    <label class="label_checkbox">
+                      <input type="checkbox" name="option_hour" value="13:00" /> 13:00 - 14:00
+                    </label>
                   </div>
                   <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="option_hour" value="18:00" />18:00 - 19:00</label>
+                    <label class="label_checkbox">
+                      <input type="checkbox" name="option_hour" value="14:00" /> 14:00 - 15:00
+                    </label>
                   </div>
                   <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="option_hour" value="19:00" />19:00 - 20:00</label>
+                    <label class="label_checkbox">
+                      <input type="checkbox" name="option_hour" value="15:00" /> 15:00 - 16:00
+                    </label>
                   </div>
                   <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="option_hour" value="20:00" />20:00 - 21:00</label>
+                    <label class="label_checkbox">
+                      <input type="checkbox" name="option_hour" value="16:00" /> 16:00 - 17:00
+                    </label>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="option_hour" value="21:00" />21:00 - 22:00</label>
+                    <label class="label_checkbox">
+                      <input type="checkbox" name="option_hour" value="17:00" /> 17:00 - 18:00
+                    </label>
                   </div>
                   <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="option_hour" value="22:00" />22:00 - 23:00</label>
+                    <label class="label_checkbox">
+                      <input type="checkbox" name="option_hour" value="18:00" /> 18:00 - 19:00
+                    </label>
                   </div>
                   <div class="col-lg-3 col-sm-12 col-xs-12">
-                    <label><input type="checkbox" name="option_hour" value="23:00" />23:00 - 00:00</label>
+                    <label class="label_checkbox">
+                      <input type="checkbox" name="option_hour" value="19:00" /> 19:00 - 20:00
+                    </label>
+                  </div>
+                  <div class="col-lg-3 col-sm-12 col-xs-12">
+                    <label class="label_checkbox">
+                      <input type="checkbox" name="option_hour" value="20:00" /> 20:00 - 21:00
+                    </label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-3 col-sm-12 col-xs-12">
+                    <label class="label_checkbox">
+                      <input type="checkbox" name="option_hour" value="21:00" /> 21:00 - 22:00
+                    </label>
+                  </div>
+                  <div class="col-lg-3 col-sm-12 col-xs-12">
+                    <label class="label_checkbox">
+                      <input type="checkbox" name="option_hour" value="22:00" /> 22:00 - 23:00
+                    </label>
+                  </div>
+                  <div class="col-lg-3 col-sm-12 col-xs-12">
+                    <label class="label_checkbox">
+                      <input type="checkbox" name="option_hour" value="23:00" /> 23:00 - 00:00
+                    </label>
                   </div>
                 </div>
               </div>
@@ -150,6 +195,22 @@
     {% endif %}
     <!-- latest jquery -->
     <script src="{% static 'assets/js/jquery-3.5.1.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+      document.getElementById('reservation_register').addEventListener('submit', function(event) {
+        var checkboxes = document.querySelectorAll('input[name="option_hour"]:checked');
+        if (checkboxes.length === 0) {
+          event.preventDefault(); // Evitar que el formulario se envíe si no hay checkboxes marcados
+          
+          // Mostrar un SweetAlert indicando que al menos una hora debe ser seleccionada
+          Swal.fire({
+            icon: 'error',
+            title: 'Ocurrió un error.',
+            text: 'Debes marcar al menos una hora.',
+          });
+        }
+      });
+    </script>
     <script>
       $(document).ready(function() {
         $('#type_dist').change(function() {
@@ -255,8 +316,8 @@
                   dataType: 'json',
                   success: function(data) {
                       // Manejar los datos de las horas disponibles devueltas en 'data.available_hours'
-                      console.log(data.available_hours);
-                      console.log(data.unavailable_hours);
+                      // console.log(data.available_hours);
+                      // console.log(data.unavailable_hours);
       
                       // Desmarcar todos los checkboxes
                       $('input[name="option_hour"]').prop('checked', false);
@@ -264,18 +325,24 @@
                       // Deshabilitar los checkboxes correspondientes a las horas no disponibles
                       $('input[name="option_hour"]').prop('disabled', false);
 
+                      // Iterar sobre las horas no disponibles (disabled) y cambiar el color de fondo a rojo
                       if (data && data.unavailable_hours) {
-                          data.unavailable_hours.forEach(function(hour) {
-                              $('input[name="option_hour"][value="' + hour + '"]').prop('disabled', true);
-                          });
+                        data.unavailable_hours.forEach(function(hour) {
+                            var checkbox = $('input[name="option_hour"][value="' + hour + '"]');
+                            checkbox.prop('disabled', true);
+                            checkbox.closest('.label_checkbox').addClass('disabled');
+                        });
                       }
-      
-                      // Marcar los checkboxes correspondientes a las horas disponibles
+
+                      // Iterar sobre las horas disponibles (checked) y cambiar el color de fondo a verde
                       if (data && data.available_hours) {
-                          data.available_hours.forEach(function(hour) {
-                              $('input[name="option_hour"][value="' + hour + '"]').prop('checked', false);
-                          });
+                        data.available_hours.forEach(function(hour) {
+                            var checkbox = $('input[name="option_hour"][value="' + hour + '"]');
+                            checkbox.prop('checked', false);
+                            checkbox.closest('.label_checkbox').addClass('checked');
+                        });
                       }
+                      
                   },
                   error: function(xhr, status, error) {
                       // Manejar errores en la solicitud AJAX
