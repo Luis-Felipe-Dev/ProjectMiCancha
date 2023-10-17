@@ -81,7 +81,7 @@ def edit(request, id):
 
 @login_required
 def update(request, id):
-    reservation_edit = FieldSoccer.objects.get(id=id)
+    reservation_edit = Reservation.objects.get(id=id)
 
     if request.method == 'POST':
         try:

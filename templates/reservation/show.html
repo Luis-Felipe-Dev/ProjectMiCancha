@@ -14,7 +14,7 @@
               <li class="breadcrumb-item">
                 <a href="{% url 'appReservation.show' %}">Reservaciones</a>
               </li>
-              <li class="breadcrumb-item">Registrar</li>
+              <li class="breadcrumb-item">Bandeja</li>
             </ol>
           </div>
           <div class="col-sm-6"></div>
@@ -63,8 +63,8 @@
                                 {% endif %}
                             </td>
                             <td class="text-center text-center">
-                                <a href="{% url 'appReservation.edit' id=reservation.id %}"
-                                    class="mt-2 btn-block btn-sm btn-warning"><i class="icofont icofont-ui-edit"></i></a>
+                                {% comment %} <a href="{% url 'appReservation.edit' id=reservation.id %}"
+                                    class="mt-2 btn-block btn-sm btn-warning"><i class="icofont icofont-ui-edit"></i></a> {% endcomment %}
                                 <a href="{% url 'appReservation.delete' id=reservation.id %}" class="mt-2 btn-block btn-sm btn-danger"><i class="icofont icofont-ui-close"></i></a>
                             </td>
                         </tr>
