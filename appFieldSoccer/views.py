@@ -45,7 +45,15 @@ def create(request):
 
 @login_required
 def show(request):
-    field_soccers = FieldSoccer.objects.all()
+    # Obtener los establecimientos del usuario actual
+    if request.user.rol.id == 2:
+        establishments = Establishment.objects.filter(owner=request.user.id)
+    else:
+        establishments = Establishment.objects.all()
+
+    # Filtrar los FieldSoccer que pertenecen a los establecimientos del propietario
+    field_soccers = FieldSoccer.objects.filter(establishment__in=establishments)
+
     context = {
         'field_soccers': field_soccers
     }

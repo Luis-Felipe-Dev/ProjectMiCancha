@@ -23,6 +23,7 @@ def create(request):
                 establishment_create.type_dist = TypeDistrict.objects.get(id=request.POST['type_dist'])
                 establishment_create.created_at = datetime.now()
                 establishment_create.created_user = request.user.id
+                establishment_create.owner = request.user.id
                 establishment_create.status = True
                 establishment_create.save()
                 return redirect("/establishment/")
@@ -43,7 +44,8 @@ def create(request):
 
 @login_required
 def show(request):
-    establishments = Establishment.objects.all()
+    establishments = Establishment.objects.filter(owner=request.user.id)\
+                    if request.user.rol.id == 2 else Establishment.objects.all()
     context = {
         'establishments': establishments
     }
@@ -93,9 +95,11 @@ def update(request, id):
             establishment_edit.type_dist = TypeDistrict.objects.get(id=request.POST['type_dist'])
             establishment_edit.updated_at = datetime.now()
             establishment_edit.updated_user = request.user.id
+            # establishment_edit.owner = request.user.id
             establishment_edit.status = request.POST.get('status', False)
             establishment_edit.status = True if establishment_edit.status == "on" else False
             establishment_edit.save()
+            return redirect('/establishment/')
         except Exception as ex:
             message = 'Algo salió mal, contacte a TI.'
             messages.add_message(request, messages.INFO, message)

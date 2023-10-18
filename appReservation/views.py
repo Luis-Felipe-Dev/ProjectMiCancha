@@ -62,7 +62,10 @@ def create(request):
 
 @login_required
 def show(request):
-    reservations = Reservation.objects.all().order_by('date', 'start_hour')
+    if request.user.rol.id == 3:
+        reservations = Reservation.objects.filter(created_user=request.user.id).order_by('date', 'start_hour')
+    else:
+        reservations = Reservation.objects.all().order_by('date', 'start_hour')
     context = {
         'reservations': reservations
     }
