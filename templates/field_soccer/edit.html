@@ -70,14 +70,14 @@
                   <div class="form-group">
                     <label for="price">Precio</label>
                     <input type="text" class="form-control" id="price" name="price" placeholder=""
-                      value="{{field_soccer_edit.price}}"/>
+                      value="{{ field_soccer_edit.price }}"/>
                   </div>
                   <div class="form-group">
                     <label for="establishment">Establecimiento</label>
                     <select class="form-control" id="establishment" name="establishment">
-                      <option value="{{field_soccer_edit.establishment.id}}">{{field_soccer_edit.establishment.name}}</option>
+                      <option value="{{ field_soccer_edit.establishment.id }}">{{ field_soccer_edit.establishment.name }} - Dirección: {{ field_soccer_edit.establishment.location }} - Cel.: {{ field_soccer_edit.establishment.phone }}</option>
                       {% for establishment in establishments %}
-                        <option value="{{ establishment.id }}">{{ establishment.name }}</option>
+                      <option value="{{ establishment.id }}">{{ establishment.name }} - Dirección: {{ establishment.location }} - Cel.: {{ establishment.phone }}</option>
                       {% endfor %}
                     </select>
                   </div>

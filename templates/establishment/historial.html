@@ -10,7 +10,7 @@
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="{% url "home" %}">Inicio</a></li>
               <li class="breadcrumb-item"><a href="{% url "appEstablishment.show" %}">Establecimientos</a></li>
-              <li class="breadcrumb-item">Bandeja</li>
+              <li class="breadcrumb-item">Historial</li>
             </ol>
           </div>
           <div class="col-sm-6">
@@ -22,7 +22,7 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
-                <a class="card-title btn btn-primary" type="button" href="{% url "appEstablishment.create" %}">Registrar establecimiento</a>
+                <a class="card-title btn btn-primary" type="button" href="{% url "appEstablishment.show" %}">Regresar</a>
             </div>
     
             <div class="card-body">
@@ -34,38 +34,30 @@
                             <th class="text-center">Distrito</th>
                             <th class="text-center">Dirección</th>
                             <th class="text-center">Celular</th>
+                            <th class="text-center">F. Creación</th>
+                            <th class="text-center">F. Modificación</th>
+                            <th class="text-center">F. Eliminación</th>
                             <th class="text-center">Estado</th>
-                            <th class="text-center" style="width: 100px">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for establishment in establishments %}
+                        {% for historial_establ in historial_establishments %}
                         <tr>
-                            {% comment %} <td class="text-center">{{establishment.id}}</td> {% endcomment %}
-                            <td class="text-center">{{establishment.name}}</td>
-                            <td class="text-center">{{establishment.type_dist.description}}</td>
-                            <td class="text-center">{{establishment.location}}</td>
-                            <td class="text-center">{{establishment.phone}}</td>
+                            {% comment %} <td class="text-center">{{historial_establ.id}}</td> {% endcomment %}
+                            <td class="text-center">{{historial_establ.name}}</td>
+                            <td class="text-center">{{historial_establ.type_dist.description}}</td>
+                            <td class="text-center">{{historial_establ.location}}</td>
+                            <td class="text-center">{{historial_establ.phone}}</td>
+                            <td class="text-center">{{historial_establ.created_at|date:"Y-m-d H:m:s"}}</td>
+                            <td class="text-center">{{historial_establ.updated_at|date:"Y-m-d H:m:s"}}</td>
+                            <td class="text-center">{{historial_establ.deleted_at|date:"Y-m-d H:m:s"}}</td>
                             <td class="text-center text-center">
-                                {% if establishment.status %}
+                                {% if historial_establ.status %}
                                 <i class="icofont icofont-check-circled" style="color: green; font-size: 20px;"></i>
                                 {% else %}
                                 <i class="icofont icofont-close-circled" style="color: red; font-size: 20px;"></i>
                                 {% endif %}
                             </td>
-                            {% if request.user.id == 2 %}  
-                            <td class="text-center text-center">
-                                <a href="{% url 'appEstablishment.edit' id=establishment.id %}"
-                                    class="mt-2 btn-block btn-sm btn-warning"><i class="icofont icofont-ui-edit"></i></a>
-                                <a href="{% url 'appEstablishment.delete' id=establishment.id %}" class="mt-2 btn-block btn-sm btn-danger"><i class="icofont icofont-ui-close"></i></a>
-                            </td>
-                            {% endif %}
-                            {% if request.user.id == 1 %}  
-                            <td class="text-center text-center">
-                                <a href="{% url 'appEstablishment.historial' id=establishment.id %}"
-                                    class="mt-2 btn-block btn-sm btn-warning"><b>Historial</b></a>
-                            </td>
-                            {% endif %}
                         </tr>
                         {% endfor %}
                     </tbody>

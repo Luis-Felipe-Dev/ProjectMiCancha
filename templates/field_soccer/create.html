@@ -64,7 +64,7 @@
                   <select class="form-control" id="establishment" name="establishment">
                     <option value="">Selecione...</option>
                     {% for establishment in establishments %}
-                      <option value="{{ establishment.id }}">{{ establishment.name }} - {{ establishment.location }} - {{ establishment.phone }}</option>
+                    <option value="{{ establishment.id }}">{{ establishment.name }} - Dirección: {{ establishment.location }} - Cel.: {{ establishment.phone }}</option>
                     {% endfor %}
                   </select>
                 </div>

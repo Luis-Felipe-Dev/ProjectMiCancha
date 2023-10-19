@@ -10,7 +10,7 @@
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="{% url "home" %}">Inicio</a></li>
               <li class="breadcrumb-item"><a href="{% url "appFieldSoccer.show" %}">Campos deportivos</a></li>
-              <li class="breadcrumb-item">Bandeja</li>
+              <li class="breadcrumb-item">Historial</li>
             </ol>
           </div>
           <div class="col-sm-6">
@@ -22,7 +22,7 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
-                <a class="card-title btn btn-primary" type="button" href="{% url "appFieldSoccer.create" %}">Registrar campo deportivo</a>
+                <a class="card-title btn btn-primary" type="button" href="{% url "appFieldSoccer.show" %}">Regresar</a>
             </div>
     
             <div class="card-body">
@@ -35,39 +35,31 @@
                             <th class="text-center">Número de jugadores</th>
                             <th class="text-center">Precio</th>
                             <th class="text-center">Establecimiento</th>
+                            <th class="text-center">F. Creación</th>
+                            <th class="text-center">F. Modificación</th>
+                            <th class="text-center">F. Eliminación</th>
                             <th class="text-center">Estado</th>
-                            <th class="text-center" style="width: 100px">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for field_soccer in field_soccers %}
+                        {% for historial_field_s in historial_field_soccers %}
                         <tr>
-                            {% comment %} <td class="text-center">{{field_soccer.id}}</td> {% endcomment %}
-                            <td class="text-center">{{field_soccer.name}}</td>
-                            <td class="text-center">{{field_soccer.type_field_soccer.description}}</td>
-                            <td class="text-center">{{field_soccer.number_players}}</td>
-                            <td class="text-center">S/. {{field_soccer.price}}</td>
-                            <td class="text-center">{{field_soccer.establishment.name}}</td>
+                            {% comment %} <td class="text-center">{{historial_field_s.id}}</td> {% endcomment %}
+                            <td class="text-center">{{historial_field_s.name}}</td>
+                            <td class="text-center">{{historial_field_s.type_field_soccer.description}}</td>
+                            <td class="text-center">{{historial_field_s.number_players}}</td>
+                            <td class="text-center">S/. {{historial_field_s.price}}</td>
+                            <td class="text-center">{{historial_field_s.establishment.name}}</td>
+                            <td class="text-center">{{historial_field_s.created_at|date:"Y-m-d H:m:s"}}</td>
+                            <td class="text-center">{{historial_field_s.updated_at|date:"Y-m-d H:m:s"}}</td>
+                            <td class="text-center">{{historial_field_s.deleted_at|date:"Y-m-d H:m:s"}}</td>
                             <td class="text-center text-center">
-                                {% if field_soccer.status %}
+                                {% if historial_field_s.status %}
                                 <i class="icofont icofont-check-circled" style="color: green; font-size: 20px;"></i>
                                 {% else %}
                                 <i class="icofont icofont-close-circled" style="color: red; font-size: 20px;"></i>
                                 {% endif %}
                             </td>
-                            {% if request.user.id == 2 %}
-                            <td class="text-center text-center">
-                                <a href="{% url 'appFieldSoccer.edit' id=field_soccer.id %}"
-                                    class="mt-2 btn-block btn-sm btn-warning"><i class="icofont icofont-ui-edit"></i></a>
-                                <a href="{% url 'appFieldSoccer.delete' id=field_soccer.id %}" class="mt-2 btn-block btn-sm btn-danger"><i class="icofont icofont-ui-close"></i></a>
-                            </td>
-                            {% endif %}
-                            {% if request.user.id == 1 %}  
-                            <td class="text-center text-center">
-                              <a href="{% url 'appFieldSoccer.historial' id=field_soccer.id %}"
-                                  class="mt-2 btn-block btn-sm btn-warning"><b>Historial</b></a>
-                          </td>
-                            {% endif %}
                         </tr>
                         {% endfor %}
                     </tbody>

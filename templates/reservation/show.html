@@ -41,7 +41,9 @@
                             <th class="text-center">Dirección</th>
                             <th class="text-center">Celular</th>
                             <th class="text-center">Estado</th>
+                            {% if request.user.id == 3 %}
                             <th class="text-center" style="width: 100px">Acciones</th>
+                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
@@ -62,11 +64,13 @@
                                 <i class="icofont icofont-close-circled" style="color: red; font-size: 20px;"></i>
                                 {% endif %}
                             </td>
+                            {% if request.user.id == 3 %}
                             <td class="text-center text-center">
                                 {% comment %} <a href="{% url 'appReservation.edit' id=reservation.id %}"
                                     class="mt-2 btn-block btn-sm btn-warning"><i class="icofont icofont-ui-edit"></i></a> {% endcomment %}
                                 <a href="{% url 'appReservation.delete' id=reservation.id %}" class="mt-2 btn-block btn-sm btn-danger"><i class="icofont icofont-ui-close"></i></a>
                             </td>
+                            {% endif %}
                         </tr>
                         {% endfor %}
                     </tbody>

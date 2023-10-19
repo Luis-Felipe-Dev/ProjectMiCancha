@@ -18,13 +18,17 @@
           <li class="dropdown"><a class="nav-link menu-title" href="javascript:void(0)"><i class="icofont icofont-home" style="margin-right: 10px;"></i><span>Establecimientos</span></a>
             <ul class="nav-submenu menu-content">
                 <li><a href="{% url "appEstablishment.show" %}">Bandeja</a></li>
+                {% if request.user.id == 2 %}                
                 <li><a href="{% url "appEstablishment.create" %}">Registrar</a></li>
+                {% endif %}
             </ul>
           </li>
           <li class="dropdown"><a class="nav-link menu-title" href="javascript:void(0)"><i class="icofont icofont icofont-field" style="margin-right: 10px;"></i><span>Campos deportivos</span></a>
             <ul class="nav-submenu menu-content">
               <li><a href="{% url "appFieldSoccer.show" %}">Bandeja</a></li>
+              {% if request.user.id == 2 %}                
               <li><a href="{% url "appFieldSoccer.create" %}">Registrar</a></li>
+              {% endif %}
             </ul>
           </li>
           {% endif %}
@@ -32,7 +36,9 @@
           <li class="dropdown"><a class="nav-link menu-title" href="javascript:void(0)"><i class="icofont icofont-book" style="margin-right: 10px;"></i><span>Reservaciones</span></a>
             <ul class="nav-submenu menu-content">
               <li><a href="{% url "appReservation.show" %}">Bandeja</a></li>
+              {% if request.user.id == 3 %}             
               <li><a href="{% url "appReservation.create" %}">Registrar</a></li>
+              {% endif %}
             </ul>
           </li>
           {% endif %}
