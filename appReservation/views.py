@@ -120,7 +120,7 @@ def delete(request, id):
 
 # @method_decorator(csrf_exempt)
 def get_establishment(request, type_dist_id):
-    establishments = Establishment.objects.filter(type_dist=type_dist_id).values("id", "name")
+    establishments = Establishment.objects.filter(type_dist=type_dist_id).values("id", "name", "location", "phone")
     return JsonResponse({'establishments': list(establishments)})
 
 # @method_decorator(csrf_exempt)

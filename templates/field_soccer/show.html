@@ -64,8 +64,8 @@
                             {% endif %}
                             {% if request.user.id == 1 %}  
                             <td class="text-center text-center">
-                              <a href="{% url 'appFieldSoccer.historial' id=field_soccer.id %}"
-                                  class="mt-2 btn-block btn-sm btn-warning"><b>Historial</b></a>
+                              {% comment %} <a href="{% url 'appFieldSoccer.historial' id=field_soccer.id %}" class="mt-2 btn-block btn-sm btn-warning"><b>Historial</b></a> {% endcomment %}
+                              <a href="#" class="mt-2 btn-block btn-sm btn-warning"><b>Historial</b></a>
                           </td>
                             {% endif %}
                         </tr>

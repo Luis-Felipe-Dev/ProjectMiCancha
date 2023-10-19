@@ -36,30 +36,30 @@ def create(request):
                 user_create.created_user = User.objects.get(id=request.user.id).id
                 user_create.save()
 
-                #Send Email to New Users
-                email = request.POST['email']
+                # #Send Email to New Users
+                # email = request.POST['email']
 
-                context = {
-                    'STATIC_ROOT': STATIC_ROOT,
-                    'email': email,
-                    'first_name': user_create.first_name,
-                    'last_name': user_create.last_name,
-                    'password': request.POST['password'].strip(),
-                    'mail_action': 'create'
-                    }
+                # context = {
+                #     'STATIC_ROOT': STATIC_ROOT,
+                #     'email': email,
+                #     'first_name': user_create.first_name,
+                #     'last_name': user_create.last_name,
+                #     'password': request.POST['password'].strip(),
+                #     'mail_action': 'create'
+                #     }
                 
-                # Send Email
-                email_subject = 'Bienvenido a la plataforma MiCancha'
-                email_template = 'send_email/send_email_user.html'
-                email_content = render_to_string(email_template, context)
-                email = EmailMessage(
-                    email_subject,
-                    email_content,
-                    settings.EMAIL_HOST_USER,
-                    [email],
-                )
-                email.content_subtype = 'html'
-                email.send()
+                # # Send Email
+                # email_subject = 'Bienvenido a la plataforma MiCancha'
+                # email_template = 'send_email/send_email_user.html'
+                # email_content = render_to_string(email_template, context)
+                # email = EmailMessage(
+                #     email_subject,
+                #     email_content,
+                #     settings.EMAIL_HOST_USER,
+                #     [email],
+                # )
+                # email.content_subtype = 'html'
+                # email.send()
 
                 return redirect("/user/")
             else:
@@ -151,35 +151,35 @@ def reset_password(request, id):
     user_reset_password.set_password(password)
     user_reset_password.save()
 
-    #Send Email to New Users
+    # #Send Email to New Users
 
-    context = {
-        'STATIC_ROOT': STATIC_ROOT,
-        'email': email,
-        'first_name': first_name,
-        'last_name': last_name,
-        'password': password,
-        'mail_action': 'reset'
-        }
-    email_subject = 'Bienvenido a la plataforma MiCancha'
-    email_template = 'send_email/send_email_user.html'
+    # context = {
+    #     'STATIC_ROOT': STATIC_ROOT,
+    #     'email': email,
+    #     'first_name': first_name,
+    #     'last_name': last_name,
+    #     'password': password,
+    #     'mail_action': 'reset'
+    #     }
+    # email_subject = 'Bienvenido a la plataforma MiCancha'
+    # email_template = 'send_email/send_email_user.html'
 
-    # Render the template with the provided context
-    email_content = render_to_string(email_template, context)
+    # # Render the template with the provided context
+    # email_content = render_to_string(email_template, context)
 
-    # Create the EmailMessage object
-    email = EmailMessage(
-        email_subject,
-        email_content,
-        settings.EMAIL_HOST_USER,  # Sender's email address
-        [email],  # Recipient's email address
-    )
+    # # Create the EmailMessage object
+    # email = EmailMessage(
+    #     email_subject,
+    #     email_content,
+    #     settings.EMAIL_HOST_USER,  # Sender's email address
+    #     [email],  # Recipient's email address
+    # )
 
-    # Set the content type of the email to HTML
-    email.content_subtype = 'html'
+    # # Set the content type of the email to HTML
+    # email.content_subtype = 'html'
 
-    # Send the email
-    email.send()
+    # # Send the email
+    # email.send()
 
     message = 'Contraseña reseteada correctamente.'
     messages.add_message(request, messages.INFO, message)

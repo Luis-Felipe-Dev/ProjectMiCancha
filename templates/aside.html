@@ -6,7 +6,7 @@
           <li class="back-btn">
             <div class="mobile-back text-end"><span>Back</span><i class="fa fa-angle-right ps-2" aria-hidden="true"></i></div>
           </li>
-          {% if request.user.id == 1 %}
+          {% if request.user.rol.id == 1 %}
           <li class="dropdown"><a class="nav-link menu-title" href="javascript:void(0)"><i class="icofont icofont-users" style="margin-right: 10px;"></i><span>Usuarios</span></a>
             <ul class="nav-submenu menu-content">
                 <li><a href="{% url "appUser.show" %}">Bandeja</a></li>
@@ -14,11 +14,11 @@
             </ul>
           </li>
           {% endif %}
-          {% if request.user.id == 1 or request.user.id == 2 %}
+          {% if request.user.rol.id == 1 or request.user.rol.id == 2 %}
           <li class="dropdown"><a class="nav-link menu-title" href="javascript:void(0)"><i class="icofont icofont-home" style="margin-right: 10px;"></i><span>Establecimientos</span></a>
             <ul class="nav-submenu menu-content">
                 <li><a href="{% url "appEstablishment.show" %}">Bandeja</a></li>
-                {% if request.user.id == 2 %}                
+                {% if request.user.rol.id == 2 %}                
                 <li><a href="{% url "appEstablishment.create" %}">Registrar</a></li>
                 {% endif %}
             </ul>
@@ -26,17 +26,17 @@
           <li class="dropdown"><a class="nav-link menu-title" href="javascript:void(0)"><i class="icofont icofont icofont-field" style="margin-right: 10px;"></i><span>Campos deportivos</span></a>
             <ul class="nav-submenu menu-content">
               <li><a href="{% url "appFieldSoccer.show" %}">Bandeja</a></li>
-              {% if request.user.id == 2 %}                
+              {% if request.user.rol.id == 2 %}                
               <li><a href="{% url "appFieldSoccer.create" %}">Registrar</a></li>
               {% endif %}
             </ul>
           </li>
           {% endif %}
-          {% if request.user.id == 1 or request.user.id == 3 %}
+          {% if request.user.rol.id == 1 or request.user.rol.id == 3 %}
           <li class="dropdown"><a class="nav-link menu-title" href="javascript:void(0)"><i class="icofont icofont-book" style="margin-right: 10px;"></i><span>Reservaciones</span></a>
             <ul class="nav-submenu menu-content">
               <li><a href="{% url "appReservation.show" %}">Bandeja</a></li>
-              {% if request.user.id == 3 %}             
+              {% if request.user.rol.id == 3 %}             
               <li><a href="{% url "appReservation.create" %}">Registrar</a></li>
               {% endif %}
             </ul>

@@ -236,7 +236,7 @@
               dataType: 'json',            
             }).done(function(data) {
                 $.each(data.establishments, function(key, value){
-                  options += `<option value="${value.id}">${value.name}</option>`;
+                  options += `<option value="${value.id}">${value.name} - Dirección: ${value.location} - Cel.: ${value.phone}</option>`;
                 });
               }).always(function(data){
                 select_establishment.html(options)
