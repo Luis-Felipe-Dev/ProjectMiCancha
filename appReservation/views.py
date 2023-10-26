@@ -10,6 +10,8 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta, time
 from django.http import JsonResponse
 
+now_filter = datetime.now().strftime('%H')
+
 @login_required
 def create(request):
     type_district = TypeDistrict.objects.filter(relation_id=127)
@@ -55,7 +57,8 @@ def create(request):
         context = {
             'type_district': type_district,
             'establishments': establishments,
-            'field_soccers': field_soccers
+            'field_soccers': field_soccers,
+            'now_filter': int(now_filter)
         }
         return render(request, 'reservation/create.html', context)
 
