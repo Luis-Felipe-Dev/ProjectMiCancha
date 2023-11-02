@@ -7,6 +7,11 @@ from django.core.exceptions import ValidationError
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
+import base64
+
+def handle_decode_image_base64(image):
+    image_decode = image.decode("utf-8")
+    return image_decode
 
 @login_required
 def create(request):
@@ -25,6 +30,14 @@ def create(request):
                 field_soccer_create.establishment = Establishment.objects.get(id=request.POST['establishment'])
                 field_soccer_create.created_user = request.user.id
                 field_soccer_create.status = True
+
+                ALLOWED_EXTENSIONS_IMAGE = set(['png', 'PNG', 'jpg', 'JPG', 'bmp', 'jpeg', 'JPEG'])
+                image_field_soccer = request.FILES['image']
+                if not (image_field_soccer and image_field_soccer.name.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS_IMAGE):
+                    message = 'Algo salió mal, contacte a TI.'
+                    return redirect(f'/field_soccer/', message=message)
+                field_soccer_create.image_base64 = base64.b64encode(image_field_soccer.read())
+
                 field_soccer_create.save()
 
                 history_field_soccer_create = HistoryFieldSoccer()
@@ -38,6 +51,9 @@ def create(request):
                 history_field_soccer_create.status = True
                 history_field_soccer_create.user_session = request.user
                 history_field_soccer_create.field_soccer = field_soccer_create
+
+                history_field_soccer_create.image_base64 = field_soccer_create.image_base64
+
                 history_field_soccer_create.save()
                 return redirect("/field_soccer/")
             else:
@@ -55,9 +71,9 @@ def create(request):
         }
         return render(request, 'field_soccer/create.html', context)
 
-
 @login_required
 def show(request):
+    images = []
     # Obtener los establecimientos del usuario actual
     if request.user.rol.id == 2:
         establishments = Establishment.objects.filter(owner=request.user.id)
@@ -67,8 +83,11 @@ def show(request):
     # Filtrar los FieldSoccer que pertenecen a los establecimientos del propietario
     field_soccers = FieldSoccer.objects.filter(establishment__in=establishments).order_by('-created_at')
 
+    for image in field_soccers:
+        images.append((image, handle_decode_image_base64(image.image_base64)))
+
     context = {
-        'field_soccers': field_soccers
+        'field_soccers': images
     }
     return render(request, 'field_soccer/show.html', context)
 
@@ -78,10 +97,12 @@ def edit(request, id):
     type_field_soccers = TypeFieldSoccer.objects.all()
     establishments = Establishment.objects.filter(owner=request.user)
     field_soccer_edit = FieldSoccer.objects.get(id=id)
+    image_base64 = field_soccer_edit.image_base64.decode("utf-8")
     context = {
         'field_soccer_edit': field_soccer_edit,
         "type_field_soccers": type_field_soccers,
-        "establishments": establishments
+        "establishments": establishments,
+        'image_base64': image_base64
     }
 
     return render(request, 'field_soccer/edit.html', context)
@@ -102,6 +123,14 @@ def update(request, id):
             field_soccer_edit.updated_user = request.user.id
             field_soccer_edit.status = request.POST.get('status', False)
             field_soccer_edit.status = True if field_soccer_edit.status == "on" else False
+
+            ALLOWED_EXTENSIONS_IMAGE = set(['png', 'PNG', 'jpg', 'JPG', 'bmp', 'jpeg', 'JPEG'])
+            image_field_soccer = request.FILES['image']
+            if not (image_field_soccer and image_field_soccer.name.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS_IMAGE):
+                message = 'Algo salió mal, contacte a TI.'
+                return redirect(f'/field_soccer/', message=message)
+            field_soccer_edit.image_base64 = base64.b64encode(image_field_soccer.read())
+
             field_soccer_edit.save()
 
             history_field_soccer_edit = HistoryFieldSoccer()
@@ -117,6 +146,9 @@ def update(request, id):
             history_field_soccer_edit.status = True
             history_field_soccer_edit.user_session = request.user
             history_field_soccer_edit.field_soccer = FieldSoccer.objects.get(id=id)
+
+            history_field_soccer_edit.image_base64 = field_soccer_edit.image_base64
+
             history_field_soccer_edit.save()
             return redirect("/field_soccer/")
         except Exception as ex:
@@ -159,8 +191,18 @@ def delete(request, id):
 
 @login_required
 def historial(request, id):
+    images = []
+
     historial_field_soccers = HistoryFieldSoccer.objects.filter(field_soccer=id).order_by('-updated_at')
+
+    for image in historial_field_soccers:
+        if image.image_base64 != None:
+            images.append((image, handle_decode_image_base64(image.image_base64)))
+        else:
+            images.append((image, None))
+
     context = {
-        'historial_field_soccers': historial_field_soccers
-    }
+        'historial_field_soccers': images
+    }    
+
     return render(request, 'field_soccer/historial.html', context)

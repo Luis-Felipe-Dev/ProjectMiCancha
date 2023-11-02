@@ -67,6 +67,8 @@
                             </td>
                             {% endif %}
                         </tr>
+                        {% empty %}
+                        <tr><td class="text-center" colspan="6">No se encontraron registros.</td></tr>
                         {% endfor %}
                     </tbody>
                 </table>

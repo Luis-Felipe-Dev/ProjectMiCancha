@@ -23,7 +23,7 @@
       <div class="row starter-main">
         <div class="col-sm-12">
           <div class="card">
-            <form method="POST" class="post-form" action="{% url 'appFieldSoccer.update' id=field_soccer_edit.id %}">
+            <form method="POST" class="post-form" action="{% url 'appFieldSoccer.update' id=field_soccer_edit.id %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="card-body">
                   <div class="form-group">
@@ -80,6 +80,21 @@
                       <option value="{{ establishment.id }}">{{ establishment.name }} - Dirección: {{ establishment.location }} - Cel.: {{ establishment.phone }}</option>
                       {% endfor %}
                     </select>
+                  </div>
+                  <div class="form-group mt-3">
+                    <label for="establishment">Imagen referencial de campo deportivo:</label>
+                    <div class="mt-2">
+                      {% if image_base64 != None %}
+                      <img src="data:image/jpeg;base64,{{ image_base64 }}" alt="Imagen cargada" width="300px;">
+                      {% else %}
+                      No tiene imagen, puedes cargar uno.
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group mt-2">
+                    <label class="image">Cargar nueva imagen referencial de campo deportivo (Formatos permitidos: 'JPG', 'JPEG', 'PNG', 'jpg', 'jpeg', 'png')</label>
+                    {% comment %} <label class="image">Cargar nueva imagen referencial de campo deportivo (Formatos permitidos: 'JPG', 'JPEG', 'PNG', 'jpg', 'jpeg', 'png') <b style="color: red;">(600x600 pixeles)</b></label> {% endcomment %}
+                    <input class="form-control" type="file" id="image" name="image">
                   </div>
                   <div class="form-check">
                     <input type="checkbox" class="form-check-input" id="status" name="status" {% if field_soccer_edit.status == True%}checked{% endif %}>

@@ -26,7 +26,7 @@
       <div class="row starter-main">
         <div class="col-sm-12">
           <div class="card">
-            <form method="POST" class="post-form" action="">
+            <form method="POST" class="post-form" action="" enctype="multipart/form-data">
               {% csrf_token %}
               <div class="card-body">
                 <div class="form-group">
@@ -67,6 +67,11 @@
                     <option value="{{ establishment.id }}">{{ establishment.name }} - Dirección: {{ establishment.location }} - Cel.: {{ establishment.phone }}</option>
                     {% endfor %}
                   </select>
+                </div>
+                <div class="form-group">
+                  <label class="image">Cargar imagen referencial de campo deportivo (Formatos permitidos: 'JPG', 'JPEG', 'PNG', 'jpg', 'jpeg', 'png')</label>
+                  {% comment %} <label class="image">Cargar imagen referencial de campo deportivo (Formatos permitidos: 'JPG', 'JPEG', 'PNG', 'jpg', 'jpeg', 'png') <b style="color: red;">(600x600 pixeles)</b></label> {% endcomment %}
+                  <input class="form-control" type="file" id="image" name="image" required>
                 </div>
               </div>
               <div class="card-footer">

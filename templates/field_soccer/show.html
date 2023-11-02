@@ -35,12 +35,13 @@
                             <th class="text-center">Número de jugadores</th>
                             <th class="text-center">Precio</th>
                             <th class="text-center">Establecimiento</th>
+                            <th class="text-center">Imagen referencial</th>
                             <th class="text-center">Estado</th>
                             <th class="text-center" style="width: 100px">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for field_soccer in field_soccers %}
+                        {% for field_soccer, image_base64 in field_soccers %}
                         <tr>
                             {% comment %} <td class="text-center">{{field_soccer.id}}</td> {% endcomment %}
                             <td class="text-center">{{field_soccer.name}}</td>
@@ -48,6 +49,9 @@
                             <td class="text-center">{{field_soccer.number_players}}</td>
                             <td class="text-center">S/. {{field_soccer.price}}</td>
                             <td class="text-center">{{field_soccer.establishment.name}}</td>
+                            <td class="text-center">
+                              <img class="p-1" src="data:image/png;base64,{{ image_base64 }}" width="80px" />
+                            </td>
                             <td class="text-center text-center">
                                 {% if field_soccer.status %}
                                 <i class="icofont icofont-check-circled" style="color: green; font-size: 20px;"></i>
@@ -69,6 +73,8 @@
                           </td>
                             {% endif %}
                         </tr>
+                        {% empty %}
+                        <tr><td class="text-center" colspan="8">No se encontraron registros.</td></tr>
                         {% endfor %}
                     </tbody>
                 </table>

@@ -9,6 +9,7 @@ class FieldSoccer(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2, null=True)
     type_field_soccer = models.ForeignKey(TypeFieldSoccer, on_delete=models.CASCADE, null=True, related_name='type_field_soccer')
     establishment = models.ForeignKey(Establishment, on_delete=models.CASCADE, null=True, related_name='type_field_soccer_establishment')
+    image_base64 = models.BinaryField(null=True)
     status = models.BooleanField(False, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

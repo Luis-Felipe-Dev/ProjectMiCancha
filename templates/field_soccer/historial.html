@@ -35,6 +35,7 @@
                             <th class="text-center">Número de jugadores</th>
                             <th class="text-center">Precio</th>
                             <th class="text-center">Establecimiento</th>
+                            <th class="text-center">Imagen referencial</th>
                             <th class="text-center">F. Creación</th>
                             <th class="text-center">F. Modificación</th>
                             <th class="text-center">F. Eliminación</th>
@@ -42,7 +43,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for historial_field_s in historial_field_soccers %}
+                        {% for historial_field_s, image_base64 in historial_field_soccers %}
                         <tr>
                             {% comment %} <td class="text-center">{{historial_field_s.id}}</td> {% endcomment %}
                             <td class="text-center">{{historial_field_s.name}}</td>
@@ -50,6 +51,12 @@
                             <td class="text-center">{{historial_field_s.number_players}}</td>
                             <td class="text-center">S/. {{historial_field_s.price}}</td>
                             <td class="text-center">{{historial_field_s.establishment.name}}</td>
+                            <td class="text-center">
+                              {% if image_base64 != None %}
+                              <img class="p-1" src="data:image/png;base64,{{ image_base64 }}" width="80px" />
+                              {% else %}
+                              {% endif %}
+                            </td>
                             <td class="text-center">{{historial_field_s.created_at|date:"Y-m-d H:m:s"}}</td>
                             <td class="text-center">{{historial_field_s.updated_at|date:"Y-m-d H:m:s"}}</td>
                             <td class="text-center">{{historial_field_s.deleted_at|date:"Y-m-d H:m:s"}}</td>
