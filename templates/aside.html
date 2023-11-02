@@ -32,7 +32,6 @@
             </ul>
           </li>
           {% endif %}
-          {% if request.user.rol.id == 1 or request.user.rol.id == 3 %}
           <li class="dropdown"><a class="nav-link menu-title" href="javascript:void(0)"><i class="icofont icofont-book" style="margin-right: 10px;"></i><span>Reservaciones</span></a>
             <ul class="nav-submenu menu-content">
               <li><a href="{% url "appReservation.show" %}">Bandeja</a></li>
@@ -41,7 +40,6 @@
               {% endif %}
             </ul>
           </li>
-          {% endif %}
           {% comment %} <li class="dropdown"><li><a class="nav-link menu-title" href="/appVideosUploaded/"><i class="icofont icofont-film" style="margin-right: 10px;"></i><span>Videos guardados</span></a></li></li> {% endcomment %}
         </ul>
       </div>

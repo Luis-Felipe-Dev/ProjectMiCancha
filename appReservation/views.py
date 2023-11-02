@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from appReservation.models import Reservation
 from appFieldSoccer.models import FieldSoccer
 from appUser.models import User
@@ -9,6 +9,9 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta, time
 from django.http import JsonResponse
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.conf import settings
 
 now_filter = datetime.now().strftime('%H')
 
@@ -21,7 +24,7 @@ def create(request):
     if request.method == 'POST':
         try:
             selected_hours = request.POST.getlist('option_hour')
-            print(selected_hours)
+            # print(selected_hours)
 
             if selected_hours:
                 reservations_to_create = []
@@ -44,6 +47,37 @@ def create(request):
 
                 # Guardar las reservas
                 for reservation in reservations_to_create:
+                    #Send Email to customers
+                    email = request.user
+
+                    context = {
+                        'email': email,
+                        'date': reservation.date,
+                        'start_hour': reservation.start_hour,
+                        'end_hour': reservation.end_hour,
+                        'field_soccer_name': reservation.field_soccer.name,
+                        'field_soccer_number_players': reservation.field_soccer.number_players,
+                        'field_soccer_price': reservation.field_soccer.price,
+                        'field_soccer_image_base64': reservation.field_soccer.image_base64.decode("utf-8"),
+                        'establishment_name': reservation.field_soccer.establishment.name,
+                        'establishment_location': reservation.field_soccer.establishment.location,
+                        'establishment_phone': reservation.field_soccer.establishment.phone,
+                        'establishment_type_dist': reservation.field_soccer.establishment.type_dist.complete
+                        }
+                    
+                    # Send Email
+                    email_subject = f'MiCancha - Reserva de campo deportivo para el {reservation.date} de {reservation.start_hour} a {reservation.end_hour}'
+                    email_template = 'send_email/reservation.html'
+                    email_content = render_to_string(email_template, context)
+                    email = EmailMessage(
+                        email_subject,
+                        email_content,
+                        settings.EMAIL_HOST_USER,
+                        ['luis.fhb.2016@gmail.com'],
+                    )
+                    email.content_subtype = 'html'
+                    email.send()
+
                     reservation.save()
                 print("Reservas guardadas con éxito.")
             else:
@@ -67,8 +101,13 @@ def create(request):
 def show(request):
     if request.user.rol.id == 3:
         reservations = Reservation.objects.filter(created_user=request.user.id).order_by('date', 'start_hour')
+    elif request.user.rol.id == 2:
+        field_soccers = FieldSoccer.objects.filter(establishment__owner=request.user)
+        reservations = Reservation.objects.filter(field_soccer__in=field_soccers).order_by('date', 'start_hour')
     else:
+        # Si el usuario tiene otro rol, muestra todas las reservaciones
         reservations = Reservation.objects.all().order_by('date', 'start_hour')
+
     context = {
         'reservations': reservations
     }
@@ -114,11 +153,15 @@ def update(request, id):
 
 @login_required
 def delete(request, id):
-    reservation_delete = Reservation.objects.get(id=id)
-    reservation_delete.deleted_at = datetime.now()
-    reservation_delete.deleted_user = request.user.id
-    reservation_delete.status = False
-    reservation_delete.save()
+    print(id)
+    try:
+        reservation_delete = Reservation.objects.get(id=id)
+        reservation_delete.deleted_at = datetime.now()
+        reservation_delete.deleted_user = request.user.id
+        reservation_delete.status = False
+        reservation_delete.save()
+    except Exception as ex:
+        print(ex)
     return redirect('/reservation/')
 
 # @method_decorator(csrf_exempt)
@@ -128,7 +171,7 @@ def get_establishment(request, type_dist_id):
 
 # @method_decorator(csrf_exempt)
 def get_field_soccer(request, establishment_id):
-    field_soccer = FieldSoccer.objects.filter(establishment=establishment_id).values('id', 'name')
+    field_soccer = FieldSoccer.objects.filter(establishment=establishment_id).values('id', 'name', 'number_players')
     return JsonResponse({'field_soccer': list(field_soccer)})
 
 # # @method_decorator(csrf_exempt)

@@ -17,7 +17,8 @@ class RoleMiddleware:
         #     return redirect('/login')
         # except Exception as ex:
         #     return redirect('/')
-            if (request.path.startswith('/user/') or request.path.startswith('/reservation/') or request.path.startswith('/evaluated/')) and request.user.rol.id == 2:
+            # if (request.path.startswith('/user/') or request.path.startswith('/reservation/')) and request.user.rol.id == 2:
+            if (request.path.startswith('/user/') or request.path.startswith('/reservation/create/')) and request.user.rol.id == 2:
                 # Redirige a una ruta específica si no tiene permisos
                 return redirect('/home/')
             if (request.path.startswith('/user/') or request.path.startswith('/establishment/') or request.path.startswith('/field_soccer/')) and request.user.rol.id == 3:

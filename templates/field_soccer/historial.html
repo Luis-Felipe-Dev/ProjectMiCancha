@@ -57,9 +57,9 @@
                               {% else %}
                               {% endif %}
                             </td>
-                            <td class="text-center">{{historial_field_s.created_at|date:"Y-m-d H:m:s"}}</td>
-                            <td class="text-center">{{historial_field_s.updated_at|date:"Y-m-d H:m:s"}}</td>
-                            <td class="text-center">{{historial_field_s.deleted_at|date:"Y-m-d H:m:s"}}</td>
+                            <td class="text-center">{{historial_field_s.created_at|date:"Y-m-d H:i:s"}}</td>
+                            <td class="text-center">{{historial_field_s.updated_at|date:"Y-m-d H:i:s"}}</td>
+                            <td class="text-center">{{historial_field_s.deleted_at|date:"Y-m-d H:i:s"}}</td>
                             <td class="text-center text-center">
                                 {% if historial_field_s.status %}
                                 <i class="icofont icofont-check-circled" style="color: green; font-size: 20px;"></i>

@@ -304,7 +304,7 @@
               dataType: 'json',            
             }).done(function(data) {
                 $.each(data.field_soccer, function(key, value){
-                  options += `<option value="${value.id}">${value.name}</option>`;
+                  options += `<option value="${value.id}">${value.name} - Capacidad: ${value.number_players/2} vs ${value.number_players/2}</option>`;
                 });
               }).always(function(data){
                 select_field_soccer.html(options)
@@ -336,50 +336,93 @@
           $('input[name="option_hour"]').closest('.label_checkbox').removeClass('checked');      
           var field_soccer_id = $('#field_soccer').val();
           var date_reservation = $(this).val();
-              
-          if (field_soccer_id && date_reservation) {
-              $.ajax({
-                  url: `/reservation/get_available_hours/${field_soccer_id}/${date_reservation}/`,
-                  dataType: 'json',
-                  success: function(data) {
-                      // Manejar los datos de las horas disponibles devueltas en 'data.available_hours'
-                      // console.log(data.available_hours);
-                      // console.log(data.unavailable_hours);
-      
-                      // Desmarcar todos los checkboxes
-                      $('input[name="option_hour"]').prop('checked', false);
-      
-                      // Deshabilitar los checkboxes correspondientes a las horas no disponibles
-                      $('input[name="option_hour"]').prop('disabled', false);
 
-                      // Iterar sobre las horas no disponibles (disabled) y cambiar el color de fondo a rojo
-                      if (data && data.unavailable_hours) {
-                        data.unavailable_hours.forEach(function(hour) {
-                            var checkbox = $('input[name="option_hour"][value="' + hour + '"]');
-                            checkbox.prop('disabled', true);
-                            checkbox.closest('.label_checkbox').addClass('disabled');
-                        });
-                      }
+          var selectedDate = new Date($(this).val() + "T00:00:00");
+          // Obtiene el año, mes y día
+          const year_select = selectedDate.getFullYear();
+          const month_select = String(selectedDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based, so add 1
+          const day_select = String(selectedDate.getDate()).padStart(2, '0');
+          // Formatea la fecha en el formato YYYY-MM-DD
+          selectedDate = `${year_select}-${month_select}-${day_select}`;
 
-                      // Iterar sobre las horas disponibles (checked) y cambiar el color de fondo a verde
-                      if (data && data.available_hours) {
-                        data.available_hours.forEach(function(hour) {
-                            var checkbox = $('input[name="option_hour"][value="' + hour + '"]');
-                            checkbox.prop('checked', false);
-                            checkbox.closest('.label_checkbox').addClass('checked');
-                        });
-                      }
-                      
-                  },
-                  error: function(xhr, status, error) {
-                      // Manejar errores en la solicitud AJAX
-                      console.error(error);
-                  }
-              });
+          var currentDate = new Date();
+          // Obtiene el año, mes y día
+          const year = currentDate.getFullYear();
+          const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based, so add 1
+          const day = String(currentDate.getDate()).padStart(2, '0');
+          // Formatea la fecha en el formato YYYY-MM-DD
+          currentDate = `${year}-${month}-${day}`;
+
+          if (selectedDate >= currentDate) {              
+            if (field_soccer_id && date_reservation) {
+                $.ajax({
+                    url: `/reservation/get_available_hours/${field_soccer_id}/${date_reservation}/`,
+                    dataType: 'json',
+                    success: function(data) {
+                        // Manejar los datos de las horas disponibles devueltas en 'data.available_hours'
+                        // console.log(data.available_hours);
+                        // console.log(data.unavailable_hours);
+        
+                        // Desmarcar todos los checkboxes
+                        $('input[name="option_hour"]').prop('checked', false);
+        
+                        // Deshabilitar los checkboxes correspondientes a las horas no disponibles
+                        $('input[name="option_hour"]').prop('disabled', false);
+  
+                        // Iterar sobre las horas no disponibles (disabled) y cambiar el color de fondo a rojo
+                        if (data && data.unavailable_hours) {
+                          data.unavailable_hours.forEach(function(hour) {
+                              var checkbox = $('input[name="option_hour"][value="' + hour + '"]');
+                              checkbox.prop('disabled', true);
+                              checkbox.closest('.label_checkbox').addClass('disabled');
+                          });
+                        }
+  
+                        // Iterar sobre las horas disponibles (checked) y cambiar el color de fondo a verde
+                        if (data && data.available_hours) {
+                          data.available_hours.forEach(function(hour) {
+                              var checkbox = $('input[name="option_hour"][value="' + hour + '"]');
+                              checkbox.prop('checked', false);
+                              checkbox.closest('.label_checkbox').addClass('checked');
+                          });
+                        }
+                        
+                    },
+                    error: function(xhr, status, error) {
+                        // Manejar errores en la solicitud AJAX
+                        console.error(error);
+                    }
+                });
+            }
+          } else {
+            // Fecha inválida: oculta los checkboxes y muestra un mensaje de error          
+            $('#date_reservation').val('');
+            $('input[name="option_hour"]').prop('checked', false);
+            $('input[name="option_hour"]').prop('disabled', true);
+            $('input[name="option_hour"]').closest('.label_checkbox').removeClass('disabled');
+            $('input[name="option_hour"]').closest('.label_checkbox').removeClass('checked');
+
+            // Muestra un mensaje de error
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'La fecha seleccionada debe ser igual o posterior a la fecha actual.',
+            });
           }
         });
         
       });
+    </script>
+    <script>
+      {% if register_ok %}
+      Swal.fire(
+        '¡Excelente!',
+        'Su mensaje fue enviado con éxito a los correos {{ recipients }}.',
+        'success'
+      ).then(function() {
+          window.location.href = "{% url 'appReservation.show' %}";
+      });
+      {% endif %}
     </script>
   {% endblock %}
 {% endblock %}

@@ -31,12 +31,15 @@ def create(request):
                 field_soccer_create.created_user = request.user.id
                 field_soccer_create.status = True
 
-                ALLOWED_EXTENSIONS_IMAGE = set(['png', 'PNG', 'jpg', 'JPG', 'bmp', 'jpeg', 'JPEG'])
-                image_field_soccer = request.FILES['image']
-                if not (image_field_soccer and image_field_soccer.name.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS_IMAGE):
-                    message = 'Algo salió mal, contacte a TI.'
-                    return redirect(f'/field_soccer/', message=message)
-                field_soccer_create.image_base64 = base64.b64encode(image_field_soccer.read())
+                try:
+                    ALLOWED_EXTENSIONS_IMAGE = set(['png', 'PNG', 'jpg', 'JPG', 'bmp', 'jpeg', 'JPEG'])
+                    image_field_soccer = request.FILES['image']
+                    if not (image_field_soccer and image_field_soccer.name.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS_IMAGE):
+                        message = 'Algo salió mal, contacte a TI.'
+                        return redirect(f'/field_soccer/', message=message)
+                    field_soccer_create.image_base64 = base64.b64encode(image_field_soccer.read())
+                except Exception as ex:
+                    pass
 
                 field_soccer_create.save()
 
@@ -52,7 +55,10 @@ def create(request):
                 history_field_soccer_create.user_session = request.user
                 history_field_soccer_create.field_soccer = field_soccer_create
 
-                history_field_soccer_create.image_base64 = field_soccer_create.image_base64
+                try:
+                    history_field_soccer_create.image_base64 = field_soccer_create.image_base64
+                except Exception as ex:
+                    pass
 
                 history_field_soccer_create.save()
                 return redirect("/field_soccer/")
@@ -124,12 +130,15 @@ def update(request, id):
             field_soccer_edit.status = request.POST.get('status', False)
             field_soccer_edit.status = True if field_soccer_edit.status == "on" else False
 
-            ALLOWED_EXTENSIONS_IMAGE = set(['png', 'PNG', 'jpg', 'JPG', 'bmp', 'jpeg', 'JPEG'])
-            image_field_soccer = request.FILES['image']
-            if not (image_field_soccer and image_field_soccer.name.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS_IMAGE):
-                message = 'Algo salió mal, contacte a TI.'
-                return redirect(f'/field_soccer/', message=message)
-            field_soccer_edit.image_base64 = base64.b64encode(image_field_soccer.read())
+            try:
+                ALLOWED_EXTENSIONS_IMAGE = set(['png', 'PNG', 'jpg', 'JPG', 'bmp', 'jpeg', 'JPEG'])
+                image_field_soccer = request.FILES['image']
+                if not (image_field_soccer and image_field_soccer.name.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS_IMAGE):
+                    message = 'Algo salió mal, contacte a TI.'
+                    return redirect(f'/field_soccer/', message=message)
+                field_soccer_edit.image_base64 = base64.b64encode(image_field_soccer.read())
+            except Exception as ex:
+                pass
 
             field_soccer_edit.save()
 
@@ -147,7 +156,10 @@ def update(request, id):
             history_field_soccer_edit.user_session = request.user
             history_field_soccer_edit.field_soccer = FieldSoccer.objects.get(id=id)
 
-            history_field_soccer_edit.image_base64 = field_soccer_edit.image_base64
+            try:
+                history_field_soccer_edit.image_base64 = field_soccer_edit.image_base64
+            except Exception as ex:
+                pass
 
             history_field_soccer_edit.save()
             return redirect("/field_soccer/")

@@ -17,17 +17,27 @@
     </div>
   </div>
   <!-- Container-fluid starts-->
-  <div class="container-fluid">
+  <div class="container">
     <div class="row starter-main">
-      <div class="col-sm-12">
+      <div class="col-sm-2">
+      </div>
+      <div class="col-sm-8">
         <div class="card">
           <div class="card-header pb-0">
             <h5>¡Bienvenido {{ request.user.first_name }} {{ request.user.last_name }}!</h5>
           </div>
           <div class="card-body">
-            <p>{% lorem 2 p random %}</p>
+            {% if request.user.rol.id == 1 %}
+            <p>Hola {{ request.user.first_name }} {{ request.user.last_name }}, bienvenido a la plataforma MiCancha, en este módulo podrás visualizar el historial de cambios que se hicieron en Establecimientos y en Campos deportivos. Asimismo podrás gestionar los usuarios registrados en la plataforma.</p>
+            {% elif request.user.rol.id == 2 %}
+            <p>Hola {{ request.user.first_name }} {{ request.user.last_name }}, bienvenido a la plataforma MiCancha, en este módulo podrás gestionar los Establecimientos y en Campos deportivos. Asimismo podrás visualizar las reservas de los campos deportivos.</p>
+            {% else %}
+            <p>Hola {{ request.user.first_name }} {{ request.user.last_name }}, bienvenido a la plataforma MiCancha, en este módulo podrás realizar las reservas de los campos deportivos teniendo en consideración el lugar, establecimiento, campo deportivo, cantidad de jugadores, fecha y hora.</p>
+            {% endif %}
           </div>
         </div>
+      </div>
+      <div class="col-sm-2">
       </div>
     </div>
   </div>

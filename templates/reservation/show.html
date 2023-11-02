@@ -1,5 +1,5 @@
 {% extends '../base.html' %}
-
+{% load static %}
 {% block body %}
 <div class="page-body">
     <div class="container-fluid">
@@ -24,9 +24,11 @@
     <!-- Container-fluid starts-->
     <div class="container-fluid">
         <div class="card">
+          {% if request.user.rol.id == 3 %}
             <div class="card-header">
-                <a class="card-title btn btn-primary" type="button" href="{% url "appReservation.create" %}">Registrar reservación</a>
+              <a class="card-title btn btn-primary" type="button" href="{% url "appReservation.create" %}">Registrar reservación</a>
             </div>
+            {% endif %}
     
             <div class="card-body">
                 <table id="appReservation" class="display responsive nowrap table-bordered" style="width:100%">
@@ -64,14 +66,24 @@
                                 <i class="icofont icofont-close-circled" style="color: red; font-size: 20px;"></i>
                                 {% endif %}
                             </td>
-                            {% if request.user.rol.id == 3 %}
+                            {% if request.user.rol.id == 3 and reservation.status == False %}
                             <td class="text-center text-center">
                                 {% comment %} <a href="{% url 'appReservation.edit' id=reservation.id %}"
                                     class="mt-2 btn-block btn-sm btn-warning"><i class="icofont icofont-ui-edit"></i></a> {% endcomment %}
-                                <a href="{% url 'appReservation.delete' id=reservation.id %}" class="mt-2 btn-block btn-sm btn-danger"><i class="icofont icofont-ui-close"></i></a>
+                                <p class="text-danger"><b>Cancelado</b></p>
+                            </td>
+                            {% elif request.user.rol.id == 3 %}
+                            <td class="text-center text-center">
+                                {% comment %} <a href="{% url 'appReservation.edit' id=reservation.id %}"
+                                    class="mt-2 btn-block btn-sm btn-warning"><i class="icofont icofont-ui-edit"></i></a> {% endcomment %}
+                                <a href="{% url 'appReservation.delete' id=reservation.id %}" class="mt-2 btn-block btn-sm btn-danger delete-btn"  data-reservation-id="{{ reservation.id }}">
+                                  <i class="icofont icofont-ui-close"></i>
+                                </a>
                             </td>
                             {% endif %}
                         </tr>
+                        {% empty %}
+                        <tr><td class="text-center" colspan="9">No se encontraron registros.</td></tr>
                         {% endfor %}
                     </tbody>
                 </table>
@@ -81,21 +93,30 @@
     <!-- Container-fluid Ends-->
   </div>
 {% block customJS %}
-{% if messages %}
-{% for message in messages %}
-  <script>
-    $(function() {
-      var Toast = Swal.mixin({
-        toast: true,
-        position: 'top-right',
-        showConfirmButton: false,
-        timer: 5000
-      });
-      toastr.error('{{message}}')
+<!-- latest jquery-->
+<script src="{% static 'assets/js/jquery-3.5.1.min.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  $(document).ready(function () {
+    $('.delete-btn').on('click', function (e) {
+      var reservationId = $(this).data('reservation-id');
+      e.preventDefault();
+      Swal.fire({
+        title: "¿Está seguro?",
+        text: "¡No podrá revertir esto!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, cancelar reserva!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = `/reservation/delete/${reservationId}`;
+        }
+      })
     });
-  </script>
-{% endfor %}
-{% endif %}
+  });
+</script>
 {% endblock customJS %}
 
 {% endblock body %}

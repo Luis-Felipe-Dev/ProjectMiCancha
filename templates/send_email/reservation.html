@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiCancha - Reserva de campo deportivo para el {{ date }} de {{ start_hour }} a {{ end_hour }}</title>
+    <style type="text/css">
+        body{
+        width: 650px;
+        font-family: work-Sans, sans-serif;
+        background-color: #f6f7fb;
+        display: block;
+        }
+        a{
+        text-decoration: none;
+        }
+        span {
+        font-size: 14px;
+        }
+        p {
+        font-size: 13px;
+        line-height: 1.7;
+        letter-spacing: 0.7px;
+        margin-top: 0;
+        }
+        .text-center{
+        text-align: center
+        }
+        h6 {
+        font-size: 16px;
+        margin: 0 0 18px 0;
+        }
+        @media (max-width: 767px) {
+        body {
+            width: unset !important;
+            padding: 0 12px;
+        }
+        table {
+            width: 100% !important;
+        }
+        }
+    </style>
+</head>
+
+<body style="margin: 100px auto;">
+    <table style="width: 650px; margin: 0 auto; background-color: #dff2e2; border-radius: 8px; margin-top: 20px;">
+        <tbody>
+        <tr>
+            <td style="padding-left: 30px; padding-right: 30px; padding-top: 30px; text-align: center;"> 
+                <h2 style="font-weight: 600">Mi<b>Cancha</b> - Reserva de campo deportivo</h2>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 30px"> 
+                <p><strong>A nombre de: </strong>{{ email.first_name }} {{ email.last_name }}</p>
+                <p><strong>Fecha: </strong>{{ date }}</p>
+                <p><strong>Hora inicio: </strong>{{ start_hour }}</p>
+                <p><strong>Hora fin: </strong>{{ end_hour }}</p>
+                <p><strong>Establecimiento: </strong>{{ establishment_name }}</p>
+                <p><strong>Dirección: </strong>{{ establishment_location }} - {{ establishment_type_dist }}</p>
+                <p><strong>Celular: </strong>{{ establishment_phone }}</p>
+                <p><strong>Nombre de campo deportivo: </strong>{{ field_soccer_name }}</p>
+                <p><strong>Número de jugadores: </strong>{{ field_soccer_number_players }}</p>
+                <p><strong>Precio: </strong>S/. {{ field_soccer_price }}</p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>
