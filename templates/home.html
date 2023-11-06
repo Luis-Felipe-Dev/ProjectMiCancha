@@ -33,6 +33,8 @@
             <p>Hola {{ request.user.first_name }} {{ request.user.last_name }}, bienvenido a la plataforma MiCancha, en este módulo podrás gestionar los Establecimientos y en Campos deportivos. Asimismo podrás visualizar las reservas de los campos deportivos.</p>
             {% else %}
             <p>Hola {{ request.user.first_name }} {{ request.user.last_name }}, bienvenido a la plataforma MiCancha, en este módulo podrás realizar las reservas de los campos deportivos teniendo en consideración el lugar, establecimiento, campo deportivo, cantidad de jugadores, fecha y hora.</p>
+            <p>Esta plataforma cuenta con {{ field_soccer }} campos deportivos registrados, los cuales se ajustan a la preferencia de cada cliente, teniendo en consideración el tipo de campo deportivo, cantidad de jugadores, distrito de preferencia, entre otros aspectos relevantes.</p>
+            <a class="btn btn-primary" href="{% url 'appReservation.create' %}">Realizar una reservación</a>
             {% endif %}
           </div>
         </div>

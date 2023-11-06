@@ -3,10 +3,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from appUser.models import User
+from appFieldSoccer.models import FieldSoccer
 
 @login_required
 def home(request):
-    return render(request, 'home.html')
+    field_soccer = FieldSoccer.objects.count()
+    return render(request, 'home.html', {'field_soccer': field_soccer})
 
 def login_custom(request):
     message = ''
