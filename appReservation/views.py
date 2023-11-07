@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from appReservation.models import Reservation
 from appFieldSoccer.models import FieldSoccer
+from appFieldSoccer.views import handle_decode_image_base64
 from appUser.models import User
 from typeThings.models import TypeDistrict
 from appEstablishment.models import Establishment
@@ -166,13 +167,29 @@ def delete(request, id):
 
 # @method_decorator(csrf_exempt)
 def get_establishment(request, type_dist_id):
-    establishments = Establishment.objects.filter(type_dist=type_dist_id).values("id", "name", "location", "phone")
-    return JsonResponse({'establishments': list(establishments)})
+    try:
+        establishments = Establishment.objects.filter(type_dist=type_dist_id).values("id", "name", "location", "phone")
+        if len(establishments) > 0:
+            return JsonResponse({'establishments': list(establishments)})
+        else:
+            return JsonResponse({'error': 'No se encontraron establecimientos por Distrito especificado.'}, status=404)
+    except ValueError:
+        return JsonResponse({'error': 'El Distrito especificado no es válido.'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 # @method_decorator(csrf_exempt)
 def get_field_soccer(request, establishment_id):
-    field_soccer = FieldSoccer.objects.filter(establishment=establishment_id).values('id', 'name', 'number_players')
-    return JsonResponse({'field_soccer': list(field_soccer)})
+    try:
+        field_soccer = FieldSoccer.objects.filter(establishment=establishment_id).values('id', 'name', 'number_players')
+        if len(field_soccer) > 0:
+            return JsonResponse({'field_soccer': list(field_soccer)})
+        else:
+            return JsonResponse({'error': 'No se encontraron campos deportivos por establecimiento especificado.'}, status=404)
+    except ValueError:
+        return JsonResponse({'error': 'El establecimiento especificado no es válido.'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 # # @method_decorator(csrf_exempt)
 # def get_reservation(request, field_soccer_id, date_reservation):
@@ -209,3 +226,28 @@ def get_available_hours(request, field_soccer_id, date_reservation):
 
     # Devuelve las horas disponibles y no disponibles como listas en la respuesta JSON
     return JsonResponse(context)
+
+def get_field_soccer_number_players(request, number_players):
+    try:
+        field_soccer = []
+        field_soccer_objects = FieldSoccer.objects.filter(number_players=number_players)
+        for obj in field_soccer_objects:
+            decoded_image = handle_decode_image_base64(obj.image_base64)
+            field_soccer.append({
+                'id': obj.id,
+                'name': obj.name,
+                'number_players': obj.number_players,
+                'price': obj.price,
+                'image_base64': decoded_image,
+                'establishment': obj.establishment.name,
+                'type_field_soccer': obj.type_field_soccer.description
+            })
+
+        if len(field_soccer) > 0:
+            return JsonResponse({'field_soccer': field_soccer})
+        else:
+            return JsonResponse({'error': 'No se encontraron campos deportivos para el número de jugadores especificado.'}, status=404)
+    except ValueError:
+        return JsonResponse({'error': 'El número de jugadores especificado no es válido.'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
