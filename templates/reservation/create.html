@@ -48,14 +48,14 @@
     </div>
     <!-- Container-fluid starts -->
     <div class="container">
-      <div class="row text-center mb-4">
+      {% comment %} <div class="row text-center mb-4">
         <div class="col-lg-6 col-sm-6 col-xs-6">
           <a class="btn btn-primary" href="#" id="searchByDistrictBtn">Buscar por Distrito</a>
         </div>
         <div class="col-lg-6 col-sm-6 col-xs-6">
           <a class="btn btn-primary" href="#" id="searchByPlayersBtn">Buscar por cantidad de jugadores</a>
         </div>
-      </div>
+      </div> {% endcomment %}
       <div class="row starter-main" id="rowDistrict">
         <div class="col-sm-12">
           <div class="card">
@@ -206,7 +206,7 @@
         </div>
       </div>
 
-      <div class="row starter-main" id="rowPlayers">
+      {% comment %} <div class="row starter-main" id="rowPlayers">
         <div class="col-sm-12">
           <div class="card">
             <form method="POST" class="post-form" action="" id="reservation_register">
@@ -228,120 +228,7 @@
                 <div class="form-group">
                   <div id="card-container"></div>
                 </div>
-                {% comment %} <div class="form-group">
-                  <label for="date_reservation">Fecha</label>
-                  <input type="date" class="form-control" id="date_reservation" name="date_reservation" placeholder="" required />
-                </div>
-
-                <div class="checkbox-container">
-                  <div class="row">
-                    {% if now_filter < 9 %}
-                    <div class="col-lg-3 col-sm-12 col-xs-12">
-                      <label class="label_checkbox">
-                        <input type="checkbox" name="option_hour" value="09:00" /> 09:00 - 10:00
-                      </label>
-                    </div>
-                    {% endif %}
-                    {% if now_filter < 10 %}
-                    <div class="col-lg-3 col-sm-12 col-xs-12">
-                      <label class="label_checkbox">
-                        <input type="checkbox" name="option_hour" value="10:00" /> 10:00 - 11:00
-                      </label>
-                    </div>
-                    {% endif %}
-                    {% if now_filter < 11 %}
-                    <div class="col-lg-3 col-sm-12 col-xs-12">
-                      <label class="label_checkbox">
-                        <input type="checkbox" name="option_hour" value="11:00" /> 11:00 - 12:00
-                      </label>
-                    </div>
-                    {% endif %}
-                    {% if now_filter < 12 %}
-                    <div class="col-lg-3 col-sm-12 col-xs-12">
-                      <label class="label_checkbox">
-                        <input type="checkbox" name="option_hour" value="12:00" /> 12:00 - 13:00
-                      </label>
-                    </div>
-                    {% endif %}
-                    {% if now_filter < 13 %}
-                    <div class="col-lg-3 col-sm-12 col-xs-12">
-                      <label class="label_checkbox">
-                        <input type="checkbox" name="option_hour" value="13:00" /> 13:00 - 14:00
-                      </label>
-                    </div>
-                    {% endif %}
-                    {% if now_filter < 14 %}
-                    <div class="col-lg-3 col-sm-12 col-xs-12">
-                      <label class="label_checkbox">
-                        <input type="checkbox" name="option_hour" value="14:00" /> 14:00 - 15:00
-                      </label>
-                    </div>
-                    {% endif %}
-                    {% if now_filter < 15 %}
-                    <div class="col-lg-3 col-sm-12 col-xs-12">
-                      <label class="label_checkbox">
-                        <input type="checkbox" name="option_hour" value="15:00" /> 15:00 - 16:00
-                      </label>
-                    </div>
-                    {% endif %}
-                    {% if now_filter < 16 %}
-                    <div class="col-lg-3 col-sm-12 col-xs-12">
-                      <label class="label_checkbox">
-                        <input type="checkbox" name="option_hour" value="16:00" /> 16:00 - 17:00
-                      </label>
-                    </div>
-                    {% endif %}
-                    {% if now_filter < 17 %}
-                    <div class="col-lg-3 col-sm-12 col-xs-12">
-                      <label class="label_checkbox">
-                        <input type="checkbox" name="option_hour" value="17:00" /> 17:00 - 18:00
-                      </label>
-                    </div>
-                    {% endif %}
-                    {% if now_filter < 18 %}
-                    <div class="col-lg-3 col-sm-12 col-xs-12">
-                      <label class="label_checkbox">
-                        <input type="checkbox" name="option_hour" value="18:00" /> 18:00 - 19:00
-                      </label>
-                    </div>
-                    {% endif %}
-                    {% if now_filter < 19 %}
-                    <div class="col-lg-3 col-sm-12 col-xs-12">
-                      <label class="label_checkbox">
-                        <input type="checkbox" name="option_hour" value="19:00" /> 19:00 - 20:00
-                      </label>
-                    </div>
-                    {% endif %}
-                    {% if now_filter < 20 %}
-                    <div class="col-lg-3 col-sm-12 col-xs-12">
-                      <label class="label_checkbox">
-                        <input type="checkbox" name="option_hour" value="20:00" /> 20:00 - 21:00
-                      </label>
-                    </div>
-                    {% endif %}
-                    {% if now_filter < 21 %}
-                    <div class="col-lg-3 col-sm-12 col-xs-12">
-                      <label class="label_checkbox">
-                        <input type="checkbox" name="option_hour" value="21:00" /> 21:00 - 22:00
-                      </label>
-                    </div>
-                    {% endif %}
-                    {% if now_filter < 22 %}
-                    <div class="col-lg-3 col-sm-12 col-xs-12">
-                      <label class="label_checkbox">
-                        <input type="checkbox" name="option_hour" value="22:00" /> 22:00 - 23:00
-                      </label>
-                    </div>
-                    {% endif %}
-                    {% if now_filter < 23 %}
-                    <div class="col-lg-3 col-sm-12 col-xs-12">
-                      <label class="label_checkbox">
-                        <input type="checkbox" name="option_hour" value="23:00" /> 23:00 - 00:00
-                      </label>
-                    </div>
-                    {% endif %}
-                  </div>
-                </div> {% endcomment %}
+                
               </div>
               <div class="card-footer">
                 <button type="submit" class="btn btn-primary">Registrar</button>
@@ -349,7 +236,7 @@
             </form>
           </div>
         </div>
-      </div>
+      </div> {% endcomment %}
     </div>
     <!-- Container-fluid Ends -->
   </div>
@@ -564,7 +451,6 @@
           }
         });
         
-        
         $('#field_soccer_number_players').off('change').on('change', function() {
           var number_players = $(this).val();
           var cardContainer = $('#card-container');
@@ -591,7 +477,7 @@
                     var cardBody = $('<div class="card-body">');
                     var cardTitle = $('<h5 class="card-title">' + field.name + '</h5>');
                     var cardImage = $('<img class="card-img-top" src="data:image/jpeg;base64,' + field.image_base64 + '" alt="Campo deportivo">');
-                    var cardText = $('<p class="card-text">Número de jugadores: ' + field.number_players / 2 + 'vs' + field.number_players / 2 + '<br>Precio: ' + field.price + '</p>');
+                    var cardText = $('<p class="card-text mt-2">Establecimiento: ' + field.establishment + '<br>Dirección: ' + field.location + '<br>Celular: ' + field.phone + '<br>Número de jugadores: ' + field.number_players / 2 + ' vs ' + field.number_players / 2 + '<br>Precio: ' + field.price + '</p>');
     
                     // Agregar elementos a la tarjeta
                     cardBody.append(cardTitle, cardImage, cardText);
@@ -619,7 +505,7 @@
       });
       {% endif %}
     </script>
-    <script>
+    {% comment %} <script>
       // Obtener los elementos de los botones y los elementos de los rows
       var searchByDistrictBtn = document.getElementById('searchByDistrictBtn');
       var searchByPlayersBtn = document.getElementById('searchByPlayersBtn');
@@ -639,6 +525,6 @@
         rowDistrict.style.display = 'none';
         rowPlayers.style.display = 'block';
       });
-    </script>
+    </script> {% endcomment %}
   {% endblock %}
 {% endblock %}

@@ -167,29 +167,13 @@ def delete(request, id):
 
 # @method_decorator(csrf_exempt)
 def get_establishment(request, type_dist_id):
-    try:
-        establishments = Establishment.objects.filter(type_dist=type_dist_id).values("id", "name", "location", "phone")
-        if len(establishments) > 0:
-            return JsonResponse({'establishments': list(establishments)})
-        else:
-            return JsonResponse({'error': 'No se encontraron establecimientos por Distrito especificado.'}, status=404)
-    except ValueError:
-        return JsonResponse({'error': 'El Distrito especificado no es válido.'}, status=400)
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
+    establishments = Establishment.objects.filter(type_dist=type_dist_id).values("id", "name", "location", "phone")
+    return JsonResponse({'establishments': list(establishments)})
 
 # @method_decorator(csrf_exempt)
 def get_field_soccer(request, establishment_id):
-    try:
-        field_soccer = FieldSoccer.objects.filter(establishment=establishment_id).values('id', 'name', 'number_players')
-        if len(field_soccer) > 0:
-            return JsonResponse({'field_soccer': list(field_soccer)})
-        else:
-            return JsonResponse({'error': 'No se encontraron campos deportivos por establecimiento especificado.'}, status=404)
-    except ValueError:
-        return JsonResponse({'error': 'El establecimiento especificado no es válido.'}, status=400)
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
+    field_soccer = FieldSoccer.objects.filter(establishment=establishment_id).values('id', 'name', 'number_players')
+    return JsonResponse({'field_soccer': list(field_soccer)})
 
 # # @method_decorator(csrf_exempt)
 # def get_reservation(request, field_soccer_id, date_reservation):
@@ -240,6 +224,8 @@ def get_field_soccer_number_players(request, number_players):
                 'price': obj.price,
                 'image_base64': decoded_image,
                 'establishment': obj.establishment.name,
+                'location': obj.establishment.location,
+                'phone': obj.establishment.phone,
                 'type_field_soccer': obj.type_field_soccer.description
             })
 
