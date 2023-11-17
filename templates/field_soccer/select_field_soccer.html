@@ -48,44 +48,51 @@
     </div>
     <!-- Container-fluid starts -->
     <div class="container">
-      <div class="row text-center mb-4">
-        <div class="col-lg-6 col-sm-6 col-xs-6">
-          <a class="btn btn-primary" href="#" id="searchByDistrictBtn">Buscar por Distrito</a>
-        </div>
-        <div class="col-lg-6 col-sm-6 col-xs-6">
-          <a class="btn btn-primary" href="#" id="searchByPlayersBtn">Buscar por cantidad de jugadores</a>
-        </div>
-      </div>
+
       <div class="row starter-main" id="rowDistrict">
         <div class="col-sm-12">
           <div class="card">
-            <form method="POST" class="post-form" action="" id="reservation_register">
+            <form method="POST" class="post-form" action="{% url 'appReservation.create_select_reservation' id=field_soccer_selected.id %}" id="reservation_register">
               {% csrf_token %}
               <div class="card-body">
-                <div class="form-group">
-                  <label for="type_dist">Distrito:</label>
-                  <select class="form-control" id="type_dist" name="type_dist" required>
-                    <option value="">Selecione...</option>
-                    {% for type_dist in type_district %}
-                      <option value="{{ type_dist.id }}">{{ type_dist.description }}</option>
-                    {% endfor %}
-                  </select>
+                <div class="form-group text-center">
+                  <label for="establishment">Imagen referencial de campo deportivo:</label>
+                  <div class="mt-2">
+                    {% if image_base64 != None %}
+                    <img src="data:image/jpeg;base64,{{ image_base64 }}" alt="Imagen cargada" width="300px;">
+                    {% else %}
+                    No tiene imagen, puedes cargar uno.
+                    {% endif %}
+                  </div>
                 </div>
-                <div class="form-group">
-                  <label for="establishment">Establecimiento: <span id="message_establishment"></span></label>
-                  <select class="form-control" id="establishment" name="establishment" required>
-                    <option value="">Selecione...</option>
-                  </select>
+                <div class="row form-group">
+                  <div class="col-lg-6 col-sm-6 col-xs-6">
+                    <label for="type_dist">Distrito:</label>
+                    <select class="form-control" id="type_dist" name="type_dist" disabled required>
+                      <option value="{{ field_soccer_selected.establishment.type_dist.id }}">{{ field_soccer_selected.establishment.type_dist.description }}</option>
+                      {% for type_dist in type_district %}
+                        <option value="{{ type_dist.id }}">{{ type_dist.description }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="col-lg-6 col-sm-6 col-xs-6">
+                    <label for="establishment">Establecimiento: <span id="message_establishment"></span></label>
+                    <select class="form-control" id="establishment" name="establishment" disabled required>
+                      <option value="{{ field_soccer_selected.establishment.id }}">{{ field_soccer_selected.establishment.name }}</option>
+                    </select>
+                  </div>
                 </div>
-                <div class="form-group">
-                  <label for="field_soccer">Campo deportivo: <span id="message_field_soccer"></span></label>
-                  <select class="form-control" id="field_soccer" name="field_soccer" required>
-                    <option value="">Selecione...</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="date_reservation">Fecha</label>
-                  <input type="date" class="form-control" id="date_reservation" name="date_reservation" placeholder="" required />
+                <div class="row form-group">
+                  <div class="col-lg-6 col-sm-6 col-xs-6">
+                    <label for="field_soccer">Campo deportivo: <span id="message_field_soccer"></span></label>
+                    <select class="form-control" id="field_soccer" name="field_soccer" disabled required>
+                      <option value="{{ field_soccer_selected.id }}">{{ field_soccer_selected.name }}</option>
+                    </select>
+                  </div>
+                  <div class="col-lg-6 col-sm-6 col-xs-6">
+                    <label for="date_reservation">Fecha</label>
+                    <input type="date" class="form-control" id="date_reservation" name="date_reservation" placeholder="" required />
+                  </div>
                 </div>
 
                 <div class="checkbox-container">
@@ -169,7 +176,14 @@
                 </div>
               </div>
               <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Registrar</button>
+                <div class="row">
+                  <div class="col-lg-6 col-sm-6 col-xs-6 text-center">
+                    <button type="submit" class="btn btn-primary">Registrar</button>
+                  </div>
+                  <div class="col-lg-6 col-sm-6 col-xs-6 text-center">
+                    <a href="{% url 'appReservation.create' %}" class="btn btn-warning">Cancelar</a>
+                  </div>
+                </div>
               </div>
             </form>
           </div>

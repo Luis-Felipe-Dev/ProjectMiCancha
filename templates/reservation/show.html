@@ -1,5 +1,6 @@
 {% extends '../base.html' %}
 {% load static %}
+
 {% block body %}
 <div class="page-body">
     <div class="container-fluid">
@@ -44,13 +45,13 @@
                             <th class="text-center">Celular</th>
                             <th class="text-center">Estado</th>
                             {% if request.user.rol.id == 3 %}
-                            <th class="text-center" style="width: 100px">Acciones</th>
+                            <th class="text-center">Acciones</th>
                             {% endif %}
                         </tr>
                     </thead>
                     <tbody>
                         {% for reservation in reservations %}
-                        <tr>
+                        <tr data-reservation-id="{{ reservation.id }}" data-created-at="{{ reservation.created_at|date:"Y-m-d H:i:s" }}" data-status-id="{{ reservation.type_status.id }}">
                             {% comment %} <td class="text-center">{{reservation.id}}</td> {% endcomment %}
                             <td class="text-center">{{reservation.date|date:"Y-m-d"}}</td>
                             <td class="text-center">{{reservation.start_hour}}</td>
@@ -60,25 +61,24 @@
                             <td class="text-center">{{reservation.field_soccer.establishment.location}}</td>
                             <td class="text-center">{{reservation.field_soccer.establishment.phone}}</td>
                             <td class="text-center text-center">
-                                {% if reservation.status %}
-                                <i class="icofont icofont-check-circled" style="color: green; font-size: 20px;"></i>
-                                {% else %}
+                                {% if reservation.type_status.id == 3 %}
                                 <i class="icofont icofont-close-circled" style="color: red; font-size: 20px;"></i>
+                                {% else %}
+                                <i class="icofont icofont-check-circled" style="color: green; font-size: 20px;"></i>
                                 {% endif %}
                             </td>
-                            {% if request.user.rol.id == 3 and reservation.status == False %}
+                            {% if request.user.rol.id == 3 and reservation.type_status.id == 3 %}
                             <td class="text-center text-center">
-                                {% comment %} <a href="{% url 'appReservation.edit' id=reservation.id %}"
-                                    class="mt-2 btn-block btn-sm btn-warning"><i class="icofont icofont-ui-edit"></i></a> {% endcomment %}
-                                <p class="text-danger"><b>Cancelado</b></p>
+                              <p class="text-danger" style="font-size: 12px;"><span class="countdown-timer"></span></p>  
                             </td>
-                            {% elif request.user.rol.id == 3 %}
+                            {% elif request.user.rol.id == 3 and reservation.type_status.id == 2 %}
                             <td class="text-center text-center">
-                                {% comment %} <a href="{% url 'appReservation.edit' id=reservation.id %}"
-                                    class="mt-2 btn-block btn-sm btn-warning"><i class="icofont icofont-ui-edit"></i></a> {% endcomment %}
-                                <a href="{% url 'appReservation.delete' id=reservation.id %}" class="mt-2 btn-block btn-sm btn-danger delete-btn"  data-reservation-id="{{ reservation.id }}">
-                                  <i class="icofont icofont-ui-close"></i>
-                                </a>
+                              <p style="font-size: 12px;"><span class="countdown-timer"></span></p>  
+                            </td>
+                            {% elif request.user.rol.id == 3 and reservation.type_status.id == 1 %}
+                            <td class="text-center text-center">
+                              <button class="mt-1 mb-1 btn-sm btn-primary" onclick="openModal()">Realizar pago</button>
+                              <p style="font-size: 12px;"><span class="countdown-timer"></span></p>  
                             </td>
                             {% endif %}
                         </tr>
@@ -91,6 +91,31 @@
         </div>
     </div>
     <!-- Container-fluid Ends-->
+
+    <!-- Modal -->
+    <div class="modal" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="paymentModalLabel">Registrar Tarjeta de Pago</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- Formulario para el registro de tarjeta -->
+            <form id="paymentForm">
+              <div class="form-group">
+                <label for="cardNumber">Número de Tarjeta</label>
+                <input type="text" class="form-control" id="cardNumber" placeholder="Ingrese el número de tarjeta">
+              </div>
+              <button type="submit" class="btn btn-primary">Pagar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 {% block customJS %}
 <!-- latest jquery-->
@@ -116,6 +141,94 @@
       })
     });
   });
+
+  // Función para abrir el modal
+  function openModal() {
+    document.getElementById('paymentModal').style.display = 'block';
+  }
+
+  // Función para cerrar el modal
+  function closeModal() {
+    document.getElementById('paymentModal').style.display = 'none';
+  }
+
+  // Cerrar el modal si se hace clic fuera de él
+  window.onclick = function(event) {
+    var modal = document.getElementById('paymentModal');
+    if (event.target === modal) {
+      modal.style.display = 'none';
+    }
+  }
+  
+  // Obtener todas las filas de reserva
+  const reservationRows = document.querySelectorAll('tbody tr[data-reservation-id]');
+
+  // Para cada fila de reserva, actualizar el contador de tiempo y anular si es necesario
+  reservationRows.forEach(function (row) {
+    const reservationId = row.getAttribute('data-reservation-id');
+    const createdAt = row.getAttribute('data-created-at');
+    const type_status = row.getAttribute('data-status-id');
+    const reservationDateTime = new Date(createdAt).getTime();
+
+    // Comprobar si la fecha y hora actual superan la fecha y hora de la reserva
+    const currentTime = new Date().getTime();
+
+    const timeDifference = currentTime - reservationDateTime;
+    const timeLimit = 30 * 60 * 1000;
+
+    if ((timeDifference > timeLimit) && (type_status == 2)) {
+      row.querySelector('.countdown-timer').innerHTML = '<b class="text-success">Confirmado</b>';
+    } 
+    else if ((timeDifference > timeLimit) && (type_status == 3)) {
+      row.querySelector('.countdown-timer').innerHTML = '<b class="text-danger">Reserva anulada</b>';
+    } 
+    else {
+        // Si la fecha y hora de la reserva están en el futuro, iniciar el contador de tiempo
+        openModalWithCountdown(reservationId, createdAt);
+    }
+  });
+
+  function openModalWithCountdown(reservationId, createdAt) {
+      // Obtener el elemento del contador de tiempo para esta reserva
+      const countdownTimer = document.querySelector(`tr[data-reservation-id="${reservationId}"] .countdown-timer`);
+
+      // Función para actualizar el contador de tiempo
+      function updateCountdown() {
+          const now = new Date();
+          const createdTime = new Date(createdAt);
+          const endTime = createdTime.getTime() + 30;
+          const elapsed = now.getTime() - createdTime.getTime();
+          const remainingTime = 30 * 60 * 1000 - elapsed; // 30 minutos en milisegundos
+
+          const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+
+          // Actualizar el contador de tiempo en el elemento correspondiente
+          countdownTimer.innerHTML = `<b class="text-danger">Tiempo restante: ${minutes}:${seconds}</b>`;
+
+          if ((minutes == 0 && seconds == 0)) {
+              // Aquí puedes agregar la lógica para anular la reserva con reservationId
+              console.log(`La reserva ${reservationId} ha sido anulada.`);
+               // Realizar la solicitud AJAX aquí
+              fetch(`/reservation/delete/${reservationId}`, {
+                method: 'GET',
+              })
+              .then(response => {
+                window.location.href = `/reservation/`
+              })
+              .catch(error => {
+                console.error('Error al cancelar la reserva:', error);
+              });
+          }
+      }
+
+      // Llamar a updateCountdown inicialmente para que se actualice inmediatamente
+      updateCountdown();
+
+      // Actualizar el contador cada segundo
+      const countdownInterval = setInterval(updateCountdown, 1000);
+  }
+
 </script>
 {% endblock customJS %}
 

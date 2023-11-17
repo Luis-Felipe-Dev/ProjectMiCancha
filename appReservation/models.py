@@ -1,6 +1,7 @@
 from django.db import models
 from appUser.models import User
 from appFieldSoccer.models import FieldSoccer
+from typeThings.models import TypeStatus
 
 # Create your models here.
 class Reservation(models.Model):
@@ -9,7 +10,7 @@ class Reservation(models.Model):
     end_hour = models.TimeField(null=False)
     customer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='reservation_customer')
     field_soccer = models.ForeignKey(FieldSoccer, on_delete=models.CASCADE, null=True, related_name='reservation_field_soccer')
-    status = models.BooleanField(False, null=False)
+    type_status = models.ForeignKey(TypeStatus, on_delete=models.CASCADE, null=True, related_name='reservation_type_status')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True)

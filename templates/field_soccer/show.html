@@ -59,14 +59,14 @@
                                 <i class="icofont icofont-close-circled" style="color: red; font-size: 20px;"></i>
                                 {% endif %}
                             </td>
-                            {% if request.user.id == 2 %}
+                            {% if request.user.rol.id == 2 %}
                             <td class="text-center text-center">
                                 <a href="{% url 'appFieldSoccer.edit' id=field_soccer.id %}"
                                     class="mt-2 btn-block btn-sm btn-warning"><i class="icofont icofont-ui-edit"></i></a>
                                 <a href="{% url 'appFieldSoccer.delete' id=field_soccer.id %}" class="mt-2 btn-block btn-sm btn-danger"><i class="icofont icofont-ui-close"></i></a>
                             </td>
                             {% endif %}
-                            {% if request.user.id == 1 %}  
+                            {% if request.user.rol.id == 1 %}  
                             <td class="text-center text-center">
                               <a href="{% url 'appFieldSoccer.historial' id=field_soccer.id %}" class="mt-2 btn-block btn-sm btn-warning"><b>Historial</b></a>
                               {% comment %} <a href="#" class="mt-2 btn-block btn-sm btn-warning"><b>Historial</b></a> {% endcomment %}

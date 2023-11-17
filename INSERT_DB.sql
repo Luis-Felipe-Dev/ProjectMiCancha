@@ -2,6 +2,10 @@ INSERT INTO roles VALUES (1, 'ADMINISTRADOR', 1);
 INSERT INTO roles VALUES (2, 'PROPIETARIO', 1);
 INSERT INTO roles VALUES (3, 'CLIENTE', 1);
 
+INSERT INTO type_status VALUES (1, 'EN PROCESO', 1);
+INSERT INTO type_status VALUES (2, 'PAGADO', 1);
+INSERT INTO type_status VALUES (3, 'ANULADO', 1);
+
 INSERT INTO type_field_soccer VALUES (1, 'SINTÉTICO', 1);
 INSERT INTO type_field_soccer VALUES (2, 'GRAS NATURAL', 1);
 INSERT INTO type_field_soccer VALUES (3, 'LOZA', 1);
