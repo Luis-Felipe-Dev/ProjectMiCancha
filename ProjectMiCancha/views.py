@@ -4,11 +4,43 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from appUser.models import User
 from appFieldSoccer.models import FieldSoccer
+from appEstablishment.models import Establishment
+from appReservation.tasks import start_task
+# from django.db.models import Max
+
+start_task()
+
+def handle_decode_image_base64(image):
+    image_decode = image.decode("utf-8")
+    return image_decode
 
 @login_required
 def home(request):
-    field_soccer = FieldSoccer.objects.count()
-    return render(request, 'home.html', {'field_soccer': field_soccer})
+    # # Obtener los identificadores únicos de establecimientos
+    # unique_establishments = FieldSoccer.objects.values('establishment').annotate(max_id=Max('id')).values_list('max_id', flat=True)
+    # # Obtener los registros de FieldSoccer para esos establecimientos
+    # field_soccer_all = FieldSoccer.objects.filter(id__in=unique_establishments).values('id', 'name', 'number_players', 'price', 'image_base64', 'establishment')
+    
+    field_soccer_all = []
+    
+    establishment = Establishment.objects.filter(type_dist=request.user.type_dist.id)
+    field_soccer_temp = FieldSoccer.objects.filter(establishment__in=establishment)
+
+    for field in field_soccer_temp:
+        field.number_players = f'{round(field.number_players / 2)} vs {round(field.number_players / 2)}'
+    
+    for image in field_soccer_temp:
+        field_soccer_all.append((image, handle_decode_image_base64(image.image_base64)))
+
+    field_soccer_count = FieldSoccer.objects.filter(establishment__in=establishment).count()
+    field_soccer_all_count = FieldSoccer.objects.count()
+
+    context = {
+        'field_soccer_all': field_soccer_all,
+        'field_soccer_count': field_soccer_count,
+        'field_soccer_all_count': field_soccer_all_count
+    }
+    return render(request, 'home.html', context)
 
 def login_custom(request):
     message = ''

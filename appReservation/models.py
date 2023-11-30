@@ -11,6 +11,7 @@ class Reservation(models.Model):
     customer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='reservation_customer')
     field_soccer = models.ForeignKey(FieldSoccer, on_delete=models.CASCADE, null=True, related_name='reservation_field_soccer')
     type_status = models.ForeignKey(TypeStatus, on_delete=models.CASCADE, null=True, related_name='reservation_type_status')
+    reminder_sent = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True)

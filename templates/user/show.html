@@ -34,6 +34,9 @@
                             <th class="text-center">Nombres</th>
                             <th class="text-center">Email</th>
                             <th class="text-center">Celular</th>
+                            <th class="text-center">Residencia</th>
+                            <th class="text-center">Contácto de emergencia</th>
+                            <th class="text-center">Celular de emergencia</th>
                             <th class="text-center">Estado</th>
                             <th class="text-center">Rol</th>
                             <th class="text-center" style="width: 100px">Acciones</th>
@@ -47,6 +50,9 @@
                             <td class="">{{user.first_name}}</td>
                             <td class="text-center">{{user.email}}</td>
                             <td class="text-center">{{user.phone}}</td>
+                            <td class="text-center">{% if user.type_dist.complete %}{{user.type_dist.complete}}{% endif %}</td>
+                            <td class="text-center">{% if user.full_name_emergency_contact %}{{user.full_name_emergency_contact}}{% endif %}</td>
+                            <td class="text-center">{% if user.phone_emergency_contact %}{{user.phone_emergency_contact}}{% endif %}</td>
                             <td class="text-center text-center">
                                 {% if user.status %}
                                 <i class="icofont icofont-check-circled" style="color: green; font-size: 20px;"></i>

@@ -1,4 +1,10 @@
 {% extends '../base.html' %}
+{% load static %}
+
+{% block customCSS %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+{% endblock customCSS %}
 
 {% block body %}
 <div class="page-body">
@@ -26,30 +32,50 @@
             <form method="POST" class="post-form" action="{% url 'appEstablishment.update' id=establishment_edit.id %}">
                 {% csrf_token %}
                 <div class="card-body">
-                  <div class="form-group">
-                      <label for="name">Nombre de establecimiento</label>
-                      <input type="text" class="form-control" id="name" name="name" placeholder=""
-                      value="{{establishment_edit.name}}">
+                  <div class="row">
+                    <div class="col-lg-4 col-sm-4 col-xs-4">
+                      <div class="form-group">
+                          <label for="name">Nombre de establecimiento</label>
+                          <input type="text" class="form-control" id="name" name="name" placeholder="" value="{{establishment_edit.name}}">
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-4 col-xs-4">     
+                      <div class="form-group">
+                        <label for="type_dist">Distrito</label>
+                        <select class="form-control" id="type_dist" name="type_dist">
+                          <option value="{{ establishment_edit.type_dist.id }}">{{ establishment_edit.type_dist.description }}</option>
+                          {% for type_dist in type_district %}
+                            <option value="{{ type_dist.id }}">{{ type_dist.description }}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-4 col-xs-4">
+                      <div class="form-group">
+                          <label for="phone">Celular</label>
+                          <input type="text" class="form-control" id="phone" name="phone" placeholder="" value="{{establishment_edit.phone}}">
+                      </div>
+                    </div>
                   </div>
                   <div class="form-group">
-                    <label for="type_dist">Distrito</label>
-                    <select class="form-control" id="type_dist" name="type_dist">
-                      <option value="{{ establishment_edit.type_dist.id }}">{{ establishment_edit.type_dist.description }}</option>
-                      {% for type_dist in type_district %}
-                        <option value="{{ type_dist.id }}">{{ type_dist.description }}</option>
-                      {% endfor %}
-                    </select>
+                    <label for="location">Dirección</label>
+                    <input type="text" class="form-control" id="location" name="location" placeholder="" value="{{establishment_edit.location}}">
                   </div>
                   <div class="form-group">
-                      <label for="location">Dirección</label>
-                      <input type="text" class="form-control" id="location" name="location" placeholder=""
-                      value="{{establishment_edit.location}}">
+                      <label for="location">Localizar en el mapa - referencia</label>
+                      <div id="map_div" style="height: 450px;"></div>
+                      <div class="row mt-2">
+                        <div class="col-lg-6 col-sm-6 col-xs-6">
+                          <label for="latitude">Latitud</label>
+                          <input type="text" class="form-control" id="latitude" name="latitude" placeholder="" value="{{establishment_edit.latitude}}" readonly>
+                        </div>
+                        <div class="col-lg-6 col-sm-6 col-xs-6">
+                          <label for="longitude">Longitud</label>
+                          <input type="text" class="form-control" id="longitude" name="longitude" placeholder="" value="{{establishment_edit.longitude}}" readonly>                       
+                        </div>
+                      </div>
                   </div>
-                  <div class="form-group">
-                      <label for="phone">Celular</label>
-                      <input type="text" class="form-control" id="phone" name="phone" placeholder=""
-                      value="{{establishment_edit.phone}}">
-                  </div>
+
                   <div class="form-check">
                     <input type="checkbox" class="form-check-input" id="status" name="status" {% if establishment_edit.status == True%}checked{% endif %}>
                     <label class="form-check-label" for="status">Establecimiento Activo</label>
@@ -82,6 +108,124 @@
   </script>
 {% endfor %}
 {% endif %}
+<script src="{% static 'assets/js/jquery-3.5.1.min.js' %}"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<script>
+  $(document).ready(function() {
+    var districts = {
+      '1257': [-12.04318, -77.02824], //LIMA
+      '1258': [-11.7736, -77.1761], //ANCON
+      '1259': [-12.0367484, -76.9326242], //ATE
+      '1260': [-12.0569, -77.0536], //BREÑA
+      '1261': [-11.89, -77.0269], //CARABAYLLO
+      '1262': [-11.9291300, -77.0388300], //COMAS
+      '1263': [-11.983333333333, -76.766666666667], //CHACLACAYO
+      '1264': [-12.18638889, -77.02111111], //CHORRILLOS
+      '1265': [-12.0653, -77.0311], //LA VICTORIA
+      '1266': [-12.0789, -76.9169], //LA MOLINA
+      '1267': [-12.0857900, -77.0356700], //LINCE
+      '1268': [-11.9358, -76.6972], //LURIGANCHO
+      '1269': [-12.2736, -76.8694], //LURIN
+      '1270': [-12.090555555556, -77.07], //MAGDALENA DEL MAR
+      '1271': [-12.111062, -77.0315913], //MIRAFLORES
+      '1272': [-12.2294, -76.8594], //PACHACAMAC
+      '1273': [-12.070277777778, -77.0625], //PUEBLO LIBRE
+      '1274': [-12.4817, -76.7975], //PUCUSANA
+      '1275': [-11.8768271, -77.0744820650776], //PUENTE PIEDRA
+      '1276': [-12.3326784, -76.8256982], //PUNTA HERMOSA
+      '1277': [-12.36805556, -76.79722222], //PUNTA NEGRA
+      '1278': [-12.035277777778, -77.027222222222], //RIMAC
+      '1279': [-12.3894, -76.7803], //SAN BARTOLO
+      '1280': [-12.09655, -77.04258], //SAN ISIDRO
+      '1281': [-12.141666666667, -77.016666666667], //BARRANCO
+      '1282': [-12.0303, -77.0572], //SAN MARTIN DE PORRES
+      '1283': [-12.07865565, -77.095283127988], //SAN MIGUEL
+      '1284': [-12.4085700, -76.7674100], //SANTA MARIA DEL MAR
+      '1285': [-11.7967, -77.1728], //SANTA ROSA
+      '1286': [-12.13588, -77.00742], //SANTIAGO DE SURCO
+      '1287': [-12.1186, -77.0217], //SURQUILLO
+      '1288': [-12.1622, -76.9436], //VILLA MARIA DEL TRIUNFO
+      '1289': [-12.0781861, -77.046411667524], //JESUS MARIA
+      '1290': [-11.99166667, -77.05], //INDEPENDENCIA
+      '1291': [-12.0483, -76.9833], //EL AGUSTINO
+      '1292': [-12.1633, -76.9636], //SAN JUAN DE MIRAFLORES
+      '1293': [-12.0017252, -77.0084106], //SAN JUAN DE LURIGANCHO
+      '1294': [-12.07555556, -76.99611111], //SAN LUIS
+      '1295': [-12.0731669, -76.7770709832113], //CIENEGUILLA
+      '1296': [-12.09645155, -76.9956898677115], //SAN BORJA
+      '1297': [-12.2075, -76.933185], //VILLA EL SALVADOR
+      '1298': [-11.9659853, -77.0730713199829], //LOS OLIVOS
+      '1299': [-12.2233828, -76.847707] //SANTA ANITA
+    };
+
+    let editLatitude = parseFloat(document.getElementById('latitude').value.replace(',', '.'));
+    let editLongitude = parseFloat(document.getElementById('longitude').value.replace(',', '.'));
+
+    let myMap = L.map('map_div', {
+      center: [editLatitude, editLongitude],
+      zoom: 13,
+      zoomControl: false,
+    });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(myMap);
+
+    // Obtener el elemento select por su ID
+    var selectElement = document.getElementById('type_dist');
+
+    function handleChange(event) {
+      var selectedValue = event.target.value;
+      
+      if (districts[selectedValue]) {
+          var newCenter = districts[selectedValue];
+          myMap.flyTo(newCenter, 13);
+          marker.setLatLng(newCenter);
+          displayLatLng({ lat: newCenter[0], lng: newCenter[1] });
+      }
+    }
+
+    var selectElement = document.getElementById('type_dist');
+    selectElement.addEventListener('change', handleChange);
+    
+    let marker = L.marker([editLatitude, editLongitude], {
+      draggable: true
+    }).addTo(myMap).on('dragend', onDragEnd);
+    
+    let geocoder = L.Control.geocoder(),
+      latInput = document.getElementById('latitude'),
+      lngInput = document.getElementById('longitude');
+
+    geocoder.markGeocode = function (result) {
+      console.log({result})
+      var latlng = result.geocode.center;
+      myMap.removeLayer(marker)
+      marker = L.marker(latlng, {
+          draggable: true
+      }).addTo(myMap).
+      on('dragend', onDragEnd).
+      bindPopup(result.geocode.html).
+      openPopup();
+      myMap.flyTo(latlng, 18);
+      displayLatLng(latlng);
+    };
+    
+    geocoder.addTo(myMap);
+
+    
+    function onDragEnd(event) {
+      let latlng = event.target.getLatLng();
+      myMap.flyTo(latlng, 18);
+      displayLatLng(latlng);
+    }
+
+    function displayLatLng(latlng) {
+      latInput.value = latlng.lat;
+      lngInput.value = latlng.lng;
+    }
+  })
+</script>
 {% endblock customJS %}
 
 {% endblock body %}

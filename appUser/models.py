@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from typeThings.models import TypeDepartament, TypeProvince, TypeDistrict
 
 # Create your models here.
 class Rol(models.Model):
@@ -18,6 +19,9 @@ class CustomerUser(BaseUserManager):
         return user
     
 class User(AbstractBaseUser):
+    type_dep = models.ForeignKey(TypeDepartament, on_delete=models.CASCADE, null=True, related_name='user_type_dep')
+    type_prov = models.ForeignKey(TypeProvince, on_delete=models.CASCADE, null=True, related_name='user_type_prov')
+    type_dist = models.ForeignKey(TypeDistrict, on_delete=models.CASCADE, null=True, related_name='user_type_dist')
     first_name = models.CharField(max_length=150, null=False)
     last_name = models.CharField(max_length=150, null=False)
     phone = models.CharField(max_length=20, null=False)
@@ -26,6 +30,8 @@ class User(AbstractBaseUser):
     password = models.CharField(max_length=150, null=False)
     rol = models.ForeignKey(Rol, on_delete=models.CASCADE, null=True, related_name='rol')
     last_login = None
+    full_name_emergency_contact = models.CharField(max_length=150, null=True)
+    phone_emergency_contact = models.CharField(max_length=20, null=True)
     status = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

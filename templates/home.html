@@ -1,4 +1,23 @@
 {% extends 'base.html' %}
+
+{% block customCSS %}
+<style>
+  /* Eliminar el color de fondo y los bordes de los controles Previous y Next */
+  .carousel-control-prev,
+  .carousel-control-next {
+    background-color: transparent; /* Establecer el color de fondo como transparente */
+    border: none; /* Eliminar los bordes */
+    opacity: 1; /* Asegurarse de que la opacidad sea 1 para asegurar que no haya transparencia */
+  }
+
+  /* Estilo para los íconos de los controles Previous y Next */
+  .carousel-control-prev-icon,
+  .carousel-control-next-icon {
+    /* Puedes agregar estilos específicos para los íconos si lo deseas */
+  }
+</style>
+{% endblock customCSS %}
+
 {% block body %}
 <div class="page-body">
   <div class="container-fluid">
@@ -26,15 +45,50 @@
           <div class="card-header pb-0">
             <h5>¡Bienvenido {{ request.user.first_name }} {{ request.user.last_name }}!</h5>
           </div>
-          <div class="card-body">
+          <div class="card-body" style="text-align: justify;">
             {% if request.user.rol.id == 1 %}
             <p>Hola {{ request.user.first_name }} {{ request.user.last_name }}, bienvenido a la plataforma MiCancha, en este módulo podrás visualizar el historial de cambios que se hicieron en Establecimientos y en Campos deportivos. Asimismo podrás gestionar los usuarios registrados en la plataforma.</p>
             {% elif request.user.rol.id == 2 %}
             <p>Hola {{ request.user.first_name }} {{ request.user.last_name }}, bienvenido a la plataforma MiCancha, en este módulo podrás gestionar los Establecimientos y en Campos deportivos. Asimismo podrás visualizar las reservas de los campos deportivos.</p>
             {% else %}
             <p>Hola {{ request.user.first_name }} {{ request.user.last_name }}, bienvenido a la plataforma MiCancha, en este módulo podrás realizar las reservas de los campos deportivos teniendo en consideración el lugar, establecimiento, campo deportivo, cantidad de jugadores, fecha y hora.</p>
-            <p>Esta plataforma cuenta con <b>{{ field_soccer }} campos deportivos registrados</b>, los cuales se ajustan a la preferencia de cada cliente, teniendo en consideración el tipo de campo deportivo, cantidad de jugadores, distrito de preferencia, entre otros aspectos relevantes.</p>
-            <a class="btn btn-primary" href="{% url 'appReservation.create' %}">Realizar una reservación</a>
+            <p>Esta plataforma cuenta con <b>{{ field_soccer_count }} campos deportivos en tu Distrito y {{ field_soccer_all_count }} campos deportivos en todo el Departamento de Lima</b>, los cuales se ajustan a la preferencia de cada cliente, teniendo en consideración el tipo de campo deportivo, cantidad de jugadores, Distrito de preferencia, entre otros aspectos relevantes.</p>
+
+            <div class="card-body">
+              <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                  {% for field_soccer, image_base64 in field_soccer_all %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                      {% if image_base64 != None %}
+                      <img src="data:image/jpeg;base64,{{ image_base64 }}" alt="Imagen cargada" width="100%;">
+                      {% else %}
+                      No tiene imagen, puedes cargar uno.
+                      {% endif %}
+                      <div class="carousel-caption d-none d-md-block text-dark" style="background-color: rgba(255, 255, 255, 0.7);">
+                        <h5><b>{{ field_soccer.name }}</b></h5>
+                        <p>
+                          <span><b>Establecimiento: {{ field_soccer.establishment.name }}</b></span>
+                          <br>
+                          <span><b>Número de jugadores: {{ field_soccer.number_players }}</b></span>
+                          <br>
+                          <span><b>Precio: S/. {{ field_soccer.price }}</b></span>
+                        </p>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+            </div>
+
+            {% comment %} <a class="btn btn-primary" href="{% url 'appReservation.create' %}">Realizar una reservación</a> {% endcomment %}
             {% endif %}
           </div>
         </div>

@@ -4,7 +4,7 @@ from appUser.models import Rol, User
 from appEstablishment.models import Establishment
 from appFieldSoccer.models import FieldSoccer
 from appReservation.models import Reservation
-from typeThings.models import TypeDepartament, TypeProvince, TypeDistrict
+from typeThings.models import TypeDepartament, TypeProvince, TypeDistrict, TypeStatus
 
 # Create your models here.
 class HistoryUser(models.Model):
@@ -36,6 +36,8 @@ class HistoryEstablishment(models.Model):
     type_prov = models.ForeignKey(TypeProvince, on_delete=models.CASCADE, null=True, related_name='history_establishment_type_prov')
     type_dist = models.ForeignKey(TypeDistrict, on_delete=models.CASCADE, null=True, related_name='history_establishment_type_dist')
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='history_establishment_owner')
+    latitude = models.FloatField(null=True)
+    longitude = models.FloatField(null=True)
     status = models.BooleanField(False, null=False)
     created_at = models.DateTimeField(null=True)
     updated_at = models.DateTimeField(null=True)
@@ -75,7 +77,8 @@ class HistoryReservation(models.Model):
     end_hour = models.DateTimeField(null=False)
     customer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='history_reservation_customer')
     field_soccer = models.ForeignKey(FieldSoccer, on_delete=models.CASCADE, null=True, related_name='history_reservation_field_soccer')
-    status = models.BooleanField(False, null=False)
+    type_status = models.ForeignKey(TypeStatus, on_delete=models.CASCADE, null=True, related_name='history_reservation_type_status')
+    reminder_sent = models.BooleanField(default=False)
     created_at = models.DateTimeField(null=True)
     updated_at = models.DateTimeField(null=True)
     deleted_at = models.DateTimeField(null=True)

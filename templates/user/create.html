@@ -26,35 +26,78 @@
             <form method="POST" class="post-form" action="{% url "appUser.create" %}">  
                 {% csrf_token %}
                 <div class="card-body">
-                    <div class="form-group">
-                        <label for="last_name">Apellidos</label>
-                        <input type="text" class="form-control" id="last_name" name="last_name" placeholder="" required>
+                  <div class="row">
+                    <div class="col-lg-6 col-sm-6 col-xs-6">
+                      <div class="form-group">
+                          <label for="last_name">Apellidos</label>
+                          <input type="text" class="form-control" id="last_name" name="last_name" placeholder="" required>
+                      </div>
                     </div>
-                    <div class="form-group">
-                        <label for="first_name">Nombres</label>
-                        <input type="text" class="form-control" id="first_name" name="first_name" placeholder="" required>
+                    <div class="col-lg-6 col-sm-6 col-xs-6"> 
+                      <div class="form-group">
+                          <label for="first_name">Nombres</label>
+                          <input type="text" class="form-control" id="first_name" name="first_name" placeholder="" required>
+                      </div>  
                     </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="" required>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-4 col-sm-4 col-xs-4"> 
+                      <div class="form-group">
+                          <label for="phone">Celular</label>
+                          <input type="text" class="form-control" id="phone" name="phone" placeholder="">
+                      </div>
                     </div>
-                    <div class="form-group">
-                        <label for="phone">Celular</label>
-                        <input type="text" class="form-control" id="phone" name="phone" placeholder="">
+                    <div class="col-lg-4 col-sm-4 col-xs-4">
+                      <div class="form-group">
+                          <label for="email">Email</label>
+                          <input type="email" class="form-control" id="email" name="email" placeholder="" required>
+                      </div>
                     </div>
-                    <div class="form-group">
-                        <label for="password">Contraseña</label>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="" required>
+                    <div class="col-lg-4 col-sm-4 col-xs-4">
+                      <div class="form-group">
+                          <label for="password">Contraseña</label>
+                          <input type="password" class="form-control" id="password" name="password" placeholder="" required>
+                      </div>
                     </div>
-                    <div class="form-group">
-                        <label for="rol">Rol</label>
-                        <select class="form-control" id="rol" name="rol">
-                        <option value="">Selecione...</option>
-                        {% for rol in roles %}
-                            <option value="{{rol.id}}">{{rol.description}}</option>
-                        {% endfor %}
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-6 col-sm-6 col-xs-6">
+                      <div class="form-group">
+                        <label for="type_dist">Distrito</label>
+                        <select class="form-control" id="type_dist" name="type_dist">
+                          <option value="">Selecione...</option>
+                          {% for type_dist in type_district %}
+                            <option value="{{ type_dist.id }}">{{ type_dist.description }}</option>
+                          {% endfor %}
                         </select>
+                      </div>
                     </div>
+                    <div class="col-lg-6 col-sm-6 col-xs-6">
+                      <div class="form-group">
+                          <label for="rol">Rol</label>
+                          <select class="form-control" id="rol" name="rol">
+                          <option value="">Selecione...</option>
+                          {% for rol in roles %}
+                              <option value="{{rol.id}}">{{rol.description}}</option>
+                          {% endfor %}
+                          </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-6 col-sm-6 col-xs-6">
+                      <div class="form-group">
+                          <label for="full_name_emergency_contact">Nombre de contácto de emergencia</label>
+                          <input type="text" class="form-control" id="full_name_emergency_contact" name="full_name_emergency_contact" placeholder="" required>
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6 col-xs-6"> 
+                      <div class="form-group">
+                          <label for="phone_emergency_contact">Celular de contácto de emergencia</label>
+                          <input type="text" class="form-control" id="phone_emergency_contact" name="phone_emergency_contact" placeholder="" required>
+                      </div>  
+                    </div>
+                  </div>
                 </div>
         
                 <div class="card-footer">

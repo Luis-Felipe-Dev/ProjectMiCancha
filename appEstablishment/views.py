@@ -9,7 +9,7 @@ from datetime import datetime
 
 @login_required
 def create(request):
-    type_district = TypeDistrict.objects.filter(relation_id=127)
+    type_district = TypeDistrict.objects.filter(relation_id=127).order_by('description')
     
     if request.method == 'POST':
         try:
@@ -24,6 +24,8 @@ def create(request):
                 establishment_create.type_dist = TypeDistrict.objects.get(id=request.POST['type_dist'])
                 establishment_create.created_user = request.user.id
                 establishment_create.owner = request.user
+                establishment_create.latitude = request.POST['latitude'].replace(',', '.')
+                establishment_create.longitude = request.POST['longitude'].replace(',', '.')
                 establishment_create.status = True
                 establishment_create.save()
 
@@ -37,6 +39,8 @@ def create(request):
                 history_establishment_create.created_at = establishment_create.created_at
                 history_establishment_create.created_user = establishment_create.created_user
                 history_establishment_create.owner = request.user
+                history_establishment_create.latitude = establishment_create.latitude
+                history_establishment_create.longitude = establishment_create.latitude
                 history_establishment_create.status = True
                 history_establishment_create.user_session = request.user
                 history_establishment_create.establishment = establishment_create
@@ -47,7 +51,6 @@ def create(request):
                 messages.add_message(request, messages.INFO, message)
                 return redirect('/establishment/')
         except Exception as ex:
-            print(ex)
             message = 'Algo salió mal, contacte a TI.'
             messages.add_message(request, messages.INFO, message)
             return redirect('/establishment/')
@@ -71,7 +74,7 @@ def show(request):
 @login_required
 def edit(request, id):
     establishment_edit = Establishment.objects.get(id=id)
-    type_district = TypeDistrict.objects.filter(relation_id=127)
+    type_district = TypeDistrict.objects.filter(relation_id=127).order_by('description')
     context = {
         'establishment_edit': establishment_edit,
         'type_district': type_district
@@ -94,6 +97,8 @@ def update(request, id):
             establishment_edit.updated_at = datetime.now()
             establishment_edit.updated_user = request.user.id
             establishment_edit.owner = request.user
+            establishment_edit.latitude = request.POST['latitude'].replace(',', '.')
+            establishment_edit.longitude = request.POST['longitude'].replace(',', '.')
             establishment_edit.status = request.POST.get('status', False)
             establishment_edit.status = True if establishment_edit.status == "on" else False
             establishment_edit.save()
@@ -110,12 +115,15 @@ def update(request, id):
             history_establishment_edit.updated_at = establishment_edit.created_at
             history_establishment_edit.updated_user = establishment_edit.updated_user
             history_establishment_edit.owner = establishment_edit.owner
+            history_establishment_edit.latitude = establishment_edit.latitude
+            history_establishment_edit.longitude = establishment_edit.longitude
             history_establishment_edit.status = True
             history_establishment_edit.user_session = request.user
             history_establishment_edit.establishment = Establishment.objects.get(id=id)
             history_establishment_edit.save()
             return redirect('/establishment/')
         except Exception as ex:
+            print(ex)
             message = 'Algo salió mal, contacte a TI.'
             messages.add_message(request, messages.INFO, message)
             return redirect('/establishment/')
@@ -148,6 +156,8 @@ def delete(request, id):
     history_establishment_delete.deleted_at = datetime.now()
     history_establishment_delete.deleted_user = request.user.id
     history_establishment_delete.owner = establishment_delete.owner
+    history_establishment_delete.latitude = establishment_delete.latitude
+    history_establishment_delete.longitude = establishment_delete.longitude
     history_establishment_delete.status = False
     history_establishment_delete.user_session = request.user
     history_establishment_delete.establishment = Establishment.objects.get(id=id)

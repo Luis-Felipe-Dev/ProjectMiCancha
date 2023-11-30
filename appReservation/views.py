@@ -18,7 +18,7 @@ from django.conf import settings
 @login_required
 def create(request):
     now_filter = datetime.now().strftime('%H')
-    type_district = TypeDistrict.objects.filter(relation_id=127)
+    type_district = TypeDistrict.objects.filter(relation_id=127).order_by('description')
     establishments = Establishment.objects.all()
     field_soccers = FieldSoccer.objects.all()
 
@@ -66,18 +66,18 @@ def create(request):
                         'establishment_type_dist': reservation.field_soccer.establishment.type_dist.complete
                         }
                     
-                    # Send Email
-                    email_subject = f'MiCancha - Reserva de campo deportivo para el {reservation.date} de {reservation.start_hour} a {reservation.end_hour}'
-                    email_template = 'send_email/reservation.html'
-                    email_content = render_to_string(email_template, context)
-                    email = EmailMessage(
-                        email_subject,
-                        email_content,
-                        settings.EMAIL_HOST_USER,
-                        ['luis.fhb.2016@gmail.com'],
-                    )
-                    email.content_subtype = 'html'
-                    email.send()
+                    # # Send Email
+                    # email_subject = f'MiCancha - Reserva de campo deportivo para el {reservation.date} de {reservation.start_hour} a {reservation.end_hour}'
+                    # email_template = 'send_email/reservation.html'
+                    # email_content = render_to_string(email_template, context)
+                    # email = EmailMessage(
+                    #     email_subject,
+                    #     email_content,
+                    #     settings.EMAIL_HOST_USER,
+                    #     ['luis.fhb.2016@gmail.com'],
+                    # )
+                    # email.content_subtype = 'html'
+                    # email.send()
 
                     reservation.save()
                 print("Reservas guardadas con éxito.")
@@ -97,7 +97,6 @@ def create(request):
         }
         return render(request, 'reservation/create.html', context)
 
-
 @login_required
 def show(request):
     for reservation in Reservation.objects.filter(type_status=1):
@@ -112,15 +111,20 @@ def show(request):
         else:
             pass
 
-
     if request.user.rol.id == 3:
-        reservations = Reservation.objects.filter(created_user=request.user.id).order_by('date', 'start_hour')
+        reservations = Reservation.objects.filter(created_user=request.user.id).order_by('-created_at')
+    
     elif request.user.rol.id == 2:
         field_soccers = FieldSoccer.objects.filter(establishment__owner=request.user)
-        reservations = Reservation.objects.filter(field_soccer__in=field_soccers).order_by('date', 'start_hour')
+        reservations = Reservation.objects.filter(field_soccer__in=field_soccers).order_by('-created_at')
+    
     else:
         # Si el usuario tiene otro rol, muestra todas las reservaciones
-        reservations = Reservation.objects.all().order_by('date', 'start_hour')
+        reservations = Reservation.objects.all().order_by('-created_at')
+    
+    for field in reservations:
+        field.field_soccer.establishment.latitude = str(field.field_soccer.establishment.latitude).replace(',', '.')
+        field.field_soccer.establishment.longitude = str(field.field_soccer.establishment.longitude).replace(',', '.')
 
     context = {
         'reservations': reservations
@@ -239,8 +243,14 @@ def get_field_soccer_number_players(request, number_players):
                 'establishment': obj.establishment.name,
                 'location': obj.establishment.location,
                 'phone': obj.establishment.phone,
+                'latitude': obj.establishment.latitude,
+                'longitude': obj.establishment.longitude,
                 'type_field_soccer': obj.type_field_soccer.description
             })
+        
+        for field in field_soccer_objects:
+            field.establishment.latitude = str(field.establishment.latitude).replace(',', '.')
+            field.establishment.longitude = str(field.establishment.longitude).replace(',', '.')
 
         if len(field_soccer) > 0:
             return JsonResponse({'field_soccer': field_soccer})
@@ -265,7 +275,7 @@ def select_field_soccer(request, id):
 @login_required
 def create_select_reservation(request, id):
     now_filter = datetime.now().strftime('%H')
-    type_district = TypeDistrict.objects.filter(relation_id=127)
+    type_district = TypeDistrict.objects.filter(relation_id=127).order_by('description')
     establishments = Establishment.objects.all()
     field_soccers = FieldSoccer.objects.all()
     field_soccer_selected = FieldSoccer.objects.get(id=id)
@@ -316,18 +326,18 @@ def create_select_reservation(request, id):
                         'establishment_type_dist': reservation.field_soccer.establishment.type_dist.complete
                         }
                     
-                    # Send Email
-                    email_subject = f'MiCancha - Reserva de campo deportivo para el {reservation.date} de {reservation.start_hour} a {reservation.end_hour}'
-                    email_template = 'send_email/reservation.html'
-                    email_content = render_to_string(email_template, context)
-                    email = EmailMessage(
-                        email_subject,
-                        email_content,
-                        settings.EMAIL_HOST_USER,
-                        ['luis.fhb.2016@gmail.com'],
-                    )
-                    email.content_subtype = 'html'
-                    email.send()
+                    # # Send Email
+                    # email_subject = f'MiCancha - Reserva de campo deportivo para el {reservation.date} de {reservation.start_hour} a {reservation.end_hour}'
+                    # email_template = 'send_email/reservation.html'
+                    # email_content = render_to_string(email_template, context)
+                    # email = EmailMessage(
+                    #     email_subject,
+                    #     email_content,
+                    #     settings.EMAIL_HOST_USER,
+                    #     ['luis.fhb.2016@gmail.com'],
+                    # )
+                    # email.content_subtype = 'html'
+                    # email.send()
 
                     reservation.save()
                 print("Reservas guardadas con éxito.")
@@ -348,4 +358,46 @@ def create_select_reservation(request, id):
             'image_base64': image_base64
         }
         return render(request, 'reservation/create.html', context)
+
+def pay_with_card(request, id):
+    reservation = Reservation.objects.get(id=id)
+    email = request.user
+    
+    context = {
+        'email': email,
+        'date': reservation.date,
+        'start_hour': reservation.start_hour,
+        'end_hour': reservation.end_hour,
+        'field_soccer_name': reservation.field_soccer.name,
+        'field_soccer_number_players': reservation.field_soccer.number_players,
+        'field_soccer_price': reservation.field_soccer.price,
+        'field_soccer_image_base64': reservation.field_soccer.image_base64.decode("utf-8"),
+        'establishment_name': reservation.field_soccer.establishment.name,
+        'establishment_location': reservation.field_soccer.establishment.location,
+        'establishment_phone': reservation.field_soccer.establishment.phone,
+        'establishment_type_dist': reservation.field_soccer.establishment.type_dist.complete,
+        'latitude': str(reservation.field_soccer.establishment.latitude).replace(',', '.'),
+        'longitude': str(reservation.field_soccer.establishment.longitude).replace(',', '.')
+        }
+    
+    if request.method == 'POST':        
+        # Send Email
+        email_subject = f'MiCancha - Reserva de campo deportivo para el {reservation.date} de {reservation.start_hour} a {reservation.end_hour}'
+        email_template = 'send_email/reservation.html'
+        email_content = render_to_string(email_template, context)
+        email = EmailMessage(
+            email_subject,
+            email_content,
+            settings.EMAIL_HOST_USER,
+            ['luis.fhb.2016@gmail.com'],
+        )
+        email.content_subtype = 'html'
+        email.send()
+
+        reservation.type_status = TypeStatus.objects.get(id=2)
+        reservation.save()
+
+        return redirect("/reservation/")
+
+    return render(request, 'reservation/pay_with_card.html', context)
 

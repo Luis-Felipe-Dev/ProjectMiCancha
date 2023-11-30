@@ -11,6 +11,8 @@ class Establishment(models.Model):
     type_dep = models.ForeignKey(TypeDepartament, on_delete=models.CASCADE, null=True, related_name='establishment_type_dep')
     type_prov = models.ForeignKey(TypeProvince, on_delete=models.CASCADE, null=True, related_name='establishment_type_prov')
     type_dist = models.ForeignKey(TypeDistrict, on_delete=models.CASCADE, null=True, related_name='establishment_type_dist')
+    latitude = models.FloatField(null=True)
+    longitude = models.FloatField(null=True)
     status = models.BooleanField(False, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

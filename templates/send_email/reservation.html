@@ -56,13 +56,13 @@
             <td style="padding: 30px"> 
                 <p><strong>A nombre de: </strong>{{ email.first_name }} {{ email.last_name }}</p>
                 <p><strong>Fecha: </strong>{{ date }}</p>
-                <p><strong>Hora inicio: </strong>{{ start_hour }}</p>
-                <p><strong>Hora fin: </strong>{{ end_hour }}</p>
+                <p><strong>Hora: </strong>{{ start_hour }} - {{ end_hour }}</p>
                 <p><strong>Establecimiento: </strong>{{ establishment_name }}</p>
                 <p><strong>Dirección: </strong>{{ establishment_location }} - {{ establishment_type_dist }}</p>
+                <p><strong>Ubicación referencial: </strong><a target="blank_" style="color: blue;" href="https://www.google.com/maps?q={{ latitude }},{{ longitude }}"><strong>Ver ubicación</strong></a></p>
                 <p><strong>Celular: </strong>{{ establishment_phone }}</p>
                 <p><strong>Nombre de campo deportivo: </strong>{{ field_soccer_name }}</p>
-                <p><strong>Número de jugadores: </strong>{{ field_soccer_number_players }}</p>
+                <p><strong>Capacidad: </strong>{{ field_soccer_number_players }} jugadores</p>
                 <p><strong>Precio: </strong>S/. {{ field_soccer_price }}</p>
             </td>
         </tr>
