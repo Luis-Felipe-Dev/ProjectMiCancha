@@ -78,15 +78,15 @@
                               {% endif %}
                           </td>
                           {% if request.user.rol.id == 3 and reservation.type_status.id == 3 %}
-                          <td class="text-center text-center">
+                          <td class="text-center text-center p-1">
                             <p class="text-danger" style="font-size: 12px;"><span class="countdown-timer"></span></p>  
                           </td>
                           {% elif request.user.rol.id == 3 and reservation.type_status.id == 2 %}
-                          <td class="text-center text-center">
+                          <td class="text-center text-center p-1">
                             <p style="font-size: 12px;"><span class="countdown-timer"></span></p>  
                           </td>
                           {% elif request.user.rol.id == 3 and reservation.type_status.id == 1 %}
-                          <td class="text-center text-center">
+                          <td class="text-center text-center p-1">
                             <a class="mt-1 mb-1 btn-sm btn-primary" href="{% url 'appReservation.pay_with_card' id=reservation.id %}">Realizar pago S/.{{reservation.field_soccer.price}}</a>
                             <p style="font-size: 12px;"><span class="countdown-timer"></span></p>  
                           </td>

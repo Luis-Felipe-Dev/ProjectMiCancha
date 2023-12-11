@@ -178,6 +178,39 @@ def delete(request, id):
         reservation_delete.deleted_user = request.user.id
         reservation_delete.type_status = TypeStatus.objects.get(id=3)
         reservation_delete.save()
+                
+        email = request.user
+        context = {
+            'email': email,
+            'date': reservation_delete.date,
+            'start_hour': reservation_delete.start_hour,
+            'end_hour': reservation_delete.end_hour,
+            'field_soccer_name': reservation_delete.field_soccer.name,
+            'field_soccer_number_players': reservation_delete.field_soccer.number_players,
+            'field_soccer_price': reservation_delete.field_soccer.price,
+            'field_soccer_image_base64': reservation_delete.field_soccer.image_base64.decode("utf-8"),
+            'establishment_name': reservation_delete.field_soccer.establishment.name,
+            'establishment_location': reservation_delete.field_soccer.establishment.location,
+            'establishment_phone': reservation_delete.field_soccer.establishment.phone,
+            'establishment_type_dist': reservation_delete.field_soccer.establishment.type_dist.complete,
+            'latitude': str(reservation_delete.field_soccer.establishment.latitude).replace(',', '.'),
+            'longitude': str(reservation_delete.field_soccer.establishment.longitude).replace(',', '.'),
+            'anulada': True
+            }
+        
+        # Send Email
+        email_subject = f'MiCancha - Reserva Anulada'
+        email_template = 'send_email/reservation.html'
+        email_content = render_to_string(email_template, context)
+        email = EmailMessage(
+            email_subject,
+            email_content,
+            settings.EMAIL_HOST_USER,
+            ['luis.fhb.2016@gmail.com'],
+        )
+        email.content_subtype = 'html'
+        email.send()
+
     except Exception as ex:
         print(ex)
     return redirect('/reservation/')

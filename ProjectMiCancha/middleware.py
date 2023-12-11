@@ -9,27 +9,26 @@ class RoleMiddleware:
 
     def __call__(self, request):
         # Antes de procesar la solicitud
-        try:
-        #     if not request.user.is_authenticated and (request.path.startswith('/accounts/')):
-        #         # Redirige a una ruta específica si no tiene permisos
-        #         return redirect('/login')
-        # except AttributeError as ex:
-        #     return redirect('/login')
-        # except Exception as ex:
-        #     return redirect('/')
-            # if (request.path.startswith('/user/') or request.path.startswith('/reservation/')) and request.user.rol.id == 2:
-            if (request.path.startswith('/user/') or request.path.startswith('/reservation/create/')) and request.user.rol.id == 2:
-                # Redirige a una ruta específica si no tiene permisos
+        if not request.user.is_authenticated and request.path.startswith('/login'):
+            print("User no autenticado")
+            return redirect('/')
+        else:
+            try:
+                if (request.path.startswith('/user/') or request.path.startswith('/reservation/create/')) and request.user.rol.id == 2:
+                    print("User Propietario")
+                    return redirect('/home/')
+                if (request.path.startswith('/user/') or request.path.startswith('/establishment/') or request.path.startswith('/field_soccer/')) and request.user.rol.id == 3:
+                    print("User Cliente")
+                    return redirect('/home/')
+            except AttributeError as ex:
+                print(f"AttributeError: {ex}")
+                return redirect('/login')
+            except Exception as ex:
+                print(f"Exception: {ex}")
                 return redirect('/home/')
-            if (request.path.startswith('/user/') or request.path.startswith('/establishment/') or request.path.startswith('/field_soccer/')) and request.user.rol.id == 3:
-                # Redirige a una ruta específica si no tiene permisos
-                return redirect('/home/')
-        except AttributeError as ex:
-            return redirect('/login')
-        except Exception as ex:
-            return redirect('/home/')
-
+            
         response = self.get_response(request)
+
         if response.status_code == 404:
             return redirect('/home/')
 

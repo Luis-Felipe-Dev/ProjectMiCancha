@@ -41,10 +41,39 @@
             width: 100% !important;
         }
         }
+        #anulada {
+            color: red;
+        }
     </style>
 </head>
 
 <body style="margin: 100px auto;">
+    {% if anulada %}
+    <table style="width: 650px; margin: 0 auto; background-color: #dff2e2; border-radius: 8px; margin-top: 20px;">
+        <tbody>
+        <tr>
+            <td style="padding-left: 30px; padding-right: 30px; padding-top: 30px; text-align: center;">
+                <h2 style="font-weight: 600" id="anulada">Reserva Anulada</h2>
+                <h2 style="font-weight: 600">Mi<b>Cancha</b> - Reserva de campo deportivo</h2>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 30px"> 
+                <p><strong>A nombre de: </strong>{{ email.first_name }} {{ email.last_name }}</p>
+                <p><strong>Fecha: </strong>{{ date }}</p>
+                <p><strong>Hora: </strong>{{ start_hour }} - {{ end_hour }}</p>
+                <p><strong>Establecimiento: </strong>{{ establishment_name }}</p>
+                <p><strong>Dirección: </strong>{{ establishment_location }} - {{ establishment_type_dist }}</p>
+                <p><strong>Ubicación referencial: </strong><a target="blank_" style="color: blue;" href="https://www.google.com/maps?q={{ latitude }},{{ longitude }}"><strong>Ver ubicación</strong></a></p>
+                <p><strong>Celular: </strong>{{ establishment_phone }}</p>
+                <p><strong>Nombre de campo deportivo: </strong>{{ field_soccer_name }}</p>
+                <p><strong>Capacidad: </strong>{{ field_soccer_number_players }} jugadores</p>
+                <p><strong>Precio: </strong>S/. {{ field_soccer_price }}</p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    {% else %}
     <table style="width: 650px; margin: 0 auto; background-color: #dff2e2; border-radius: 8px; margin-top: 20px;">
         <tbody>
         <tr>
@@ -68,5 +97,6 @@
         </tr>
         </tbody>
     </table>
+    {% endif %}
 </body>
 </html>
