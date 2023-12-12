@@ -22,13 +22,13 @@ from . import views
 
 urlpatterns = [
     path('', views.login_custom, name='login_custom'),
-    # path('home/', views.home, name='home'),
-    # path('accounts/', include('django.contrib.auth.urls')),
-    # path('change_password/', views.change_password, name='change_password'),
-    # path('user/', include('appUser.urls')),
-    # path('establishment/', include('appEstablishment.urls')),
-    # path('field_soccer/', include('appFieldSoccer.urls')),
-    # path('reservation/', include('appReservation.urls')),
+    path('home/', views.home, name='home'),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('change_password/', views.change_password, name='change_password'),
+    path('user/', include('appUser.urls')),
+    path('establishment/', include('appEstablishment.urls')),
+    path('field_soccer/', include('appFieldSoccer.urls')),
+    path('reservation/', include('appReservation.urls')),
 ]
 
 if settings.DEBUG:

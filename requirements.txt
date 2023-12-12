@@ -1,0 +1,14 @@
+amqp==1.4.9
+asgiref==3.7.2
+billiard==3.3.0.23
+celery==3.1.26.post2
+Django==4.2.6
+django-celery==3.3.1
+kombu==3.0.37
+mysqlclient==2.2.0
+python-decouple==3.8
+pytz==2023.3.post1
+schedule==1.2.1
+sqlparse==0.4.4
+typing_extensions==4.8.0
+tzdata==2023.3

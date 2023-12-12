@@ -56,19 +56,23 @@
       <div class="page-main-header">
         <div class="main-header-right row m-0">
           <div class="main-header-left">
-            {% comment %} <div class="logo-wrapper"><a href="index.html"><img class="img-fluid" src="{% static 'assets/images/logo/logo.png' %}" alt=""></a></div> {% endcomment %}
             <div class="logo-wrapper"><img class="img-fluid" src="{% static 'dist/images/arco.png' %}" width="50" alt="" style="margin-right: 10px;">Mi<b>Cancha</b></div>
             <div class="toggle-sidebar"><i class="status_toggle middle" data-feather="align-center" id="sidebar-toggle"></i></div>
           </div>
           <div class="nav-left col pull-left left-menu pl-5">
-            {% comment %} <h1 class="text-center">App Demo - Identificación Facial - DIRIN PNP</h1> {% endcomment %}
-            {% if user.is_authenticated  %}
+            {% if user.is_authenticated %}
             <div class="nav-right col pull-right right-menu p-0">
-              <ul class="nav-menus">
-                <li class="onhover-dropdown p-0">
-                  <button class="btn btn-primary-light" type="button" data-bs-original-title="" title=""><a href="{% url 'logout' %}" data-bs-original-title="" title=""><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>Cerrar sesión</a></button>
-                </li>
-              </ul>
+              <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button class="btn btn-primary-light" type="submit">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                  </svg>
+                  Cerrar sesión
+                </button>
+              </form>
             </div>
             {% endif %}
           </div>
@@ -154,7 +158,15 @@
     <!-- Plugins JS Ends-->
     <!-- Theme js-->
     <script src="{% static 'assets/js/script.js' %}"></script>
-
+    
+    <script>
+        function actualizarContenido() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "{% url 'appReservation.send_email_reminder' %}", true);
+            xhr.send();
+        }
+        setInterval(actualizarContenido, 5000);
+    </script>
     {% block customJS %}
 
     {% endblock customJS %}

@@ -65,7 +65,7 @@
                 <div class="form-group">
                   <label for="type_dist">Distrito:</label>
                   <select class="form-control" id="type_dist" name="type_dist" required>
-                    <option value="">Selecione...</option>
+                    <option value="">Seleccione...</option>
                     {% for type_dist in type_district %}
                       <option value="{{ type_dist.id }}">{{ type_dist.description }}</option>
                     {% endfor %}
@@ -74,13 +74,13 @@
                 <div class="form-group">
                   <label for="establishment">Establecimiento: <span id="message_establishment"></span></label>
                   <select class="form-control" id="establishment" name="establishment" required>
-                    <option value="">Selecione...</option>
+                    <option value="">Seleccione...</option>
                   </select>
                 </div>
                 <div class="form-group">
                   <label for="field_soccer">Campo deportivo: <span id="message_field_soccer"></span></label>
                   <select class="form-control" id="field_soccer" name="field_soccer" required>
-                    <option value="">Selecione...</option>
+                    <option value="">Seleccione...</option>
                   </select>
                 </div>
                 <div class="form-group">
@@ -183,9 +183,9 @@
               {% csrf_token %}
               <div class="card-body">
                 <div class="form-group">
-                  <label for="field_soccer">Campo deportivo: <span id="message_field_soccer_number_players"></span></label>
-                  <select class="form-control" id="field_soccer_number_players" name="field_soccer" required>
-                    <option value="">Selecione...</option>
+                  <label for="field_soccer_number_players">Campo deportivo: <span id="message_field_soccer_number_players"></span></label>
+                  <select class="form-control" id="field_soccer_number_players" name="field_soccer_number_players" required>
+                    <option value="">Seleccione...</option>
                     <option value="10">5 vs 5</option>
                     <option value="12">6 vs 6</option>
                     <option value="14">7 vs 7</option>

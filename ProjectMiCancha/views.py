@@ -8,7 +8,7 @@ from appEstablishment.models import Establishment
 from appReservation.tasks import start_task
 # from django.db.models import Max
 
-start_task()
+# start_task()
 
 def handle_decode_image_base64(image):
     image_decode = image.decode("utf-8")

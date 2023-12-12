@@ -15,4 +15,5 @@ urlpatterns = [
     path('select_field_soccer/<int:id>', views.select_field_soccer, name='appReservation.select_field_soccer'),
     path('create_select_reservation/<int:id>', views.create_select_reservation, name='appReservation.create_select_reservation'),
     path('pay_with_card/<int:id>', views.pay_with_card, name='appReservation.pay_with_card'),
+    path('send_email_reminder/', views.send_email_reminder, name='appReservation.send_email_reminder'),
 ]
