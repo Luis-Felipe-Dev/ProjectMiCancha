@@ -64,7 +64,7 @@
                     <div class="col-lg-6 col-sm-6 col-xs-6">
                       <div class="form-group">
                         <label for="type_dist">Distrito</label>
-                        <select class="form-control" id="type_dist" name="type_dist">
+                        <select class="form-control" id="type_dist" name="type_dist" required>
                           <option value="">Selecione...</option>
                           {% for type_dist in type_district %}
                             <option value="{{ type_dist.id }}">{{ type_dist.description }}</option>
@@ -75,7 +75,7 @@
                     <div class="col-lg-6 col-sm-6 col-xs-6">
                       <div class="form-group">
                           <label for="rol">Rol</label>
-                          <select class="form-control" id="rol" name="rol">
+                          <select class="form-control" id="rol" name="rol" required>
                           <option value="">Selecione...</option>
                           {% for rol in roles %}
                               <option value="{{rol.id}}">{{rol.description}}</option>
