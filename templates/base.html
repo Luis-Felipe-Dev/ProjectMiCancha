@@ -159,14 +159,14 @@
     <!-- Theme js-->
     <script src="{% static 'assets/js/script.js' %}"></script>
     
-    <script>
+    {% comment %} <script>
         function actualizarContenido() {
             var xhr = new XMLHttpRequest();
             xhr.open("GET", "{% url 'appReservation.send_email_reminder' %}", true);
             xhr.send();
         }
         setInterval(actualizarContenido, 5000);
-    </script>
+    </script> {% endcomment %}
     {% block customJS %}
 
     {% endblock customJS %}
