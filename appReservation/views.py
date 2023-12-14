@@ -74,7 +74,7 @@ def create(request):
                     #     email_subject,
                     #     email_content,
                     #     settings.EMAIL_HOST_USER,
-                    #     ['luis.fhb.2016@gmail.com'],
+                    #     [email],
                     # )
                     # email.content_subtype = 'html'
                     # email.send()
@@ -206,7 +206,7 @@ def delete(request, id):
             email_subject,
             email_content,
             settings.EMAIL_HOST_USER,
-            ['luis.fhb.2016@gmail.com'],
+            [email],
         )
         email.content_subtype = 'html'
         email.send()
@@ -367,7 +367,7 @@ def create_select_reservation(request, id):
                     #     email_subject,
                     #     email_content,
                     #     settings.EMAIL_HOST_USER,
-                    #     ['luis.fhb.2016@gmail.com'],
+                    #     [email],
                     # )
                     # email.content_subtype = 'html'
                     # email.send()
@@ -422,7 +422,7 @@ def pay_with_card(request, id):
             email_subject,
             email_content,
             settings.EMAIL_HOST_USER,
-            ['luis.fhb.2016@gmail.com'],
+            [email],
         )
         email.content_subtype = 'html'
         email.send()
@@ -469,7 +469,7 @@ def pay_with_card(request, id):
 #                 email_subject,
 #                 email_content,
 #                 settings.EMAIL_HOST_USER,
-#                 ['luis.fhb.2016@gmail.com'],
+#                 [email],
 #             )
 #             email.content_subtype = 'html'
 #             email.send()
