@@ -21,9 +21,11 @@
     <!-- Container-fluid starts-->
     <div class="container-fluid">
         <div class="card">
+            {% if request.user.rol.id != 1 %}
             <div class="card-header">
                 <a class="card-title btn btn-primary" type="button" href="{% url "appFieldSoccer.show" %}">Regresar</a>
             </div>
+            {% endif %}
     
             <div class="card-body">
                 <table id="appFieldSoccer" class="display responsive nowrap table-bordered" style="width:100%">
